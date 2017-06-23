@@ -1,0 +1,22 @@
+.app {
+    font-family: "Helvetica";
+    width: 900px;
+    margin: auto;
+    border: 3px solid #f6f8fa;
+}
+
+.title {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: center;
+    font-size: 2.5em;
+    background-color: #f6f8fa
+}
+
+.content {
+    margin: 10px;
+}
+
+.hi {
+    text-align: center
+}

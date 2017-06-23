@@ -1,0 +1,22 @@
+.errorBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    padding: 5px;
+}
+
+.error {
+    background-color: #DE0707;
+    color: white;
+}
+
+.warn {
+    background-color: #FFDD00;
+    color: black;
+}
+
+.dismiss {
+    cursor: pointer;
+    margin-left: auto;
+}
