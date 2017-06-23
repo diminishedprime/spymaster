@@ -2,44 +2,47 @@ import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { rootSaga } from './sagas/index.js'
 import R from 'ramda'
+import words from './words.js'
+import shuffle from 'shuffle-array'
+
+shuffle(words)
 
 // Paths & Initial State
-const counterPath = R.lensPath(['counter'])
-const heartbeatsPath = R.lensPath(['heartbeats'])
-const hiPath = R.lensPath(['hi'])
+const timePath = R.lensPath(['time'])
 const errorPath = R.lensPath(['error'])
 const errorTextPath = R.lensPath(['error', 'text'])
 const errorSeverityPath = R.lensPath(['error', 'severity'])
 const actionLogPath = R.lensPath(['actionLog'])
 const replayingPath = R.lensPath(['replaying'])
-
+const showTitlePath = R.lensPath(['settings', 'showTitle'])
+const initialCards = R.compose(
+  R.map((text) => ({text})),
+  R.take(25)
+)(words)
 const initialActionLog = []
 const initialErrorState = {}
+const initialSettings = {
+  showTitle: true,
+}
 
 const initialState = {
-  counter: 0,
-  heartbeats: 0,
-  hi: [],
+  cards: initialCards,
   error: initialErrorState,
   actionLog: initialActionLog,
+  settings: initialSettings,
   replaying: false,
 }
 
 // Actions & Action Creators
-const INCREMENT_HEARTBEATS = 'increment heartbeats'
-export const afIncrementHeartbeats = () => ({
-  type: INCREMENT_HEARTBEATS,
+const SET_TIME = 'set time'
+export const afSetTime = (seconds) => ({
+  type: SET_TIME,
+  seconds,
 })
 
-const INCREMENT_COUNTER = 'increment counter'
-export const afIncrementCounter = () => ({
-  type: INCREMENT_COUNTER,
-})
-
-const APPEND_HI = 'append hi'
-export const afAppendHi = (hi) => ({
-  type: APPEND_HI,
-  hi,
+const TOGGLE_TITLE = 'toggle title'
+export const afToggleTitle = () => ({
+  type: TOGGLE_TITLE,
 })
 
 const ERROR_OCCURED = 'an error has occured'
@@ -77,7 +80,6 @@ export const afReplaying = (flag) => ({
   flag,
 })
 
-
 // Reducers
 const replayingActionReducer = (state, {flag}) =>
   R.set(replayingPath, flag, state)
@@ -88,15 +90,6 @@ const clearActionLogReducer = (state, _) =>
 const addToActionLogReducer = (state, action) =>
   R.over(actionLogPath, R.append(action), state)
 
-const incrementCounterReducer = (state, _) =>
-  R.over(counterPath, R.inc, state)
-
-const incrementHeartbeatReducer = (state, _) =>
-  R.over(heartbeatsPath, R.inc, state)
-
-const appendHiReducer = (state, {hi}) =>
-  R.over(hiPath, R.append(hi), state)
-
 const hiErrorReducer = (state, {
   text='The request failed',
   severity='error',
@@ -105,6 +98,12 @@ const hiErrorReducer = (state, {
 
 const dismissErrorReducer = (state, _) =>
   R.set(errorPath, initialErrorState, state)
+
+const toggleTitle = (state, _) =>
+  R.over(showTitlePath, R.not, state)
+
+const setTime = (state, {seconds}) =>
+  R.set(timePath, seconds, state)
 
 const appReducer = (state=initialState, action) => {
   switch(action.type) {
@@ -120,12 +119,10 @@ const appReducer = (state=initialState, action) => {
       return dismissErrorReducer(state, action)
     case ERROR_OCCURED:
       return hiErrorReducer(state, action)
-    case APPEND_HI:
-      return appendHiReducer(state, action)
-    case INCREMENT_HEARTBEATS:
-      return incrementHeartbeatReducer(state, action)
-    case INCREMENT_COUNTER:
-      return incrementCounterReducer(state, action)
+    case TOGGLE_TITLE:
+      return toggleTitle(state, action)
+    case SET_TIME:
+      return setTime(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

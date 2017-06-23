@@ -1,6 +1,5 @@
 import { eventChannel, END } from 'redux-saga'
 import { takeLatest, take, put } from 'redux-saga/effects'
-import { afIncrementHeartbeats } from '../redux.js'
 import io from 'socket.io-client'
 
 export const CONNECT_TO_WEBSOCKET = 'async connect to websocket'
@@ -20,9 +19,8 @@ const connectToWebsocket = function* () {
   try {
     for (;;) {
       const message = yield take(wsChan)
-      if (message === 'heartbeat') {
-        yield put(afIncrementHeartbeats())
-      }
+      // eslint-disable-next-line no-console
+      console.log(message)
     }
   } finally {
     ws.disconnect()

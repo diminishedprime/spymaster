@@ -1,26 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import ErrorBar from '../error-bar/error-bar.jsx'
-import Counter from '../counter/counter.jsx'
+import Game from '../game/game.jsx'
+import { afToggleTitle } from '../../redux.js'
 import './app.css'
 
-const App = ({hi, hasError}) => (
+const App = ({hasError, showTitle, toggleTitle}) => (
   <div className="app">
     {hasError && <ErrorBar />}
-    <div className="title">Best Counter</div>
-    <div className="content">
-      <Counter />
-      {hi.map((text, idx) => (
-        <div className="hi" key={idx}>{text}</div>
-      ))}
-    </div>
+    {showTitle && <div className="title" onClick={toggleTitle}>Spymaster</div>}
+    <Game />
   </div>
 )
-const mapStateToProps = ({hi, error: {text: hasError}}) => ({
-  hi,
+const mapStateToProps = ({
+  error: {text: hasError},
+  settings: {showTitle},
+}) => ({
   hasError,
+  showTitle,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  toggleTitle: () => dispatch(afToggleTitle()),
 })
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(App)

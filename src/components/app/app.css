@@ -1,6 +1,5 @@
 .app {
     font-family: "Helvetica";
-    width: 900px;
     margin: auto;
     border: 3px solid #f6f8fa;
 }
@@ -15,8 +14,4 @@
 
 .content {
     margin: 10px;
-}
-
-.hi {
-    text-align: center
 }

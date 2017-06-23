@@ -1,0 +1,25 @@
+.board {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.cardRow {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 3.2em;
+    margin: 5px;
+    min-width: 10.5em;
+    background-color: #f6f8fa;
+}
+
+.timer {
+    display: flex;
+    justify-content: center
+}
