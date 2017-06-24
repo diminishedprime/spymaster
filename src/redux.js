@@ -134,23 +134,23 @@ export const afReplaying = (flag) => ({
   flag,
 })
 
-// Reducers
-const replayingActionReducer = (state, {flag}) =>
+// s
+const replayingAction = (state, {flag}) =>
   R.set(replayingPath, flag, state)
 
-const clearActionLogReducer = (state, _) =>
+const clearActionLog = (state, _) =>
   R.set(actionLogPath, initialActionLog, state)
 
-const addToActionLogReducer = (state, action) =>
+const addToActionLog = (state, action) =>
   R.over(actionLogPath, R.append(action), state)
 
-const hiErrorReducer = (state, {
+const hiError = (state, {
   text='The request failed',
   severity='error',
 }) =>
   R.set(errorSeverityPath, severity, R.set(errorTextPath, text, state))
 
-const dismissErrorReducer = (state, _) =>
+const dismissError = (state, _) =>
   R.set(errorPath, initialErrorState, state)
 
 const toggleTitle = (state, _) =>
@@ -188,20 +188,20 @@ const flipCard = (state, {id}) => {
 
 
 
-const appReducer = (state=initialState, action) => {
+const app = (state=initialState, action) => {
   switch(action.type) {
     case REPLAYING:
-      return replayingActionReducer(state, action)
+      return replayingAction(state, action)
     case RESET_STATE:
       return initialState
     case CLEAR_ACTION_LOG:
-      return clearActionLogReducer(state, action)
+      return clearActionLog(state, action)
     case ADD_TO_ACTION_LOG:
-      return addToActionLogReducer(state, action)
+      return addToActionLog(state, action)
     case DISMISS_ERROR:
-      return dismissErrorReducer(state, action)
+      return dismissError(state, action)
     case ERROR_OCCURED:
-      return hiErrorReducer(state, action)
+      return hiError(state, action)
     case TOGGLE_TITLE:
       return toggleTitle(state, action)
     case SET_TIME:
@@ -227,7 +227,7 @@ const appReducer = (state=initialState, action) => {
 
 const sagaMiddleware = createSagaMiddleware()
 export const store = createStore(
-  appReducer,
+  app,
   applyMiddleware(sagaMiddleware)
 )
 sagaMiddleware.run(rootSaga)
