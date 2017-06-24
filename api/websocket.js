@@ -33,10 +33,6 @@ const connect = (httpServer) => {
   const users = []
   const wss = io(httpServer)
   wss.on('connection', onConnect(users))
-
-  setInterval(() => {
-    broadcast(users, 'heartbeat')
-  }, 1500)
 }
 
 export default connect
