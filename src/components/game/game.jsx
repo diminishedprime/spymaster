@@ -2,16 +2,15 @@ import React from 'react'
 import R from 'ramda'
 import { connect } from 'react-redux'
 import { afStartTimer } from '../../sagas/timer.js'
+import Card from '../card/card.jsx'
 import './game.css'
-
-const Card = ({text}) => (<button className="card" > {text} </button>)
 
 const CardRow = ({cards}) => (
   <div className="cardRow">
     {
       cards
-        .map((card, idx) => (
-          <Card key={idx} {...card} />
+        .map((card) => (
+          <Card key={card.id} {...card}/>
         ))
     }
   </div>
@@ -41,12 +40,23 @@ const Timer = connect(
 ))
 
 
+const Info = connect(
+  ({localState: {playerType: {role, team}}}) => ({
+    role,
+    team,
+  })
+)(({role, team}) => (
+  <div>
+    {role} {team}
+  </div>
+))
 
 const Game = ({cards}) => (
   <div className="game">
     <Timer />
     <Board cards={cards} />
     <Timer />
+    <Info />
   </div>
 
 )

@@ -4,40 +4,47 @@ import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
 import { afToggleTitle } from '../../redux.js'
 import { CirclePicker } from 'react-color'
-import { afChangeColor } from '../../redux.js'
+import { afChangeColor, afPickRole } from '../../redux.js'
+import { fgColorForRGB, hexToRGB } from '../../util.js'
 import './app.css'
 
-const colorForRGB = ({red, green, blue}) =>
-  (red*0.299 + green*0.587 + blue*0.114) > 186 ? '#000000' : '#ffffff'
 
-const hexToRgb = (hex) => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  return {
-    red: parseInt(result[1], 16),
-    green: parseInt(result[2], 16),
-    blue: parseInt(result[3], 16),
-  }
-}
+/*
+ * import {store} from '../../redux.js'
+ * setTimeout(() => {
+ *   store.dispatch(afPickRole('1', 'spymaster'))
+ * }, 300)*/
+
+const StyledButton = ({backgroundColor, text, onClick}) => (
+  <button onClick={onClick}
+    style={{
+      backgroundColor,
+      color: fgColorForRGB(hexToRGB(backgroundColor)),
+    }} >
+    {text}
+  </button>
+)
 
 const TeamRow = connect(
-  (state, {team}) => ({color: state.team[team].color}),
+  (state, {team}) => ({backgroundColor: state.colors[team].backgroundColor}),
   (dispatch, {team}) => ({
     onColorChange: ({hex}) => dispatch(afChangeColor(team, hex)),
+    pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
-)(({onColorChange, color}) => (
+)(({onColorChange, backgroundColor, pickRole}) => (
   <div className="teamRow">
     <div className="teamButtons">
-      <button style={{
-        backgroundColor: color,
-        color: colorForRGB(hexToRgb(color)),
-      }}>Spymaster</button>
-      <button style={{
-        backgroundColor: color,
-        color: colorForRGB(hexToRgb(color)),
-      }}>Agent</button>
+      <StyledButton text="Spymaster"
+        backgroundColor={backgroundColor}
+        onClick={pickRole('spymaster')}
+      />
+      <StyledButton text="Agent"
+        backgroundColor={backgroundColor}
+        onClick={pickRole('agent')}
+      />
     </div>
     <CirclePicker onChangeComplete={onColorChange}
-      color={color}/>
+      color={backgroundColor}/>
   </div>
 ))
 
@@ -60,7 +67,7 @@ const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
 const mapStateToProps = ({
   error: {text: hasError},
   settings: {showTitle},
-  gameMode,
+  localState: {gameMode},
 }) => ({
   hasError,
   showTitle,

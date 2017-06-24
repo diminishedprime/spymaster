@@ -1,5 +1,5 @@
 import { eventChannel, END } from 'redux-saga'
-import { takeLatest, take, put } from 'redux-saga/effects'
+import { takeLatest, take } from 'redux-saga/effects'
 import io from 'socket.io-client'
 
 export const CONNECT_TO_WEBSOCKET = 'async connect to websocket'

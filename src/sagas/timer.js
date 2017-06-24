@@ -30,7 +30,7 @@ const startTimer = function* () {
   try {
     for (;;) {
       const seconds = yield take(timerChan)
-      // TODO: this is where I can handle 0 seconds differently
+      // This is where I can handle 0 seconds differently
       yield put(afSetTime(seconds))
     }
   } finally {

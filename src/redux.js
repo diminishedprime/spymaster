@@ -4,6 +4,7 @@ import { rootSaga } from './sagas/index.js'
 import R from 'ramda'
 import words from './words.js'
 import shuffle from 'shuffle-array'
+import uuid4 from 'uuid/v4'
 
 shuffle(words)
 
@@ -15,8 +16,28 @@ const errorSeverityPath = R.lensPath(['error', 'severity'])
 const actionLogPath = R.lensPath(['actionLog'])
 const replayingPath = R.lensPath(['replaying'])
 const showTitlePath = R.lensPath(['settings', 'showTitle'])
+const playerTypePath = R.lensPath(['localState', 'playerType'])
+const gameModePath = R.lensPath(['localState', 'gameMode'])
+const cardsPath = R.lensPath(['cards'])
+
+const randTeam = () => {
+  const rnd = Math.random()
+  return (rnd >= 0.0 && rnd < 0.25)
+    ? '1'
+    : (rnd >= 0.25 && rnd < 0.5)
+      ? '2'
+      : (rnd >= 0.5 && rnd < 0.75)
+        ? 'assassin'
+        : 'bystander'
+}
+
 const initialCards = R.compose(
-  R.map((text) => ({text})),
+  R.map((card) => R.assoc('id', uuid4(), card)),
+  R.map((text) => ({
+    text,
+    flipped: false,
+    team: randTeam(),
+  })),
   R.take(25)
 )(words)
 const initialActionLog = []
@@ -25,20 +46,34 @@ const initialSettings = {
   showTitle: true,
 }
 
+const GAME_MODE_PICK_TEAM = 'pick team'
+const GAME_MODE_GAME = 'game'
+
 const initialState = {
-  team: {
-    1: { color: '#f44336' },
-    2: { color: '#2196f3' },
+  colors: {
+    '1': { backgroundColor: '#f44336' },
+    '2': { backgroundColor: '#2196f3' },
+    'assassin': { backgroundColor: '#000000'},
+    'bystander': { backgroundColor: '#686868'},
+  },
+  localState: {
+    playerType: {role: 'spymaster', team: 1},
+    gameMode: GAME_MODE_PICK_TEAM,
   },
   cards: initialCards,
   error: initialErrorState,
   actionLog: initialActionLog,
   settings: initialSettings,
   replaying: false,
-  gameMode: 'pick team',
 }
 
 // Actions & Action Creators
+const FLIP_CARD = 'flip card'
+export const afFlipCard = (id) => ({
+  type: FLIP_CARD,
+  id,
+})
+
 const CHANGE_COLOR = 'change color'
 export const afChangeColor = (team, color) => ({
   type: CHANGE_COLOR,
@@ -46,6 +81,12 @@ export const afChangeColor = (team, color) => ({
   color,
 })
 
+const PICK_ROLE = 'change role'
+export const afPickRole = (team, role) => ({
+  type: PICK_ROLE,
+  team,
+  role,
+})
 
 const SET_TIME = 'set time'
 export const afSetTime = (seconds) => ({
@@ -120,7 +161,7 @@ const setTime = (state, {seconds}) =>
 
 const otherTeam = (team) => team === 1 ? 2 : 1
 
-const teamColorPath = (team) => R.lensPath(['team', team, 'color'])
+const teamColorPath = (team) => R.lensPath(['colors', team, 'backgroundColor'])
 
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(teamColorPath(otherTeam(team)), state)
@@ -128,6 +169,24 @@ const changeColor = (state, {team, color}) => {
     ? R.set(teamColorPath(team), color, state)
     : state
 }
+
+const pickRole = (state, {team, role}) => {
+  const withPlayerType = R.set(playerTypePath, ({team, role}))
+  const withGameMode = R.set(gameModePath, GAME_MODE_GAME)
+
+  return R.compose(
+    withPlayerType,
+    withGameMode
+  )(state)
+}
+
+const flipCard = (state, {id}) => {
+  const cards = R.view(cardsPath, state),
+        cardIdx = R.findIndex((card) => card.id === id, cards)
+  return R.set(R.lensPath(['cards', cardIdx, 'flipped']), true, state)
+}
+
+
 
 const appReducer = (state=initialState, action) => {
   switch(action.type) {
@@ -149,6 +208,10 @@ const appReducer = (state=initialState, action) => {
       return setTime(state, action)
     case CHANGE_COLOR:
       return changeColor(state, action)
+    case PICK_ROLE:
+      return pickRole(state, action)
+    case FLIP_CARD:
+      return flipCard(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||
