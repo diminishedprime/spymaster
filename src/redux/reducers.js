@@ -1,23 +1,7 @@
 import paths from './paths.js'
-import {
-  FLIP_CARD,
-  CHANGE_COLOR,
-  PICK_ROLE,
-  SET_TIME,
-  TOGGLE_TITLE,
-  ERROR_OCCURED,
-  DISMISS_ERROR,
-  ADD_TO_ACTION_LOG,
-  CLEAR_ACTION_LOG,
-  RESET_STATE,
-  REPLAYING,
-} from './actions.js'
+import {FLIP_CARD, CHANGE_COLOR, PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING} from './actions.js'
 import { GAME_MODE_GAME } from '../constants.js'
-import {
-  initialActionLog,
-  initialErrorState,
-  initialState,
-} from './initial-state.js'
+import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
 import R from 'ramda'
 
 const replayingAction = (state, {flag}) =>
