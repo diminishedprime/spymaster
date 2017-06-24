@@ -27,7 +27,7 @@ const updateUsername = (users, user) => (username) => {
 }
 
 const onConnect = (users) => (ws) => {
-  const userId = uuid4(),
+  const userId = uuid4().substring(0, 8),
         user = {
           userId,
           ws,
