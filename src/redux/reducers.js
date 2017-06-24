@@ -1,5 +1,5 @@
 import paths from './paths.js'
-import {FLIP_CARD, PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS, SET_USERNAME, SET_EDITING, UPDATE_USER_LIST, UPDATE_REMOTE_STATE } from './actions.js'
+import {PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS, SET_USERNAME, SET_EDITING, UPDATE_USER_LIST, UPDATE_REMOTE_STATE } from './actions.js'
 import { GAME_MODE_GAME } from '../constants.js'
 import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
 import R from 'ramda'
@@ -36,12 +36,6 @@ const pickRole = (state, {team, role}) => {
     withPlayerType,
     withGameMode
   )(state)
-}
-
-const flipCard = (state, {id}) => {
-  const cards = R.view(paths.cardsPath, state),
-        cardIdx = R.findIndex((card) => card.id === id, cards)
-  return R.set(paths.cardsFlippedPath(cardIdx), true, state)
 }
 
 const setWs = (state, {ws}) =>
@@ -82,8 +76,6 @@ export const app = (state=initialState, action) => {
       return setTime(state, action)
     case PICK_ROLE:
       return pickRole(state, action)
-    case FLIP_CARD:
-      return flipCard(state, action)
     case SET_WS:
       return setWs(state, action)
     case SET_USERNAME:

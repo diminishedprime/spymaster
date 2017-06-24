@@ -3,6 +3,7 @@ import R from 'ramda'
 import { connect } from 'react-redux'
 import { afFlipCard } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
+import { afEmitAction } from '../../sagas/connect-to-websocket.js'
 import paths from '../../redux/paths.js'
 import './card.css'
 
@@ -40,7 +41,7 @@ const mapStateToProps = (state, {
 }
 
 const mapDispatchToProps = (dispatch, {id}) => ({
-  flip: () => dispatch(afFlipCard(id)),
+  flip: () => dispatch(afEmitAction(afFlipCard(id))),
 })
 
 const Card = ({
