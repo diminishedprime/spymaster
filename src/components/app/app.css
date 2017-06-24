@@ -2,6 +2,8 @@
     font-family: "Helvetica";
     margin: auto;
     border: 3px solid #f6f8fa;
+    display: flex;
+    flex-direction: column;
 }
 
 .title {
@@ -14,4 +16,21 @@
 
 .content {
     margin: 10px;
+}
+
+.teamRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pickTeam {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.teamButtons > button {
+    margin: 5px;
+    min-width: 100px;
 }

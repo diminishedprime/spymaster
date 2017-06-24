@@ -26,14 +26,27 @@ const initialSettings = {
 }
 
 const initialState = {
+  team: {
+    1: { color: '#f44336' },
+    2: { color: '#2196f3' },
+  },
   cards: initialCards,
   error: initialErrorState,
   actionLog: initialActionLog,
   settings: initialSettings,
   replaying: false,
+  gameMode: 'pick team',
 }
 
 // Actions & Action Creators
+const CHANGE_COLOR = 'change color'
+export const afChangeColor = (team, color) => ({
+  type: CHANGE_COLOR,
+  team,
+  color,
+})
+
+
 const SET_TIME = 'set time'
 export const afSetTime = (seconds) => ({
   type: SET_TIME,
@@ -105,6 +118,17 @@ const toggleTitle = (state, _) =>
 const setTime = (state, {seconds}) =>
   R.set(timePath, seconds, state)
 
+const otherTeam = (team) => team === 1 ? 2 : 1
+
+const teamColorPath = (team) => R.lensPath(['team', team, 'color'])
+
+const changeColor = (state, {team, color}) => {
+  const otherTeamsColor = R.view(teamColorPath(otherTeam(team)), state)
+  return (color !== otherTeamsColor)
+       ? R.set(teamColorPath(team), color, state)
+       : state
+}
+
 const appReducer = (state=initialState, action) => {
   switch(action.type) {
     case REPLAYING:
@@ -123,6 +147,8 @@ const appReducer = (state=initialState, action) => {
       return toggleTitle(state, action)
     case SET_TIME:
       return setTime(state, action)
+    case CHANGE_COLOR:
+      return changeColor(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||
