@@ -1,7 +1,7 @@
 import React from 'react'
 import R from 'ramda'
 import { connect } from 'react-redux'
-import { afFlipCard } from '../../redux.js'
+import { afFlipCard } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
 import './card.css'
 

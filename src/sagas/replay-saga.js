@@ -6,7 +6,7 @@ import {
   afAddToActionLog,
   ADD_TO_ACTION_LOG,
   RESET_STATE,
-} from '../redux.js'
+} from '../redux/actions.js'
 
 export const REPLAY_ACTIONS = 'async replay actions'
 export const afReplayActions = () => ({

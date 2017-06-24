@@ -1,6 +1,6 @@
 import { eventChannel, END } from 'redux-saga'
 import { takeLatest, take, put } from 'redux-saga/effects'
-import { afSetTime } from '../redux.js'
+import { afSetTime } from '../redux/actions.js'
 
 const START_TIMER = 'async start timer'
 export const afStartTimer = () => ({
