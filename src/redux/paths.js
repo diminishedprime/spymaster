@@ -28,7 +28,12 @@ const ws = [...localState, 'ws']
 const username = [...localState, 'username']
 const editing = [...localState, 'editing']
 const userList = [...remoteState, 'users']
+const userListUser = (idx) => [...userList, idx]
+const users = [...localState, 'users']
+const usersUser = (idx) => [...users, idx]
+const usersUserUsername = (idx) => [...usersUser(idx), 'userId']
 
+const remoteStatePath = R.lensPath([...remoteState])
 const settingsPath = R.lensPath([...settings])
 const timePath = R.lensPath([...time])
 const errorPath = R.lensPath([...error])
@@ -54,8 +59,20 @@ const wsPath = R.lensPath([...ws])
 const usernamePath = R.lensPath([...username])
 const editingPath = R.lensPath([...editing])
 const userListPath = R.lensPath([...userList])
+const userListUserPath = (idx) =>
+  R.lensPath([...userListUser(idx)])
+const usersPath = R.lensPath([...users])
+const usersUserPath = (idx) =>
+  R.lensPath([...usersUser(idx)])
+const usersUserUsernamePath = (idx) =>
+  R.lensPath([...usersUserUsername(idx)])
 
 export default {
+  usersUserUsernamePath,
+  usersUserPath,
+  userListUserPath,
+  usersPath,
+  remoteStatePath,
   userListPath,
   editingPath,
   usernamePath,

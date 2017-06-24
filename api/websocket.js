@@ -1,54 +1,61 @@
 import io from 'socket.io'
 import uuid4 from 'uuid/v4'
-import { afSetUsername, afUpdateUserList } from '../src/redux/actions.js'
+import {
+  afSetUsername,
+  afUpdateRemoteState,
+  afAddUser,
+  afRemoveUser,
+  afUpdateUsername,
+} from '../src/redux/actions.js'
 import R from 'ramda'
+import paths from '../src/redux/paths.js'
+import { store } from './redux/index.js'
 
-const removeUser = (users, user) => {
-  const idx = users.indexOf(user)
-  if (idx > -1) {
-    users.splice(idx, 1)
-  }
+const onDisconnect = (user) => () => {
+  store.dispatch(afRemoveUser(user))
 }
 
-const onDisconnect = (users, user) => () => {
-  removeUser(users, user)
+const forceUpdateRemoteState = () => {
+  const users = R.view(paths.usersPath, store.getState())
+  const remoteStateAction = afUpdateRemoteState(
+    R.view(paths.remoteStatePath, store.getState())
+  )
+  users.forEach(({ws}) => ws.emit('action', remoteStateAction))
 }
 
-const broadcastAction = (users) => (action) => {
-  users.forEach(({ws}) => ws.emit('action', action))
+const broadcastAction = (action) => {
+  store.dispatch(action)
+  forceUpdateRemoteState()
 }
 
-const updateUsername = (users, user) => (username) => {
-  user.userId = username
-  // TODO: there should be more complex logic here in the future to avoid duplicate userIds
-  broadcastAction(users)(afUpdateUserList(
-    users.map(R.prop('userId'))
-  ))
+const updateUsername = (user) => (username) => {
+  store.dispatch(afUpdateUsername(user, username))
+  forceUpdateRemoteState()
 }
 
-const onConnect = (users) => (ws) => {
+const addUser = (user) => {
+  store.dispatch(afAddUser(user))
+  forceUpdateRemoteState()
+}
+
+const onConnect = (ws) => {
   const userId = uuid4().substring(0, 8),
         user = {
           userId,
           ws,
         }
-  users.push(user)
 
-  ws.on('disconnect', onDisconnect(users, user))
-  ws.on('client action', broadcastAction(users))
-  ws.on('change username', updateUsername(users, user))
-
-  broadcastAction(users)(afUpdateUserList(
-    users.map(R.prop('userId'))
-  ))
+  ws.on('disconnect', onDisconnect(user))
+  ws.on('client action', broadcastAction)
+  ws.on('change username', updateUsername(user))
   ws.emit('message', 'Thanks for connecting via websockets')
   ws.emit('action', afSetUsername(userId))
+  addUser(user)
 }
 
 const connect = (httpServer) => {
-  const users = []
   const wss = io(httpServer)
-  wss.on('connection', onConnect(users))
+  wss.on('connection', onConnect)
 }
 
 export default connect

@@ -88,3 +88,28 @@ export const afUpdateUserList = (users) => ({
   type: UPDATE_USER_LIST,
   users,
 })
+
+export const UPDATE_REMOTE_STATE = 'update remote state'
+export const afUpdateRemoteState = (remoteState) => ({
+  type: UPDATE_REMOTE_STATE,
+  remoteState,
+})
+
+export const ADD_USER = 'server add user'
+export const afAddUser = (user) => ({
+  type: ADD_USER,
+  user,
+})
+
+export const REMOVE_USER = 'server remove user'
+export const afRemoveUser = (user) => ({
+  type: REMOVE_USER,
+  user,
+})
+
+export const UPDATE_USERNAME = 'server update username'
+export const afUpdateUsername = (user, username) => ({
+  type: UPDATE_USERNAME,
+  user,
+  username,
+})

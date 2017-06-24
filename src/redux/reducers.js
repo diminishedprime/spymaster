@@ -1,5 +1,5 @@
 import paths from './paths.js'
-import {FLIP_CARD, CHANGE_COLOR, PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS, SET_USERNAME, SET_EDITING, UPDATE_USER_LIST } from './actions.js'
+import {FLIP_CARD, PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS, SET_USERNAME, SET_EDITING, UPDATE_USER_LIST, UPDATE_REMOTE_STATE } from './actions.js'
 import { GAME_MODE_GAME } from '../constants.js'
 import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
 import R from 'ramda'
@@ -27,15 +27,6 @@ const toggleTitle = (state, _) =>
 
 const setTime = (state, {seconds}) =>
   R.set(paths.timePath, seconds, state)
-
-const otherTeam = (team) => team === 1 ? 2 : 1
-
-const changeColor = (state, {team, color}) => {
-  const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
-  return (color !== otherTeamsColor)
-    ? R.set(paths.backgroundColorPath(team), color, state)
-    : state
-}
 
 const pickRole = (state, {team, role}) => {
   const withPlayerType = R.set(paths.playerTypePath, ({team, role}))
@@ -65,6 +56,12 @@ const setEditing = (state, {flag}) =>
 const updateUserList = (state, {users}) =>
   R.set(paths.userListPath, users, state)
 
+const updateRemoteState = (state, {remoteState}) => {
+  console.log(remoteState)
+  return R.set(paths.remoteStatePath, remoteState, state)
+}
+
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
     case REPLAYING:
@@ -83,8 +80,6 @@ export const app = (state=initialState, action) => {
       return toggleTitle(state, action)
     case SET_TIME:
       return setTime(state, action)
-    case CHANGE_COLOR:
-      return changeColor(state, action)
     case PICK_ROLE:
       return pickRole(state, action)
     case FLIP_CARD:
@@ -97,6 +92,8 @@ export const app = (state=initialState, action) => {
       return setEditing(state, action)
     case UPDATE_USER_LIST:
       return updateUserList(state, action)
+    case UPDATE_REMOTE_STATE:
+      return updateRemoteState(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||
