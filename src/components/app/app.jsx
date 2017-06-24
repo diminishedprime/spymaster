@@ -37,7 +37,7 @@ const TeamRow = connect(
       }}>Agent</button>
     </div>
     <CirclePicker onChangeComplete={onColorChange}
-                  color={color}/>
+      color={color}/>
   </div>
 ))
 

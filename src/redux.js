@@ -125,8 +125,8 @@ const teamColorPath = (team) => R.lensPath(['team', team, 'color'])
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(teamColorPath(otherTeam(team)), state)
   return (color !== otherTeamsColor)
-       ? R.set(teamColorPath(team), color, state)
-       : state
+    ? R.set(teamColorPath(team), color, state)
+    : state
 }
 
 const appReducer = (state=initialState, action) => {
