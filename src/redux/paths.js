@@ -16,9 +16,13 @@ const replaying = ['replaying']
 const settings = ['settings']
 const showTitle = [...settings, 'showTitle']
 const colors = ['colors']
-const backgroundColor = ['backgroundColor']
+const colorsTeam = (team) =>
+  [...colors, team]
+const colorsTeamBackgroundColor = (team) =>
+  [...colorsTeam(team), 'backgroundColor']
 const currentTeam = ['currentTeam']
 
+export const settingsPath = R.lensPath([...settings])
 export const timePath = R.lensPath([...time])
 export const errorPath = R.lensPath([...error])
 export const errorTextPath = R.lensPath([...errorText])
@@ -31,8 +35,11 @@ export const rolePath = R.lensPath([...role])
 export const teamPath = R.lensPath([...team])
 export const gameModePath = R.lensPath([...gameMode])
 export const cardsPath = R.lensPath([...cards])
+export const colorsPath = R.lensPath([...colors])
+export const colorsTeamPath = (team) =>
+  R.lensPath(colorsTeam(team))
 export const backgroundColorPath = (team) =>
-  R.lensPath([...colors, team, ...backgroundColor])
+  R.lensPath([...colorsTeamBackgroundColor(team)])
 export const currentTeamPath = R.lensPath([...currentTeam])
 
 export default {
@@ -50,4 +57,7 @@ export default {
   rolePath,
   teamPath,
   currentTeamPath,
+  colorsPath,
+  colorsTeamPath,
+  settingsPath,
 }

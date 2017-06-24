@@ -3,8 +3,9 @@ import words from './words.js'
 import R from 'ramda'
 import { GAME_MODE_PICK_TEAM } from '../constants.js'
 import shuffle from 'shuffle-array'
-shuffle(words)
+import paths from './paths.js'
 
+shuffle(words)
 const randTeam = () => {
   const rnd = Math.random()
   return (rnd >= 0.0 && rnd < 0.25)
@@ -16,7 +17,7 @@ const randTeam = () => {
         : 'bystander'
 }
 
-export const initialCards = R.compose(
+const initialCards = R.compose(
   R.map((card) => R.assoc('id', uuid4(), card)),
   R.map((text) => ({
     text,
@@ -25,27 +26,24 @@ export const initialCards = R.compose(
   })),
   R.take(25)
 )(words)
+
 export const initialActionLog = []
 export const initialErrorState = {}
-export const initialSettings = {
-  showTitle: true,
-}
 
-export const initialState = {
-  currentTeam: (Math.random() > 0.5) ? '1' : '2',
-  colors: {
-    '1': { backgroundColor: '#f44336' },
-    '2': { backgroundColor: '#2196f3' },
-    'assassin': { backgroundColor: '#000000'},
-    'bystander': { backgroundColor: '#686868'},
-  },
-  localState: {
-    playerType: {role: 'spymaster', team: 1},
-    gameMode: GAME_MODE_PICK_TEAM,
-  },
-  cards: initialCards,
-  error: initialErrorState,
-  actionLog: initialActionLog,
-  settings: initialSettings,
-  replaying: false,
-}
+const currentTeam = (Math.random() > 0.5) ? '1' : '2'
+
+export const initialState = R.compose(
+  R.set(paths.currentTeamPath, currentTeam),
+  R.set(paths.backgroundColorPath('1'), '#f44336'),
+  R.set(paths.backgroundColorPath('2'), '#2196f3'),
+  R.set(paths.backgroundColorPath('assassin'), '#000000'),
+  R.set(paths.backgroundColorPath('bystander'), '#686868'),
+  R.set(paths.rolePath, 'spymaster'),
+  R.set(paths.teamPath, '1'),
+  R.set(paths.gameModePath, GAME_MODE_PICK_TEAM),
+  R.set(paths.cardsPath, initialCards),
+  R.set(paths.errorPath, initialErrorState),
+  R.set(paths.showTitlePath, true),
+  R.set(paths.actionLogPath, initialActionLog),
+  R.set(paths.replayingPath, false)
+)({})
