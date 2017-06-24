@@ -14,7 +14,7 @@ const startTimer = function* () {
     let remainingSeconds = seconds
     iv = setInterval(
       () => {
-        if (seconds >= 0) {
+        if (remainingSeconds >= 0) {
           emitter(remainingSeconds)
           remainingSeconds--
         } else {
