@@ -3,6 +3,7 @@ import R from 'ramda'
 import { connect } from 'react-redux'
 import { afStartTimer } from '../../sagas/timer.js'
 import Card from '../card/card.jsx'
+import { fgColorForRGB, hexToRGB } from '../../util.js'
 import './game.css'
 
 const CardRow = ({cards}) => (
@@ -40,14 +41,36 @@ const Timer = connect(
 ))
 
 
+const InfoColumn = connect(
+  ({localState: {playerType: {team}}, colors},
+    {backgroundColor}) => ({
+    style: {
+      color: fgColorForRGB(hexToRGB(colors[team].backgroundColor)),
+      backgroundColor: backgroundColor || colors[team].backgroundColor,
+    },
+  })
+)(({label, value, style}) => (
+  <div className="infoColumn" style={style}>
+    <div>{label}</div>
+    <div className="infoColumnValue">{value}</div>
+  </div>
+))
+
 const Info = connect(
-  ({localState: {playerType: {role, team}}}) => ({
+  ({localState: {playerType: {role, team}}, currentTeam, colors}) => ({
     role,
     team,
+    currentTeam,
+    backgroundColor: colors[currentTeam].backgroundColor,
   })
-)(({role, team}) => (
-  <div>
-    {role} {team}
+)(({role, team, currentTeam, backgroundColor}) => (
+  <div className="info">
+    <InfoColumn label="Current Team"
+      value={currentTeam}
+      backgroundColor={backgroundColor}
+    />
+    <InfoColumn label="Your Role" value={role} />
+    <InfoColumn label="Your Team" value={team} />
   </div>
 ))
 
