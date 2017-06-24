@@ -29,20 +29,27 @@ const mapStateToProps = ({
     playerTeam,
     role,
     currentTeam,
+    flipped,
   }
 }
 
 const mapDispatchToProps = (dispatch, {id}) => ({
-  flip: (playerTeam, role, currentTeam) => () => {
-    if ( role !== 'spymaster' && playerTeam === currentTeam )
-      dispatch(afFlipCard(id))
-  },
+  flip: () => dispatch(afFlipCard(id)),
 })
 
-const Card = ({text, style, flip, playerTeam, role, currentTeam}) => (
+const Card = ({
+  text,
+  style,
+  flip,
+  playerTeam,
+  role,
+  currentTeam,
+  flipped,
+}) => (
   <button className="card"
+    disabled={role === 'spymaster' || playerTeam !== currentTeam || flipped}
     style={style}
-    onClick={flip(playerTeam, role, currentTeam)}>
+    onClick={flip}>
     {text}
   </button>
 )
