@@ -5,6 +5,11 @@ import { afSetWs } from '../redux/actions.js'
 import R from 'ramda'
 import paths from '../redux/paths.js'
 
+export const SET_SERVER_USERNAME = 'async set server username'
+export const afSetServerUsername = () => ({
+  type: SET_SERVER_USERNAME,
+})
+
 export const CONNECT_TO_WEBSOCKET = 'async connect to websocket'
 export const afConnectToWebsocket = () => ({
   type: CONNECT_TO_WEBSOCKET,
@@ -20,6 +25,12 @@ export const afEmitAction = (action) => ({
   type: EMIT_ACTION,
   action,
 })
+
+const emitSetServerUsername = function* () {
+  const username = yield select((state) => R.view(paths.usernamePath, state))
+  const ws = yield select((state) => R.view(paths.wsPath, state))
+  ws.emit('change username', username)
+}
 
 const emitAction = function* ({action}) {
   const ws = yield select((state) => R.view(paths.wsPath, state))
@@ -62,4 +73,5 @@ export default function* () {
   yield takeLatest(CONNECT_TO_WEBSOCKET, connectToWebsocket)
   yield takeLatest(LISTEN_TO_WEBSOCKET, listenToWebsocket)
   yield takeEvery(EMIT_ACTION, emitAction)
+  yield takeEvery(SET_SERVER_USERNAME, emitSetServerUsername)
 }

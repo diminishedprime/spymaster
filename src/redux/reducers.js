@@ -1,5 +1,5 @@
 import paths from './paths.js'
-import {FLIP_CARD, CHANGE_COLOR, PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS} from './actions.js'
+import {FLIP_CARD, CHANGE_COLOR, PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS, SET_USERNAME, SET_EDITING, UPDATE_USER_LIST } from './actions.js'
 import { GAME_MODE_GAME } from '../constants.js'
 import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
 import R from 'ramda'
@@ -56,6 +56,15 @@ const flipCard = (state, {id}) => {
 const setWs = (state, {ws}) =>
   R.set(paths.wsPath, ws, state)
 
+const setUsername = (state, {username}) =>
+  R.set(paths.usernamePath, username, state)
+
+const setEditing = (state, {flag}) =>
+  R.set(paths.editingPath, flag, state)
+
+const updateUserList = (state, {users}) =>
+  R.set(paths.userListPath, users, state)
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
     case REPLAYING:
@@ -82,6 +91,12 @@ export const app = (state=initialState, action) => {
       return flipCard(state, action)
     case SET_WS:
       return setWs(state, action)
+    case SET_USERNAME:
+      return setUsername(state, action)
+    case SET_EDITING:
+      return setEditing(state, action)
+    case UPDATE_USER_LIST:
+      return updateUserList(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

@@ -25,6 +25,9 @@ const colorsTeamBackgroundColor = (team) =>
   [...colorsTeam(team), 'backgroundColor']
 const currentTeam = [...remoteState, 'currentTeam']
 const ws = [...localState, 'ws']
+const username = [...localState, 'username']
+const editing = [...localState, 'editing']
+const userList = [...remoteState, 'users']
 
 const settingsPath = R.lensPath([...settings])
 const timePath = R.lensPath([...time])
@@ -45,12 +48,17 @@ const colorsTeamPath = (team) =>
 const backgroundColorPath = (team) =>
   R.lensPath([...colorsTeamBackgroundColor(team)])
 const currentTeamPath = R.lensPath([...currentTeam])
-
 const cardsIdPath = (id) => R.lensPath(cardsId(id))
 const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
 const wsPath = R.lensPath([...ws])
+const usernamePath = R.lensPath([...username])
+const editingPath = R.lensPath([...editing])
+const userListPath = R.lensPath([...userList])
 
 export default {
+  userListPath,
+  editingPath,
+  usernamePath,
   wsPath,
   timePath,
   errorPath,

@@ -70,3 +70,21 @@ export const afSetWs = (ws) => ({
   type: SET_WS,
   ws,
 })
+
+export const SET_USERNAME = 'set username'
+export const afSetUsername = (username) => ({
+  type: SET_USERNAME,
+  username,
+})
+
+export const SET_EDITING = 'set editing'
+export const afSetEditing = (flag=true) => ({
+  type: SET_EDITING,
+  flag,
+})
+
+export const UPDATE_USER_LIST = 'update user list'
+export const afUpdateUserList = (users) => ({
+  type: UPDATE_USER_LIST,
+  users,
+})

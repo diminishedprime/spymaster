@@ -72,15 +72,17 @@ const Info = connect(
       team: R.view(paths.teamPath, state),
       currentTeam,
       backgroundColor: R.view(paths.backgroundColorPath(currentTeam), state),
+      username: R.view(paths.usernamePath, state),
     })
   }
-)(({role, team, currentTeam, backgroundColor}) => (
+)(({role, team, currentTeam, backgroundColor, username}) => (
   <div className="info">
     <InfoColumn label="Current Team"
       value={currentTeam}
       backgroundColor={backgroundColor}
     />
     <InfoColumn label="Your Role" value={role} />
+    <InfoColumn label="Username" value={username} />
     <InfoColumn label="Your Team" value={team} />
   </div>
 ))

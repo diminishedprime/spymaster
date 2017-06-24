@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
 import { CirclePicker } from 'react-color'
-import { afChangeColor, afPickRole, afToggleTitle } from '../../redux/actions.js'
+import { afChangeColor, afPickRole, afToggleTitle, afSetEditing, afSetUsername } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
-import { afEmitAction } from '../../sagas/connect-to-websocket.js'
+import { afEmitAction, afSetServerUsername } from '../../sagas/connect-to-websocket.js'
 import paths from '../../redux/paths.js'
 import R from 'ramda'
 import './app.css'
@@ -51,6 +51,45 @@ const TeamRow = connect(
   </div>
 ))
 
+const Username = connect(
+  (state) => ({
+    username: R.view(paths.usernamePath, state),
+    editing: R.view(paths.editingPath, state),
+  }),
+  (dispatch) => ({
+    setEditing: () => dispatch(afSetEditing()),
+    changeUsername: (username) => dispatch(afSetUsername(username)),
+    updateUsername: () => dispatch(afSetServerUsername()),
+  })
+)(({editing, username, setEditing, changeUsername, updateUsername}) => (
+  <div>
+    {editing
+      ? (
+        <div>
+          <input className="usernameInput"
+            value={username}
+            onChange={({target: {value}}) => changeUsername(value)}
+          />
+          <button onClick={updateUsername}>submit</button>
+        </div>
+      )
+      : (
+        <div onClick={setEditing}>
+          {username}
+        </div>
+      )
+
+    }
+  </div>
+))
+
+const PickUsername = () => (
+  <div className="pickUsername">
+    <div>Your Name</div>
+    <Username />
+  </div>
+)
+
 const PickTeam = () => (
   <div className="pickTeam" >
     <TeamRow team="1" />
@@ -58,12 +97,30 @@ const PickTeam = () => (
   </div>
 )
 
+const ConnectedUsers = connect(
+  (state) => ({
+    users: R.view(paths.userListPath, state),
+  })
+)(({users}) => (
+  <div className="connectedUsers">
+    <h3>Connected Users</h3>
+    <div className="users">
+      {users
+        .map((user) => (
+          <div key={user}>{user}</div>
+        ))}
+    </div>
+  </div>
+))
+
 const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
   <div className="app">
     {hasError && <ErrorBar />}
     {showTitle && <div className="title" onClick={toggleTitle}>Spymaster</div>}
     {gameMode === 'game' && <Game />}
+    {gameMode === 'pick team' && <PickUsername />}
     {gameMode === 'pick team' && <PickTeam />}
+    <ConnectedUsers />
 
   </div>
 )
