@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { afStartTimer } from '../../sagas/timer.js'
 import Card from '../card/card.jsx'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
+import paths from '../../redux/paths.js'
 import './game.css'
 
 const CardRow = ({cards}) => (
@@ -30,7 +31,9 @@ const Board = ({cards}) => (
 )
 
 const Timer = connect(
-  ({time}) => ({time}),
+  (state) => ({
+    time: R.view(paths.timePath, state),
+  }),
   (dispatch) => ({start: () => dispatch(afStartTimer())})
 )(({time, start}) => (
   <div className="timer">
@@ -42,13 +45,18 @@ const Timer = connect(
 
 
 const InfoColumn = connect(
-  ({localState: {playerType: {team}}, colors},
-    {backgroundColor}) => ({
-    style: {
-      color: fgColorForRGB(hexToRGB(colors[team].backgroundColor)),
-      backgroundColor: backgroundColor || colors[team].backgroundColor,
-    },
-  })
+  (state, {backgroundColor}) => {
+    const team = R.view(paths.teamPath, state),
+          bgColor = backgroundColor ||
+                    R.view(paths.backgroundColorPath(team), state),
+          fgColor = fgColorForRGB(hexToRGB(bgColor))
+    return {
+      style: {
+        color: fgColor,
+        backgroundColor: bgColor,
+      },
+    }
+  }
 )(({label, value, style}) => (
   <div className="infoColumn" style={style}>
     <div>{label}</div>
@@ -57,12 +65,15 @@ const InfoColumn = connect(
 ))
 
 const Info = connect(
-  ({localState: {playerType: {role, team}}, currentTeam, colors}) => ({
-    role,
-    team,
-    currentTeam,
-    backgroundColor: colors[currentTeam].backgroundColor,
-  })
+  (state) => {
+    const currentTeam = R.view(paths.currentTeamPath, state)
+    return ({
+      role: R.view(paths.rolePath, state),
+      team: R.view(paths.teamPath, state),
+      currentTeam,
+      backgroundColor: R.view(paths.backgroundColorPath(currentTeam), state),
+    })
+  }
 )(({role, team, currentTeam, backgroundColor}) => (
   <div className="info">
     <InfoColumn label="Current Team"
@@ -74,7 +85,11 @@ const Info = connect(
   </div>
 ))
 
-const Game = ({cards}) => (
+const Game = connect(
+  (state) => ({
+    cards: R.view(paths.cardsPath, state),
+  })
+)(({cards}) => (
   <div className="game">
     <Timer />
     <Board cards={cards} />
@@ -82,15 +97,6 @@ const Game = ({cards}) => (
     <Info />
   </div>
 
-)
-const mapStateToProps = ({cards}) => ({
-  cards,
-})
+))
 
-const mapDispatchToProps = () => ({
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Game)
+export default Game

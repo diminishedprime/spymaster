@@ -3,27 +3,33 @@ import R from 'ramda'
 import { connect } from 'react-redux'
 import { afFlipCard } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
+import paths from '../../redux/paths.js'
 import './card.css'
 
-const mapStateToProps = ({
-  colors,
-  localState: {playerType: {role, team: playerTeam}},
-  currentTeam,
-}, {
+/* {
+ *   colors,
+ *   localState: {playerType: {role, team: playerTeam}},
+ *   currentTeam,
+ * }*/
+
+const mapStateToProps = (state, {
   team: cardTeam,
   flipped,
 }) => {
-  const bgColor = colors[cardTeam].backgroundColor,
-        baseStyle = {
-          color: '#000000',
-          backgroundColor: '#ffffff',
-        },
-        style = (flipped || role === 'spymaster')
-          ? R.compose(
-            R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
-            R.assoc('backgroundColor', bgColor)
-          )(baseStyle)
-          : baseStyle
+  const role = R.view(paths.rolePath, state)
+  const bgColor = R.view(paths.backgroundColorPath(cardTeam), state)
+  const playerTeam = R.view(paths.teamPath, state)
+  const currentTeam = R.view(paths.currentTeamPath, state)
+  const baseStyle = {
+    color: '#000000',
+    backgroundColor: '#ffffff',
+  }
+  const style = (flipped || role === 'spymaster')
+    ? R.compose(
+      R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
+      R.assoc('backgroundColor', bgColor)
+    )(baseStyle)
+    : baseStyle
   return {
     style,
     playerTeam,

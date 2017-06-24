@@ -5,8 +5,9 @@ import Game from '../game/game.jsx'
 import { CirclePicker } from 'react-color'
 import { afChangeColor, afPickRole, afToggleTitle } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
+import paths from '../../redux/paths.js'
+import R from 'ramda'
 import './app.css'
-
 
 /*
  * import {store} from '../../redux.js'
@@ -25,7 +26,9 @@ const StyledButton = ({backgroundColor, text, onClick}) => (
 )
 
 const TeamRow = connect(
-  (state, {team}) => ({backgroundColor: state.colors[team].backgroundColor}),
+  (state, {team}) => ({
+    backgroundColor: R.view(paths.backgroundColorPath(team), state),
+  }),
   (dispatch, {team}) => ({
     onColorChange: ({hex}) => dispatch(afChangeColor(team, hex)),
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
@@ -63,14 +66,10 @@ const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
 
   </div>
 )
-const mapStateToProps = ({
-  error: {text: hasError},
-  settings: {showTitle},
-  localState: {gameMode},
-}) => ({
-  hasError,
-  showTitle,
-  gameMode,
+const mapStateToProps = (state) => ({
+  hasError: R.view(paths.errorTextPath, state),
+  showTitle: R.view(paths.showTitlePath, state),
+  gameMode: R.view(paths.gameModePath, state),
 })
 
 const mapDispatchToProps = (dispatch) => ({
