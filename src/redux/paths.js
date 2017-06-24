@@ -8,6 +8,8 @@ const role = [...playerType, 'role']
 const team = [...playerType, 'team']
 const gameMode = [...remoteState, 'gameMode']
 const cards = [...remoteState, 'cards']
+const cardsId = (id) => [...cards, id]
+const cardsFlipped = (id) => [...cardsId(id), 'flipped']
 const time = [...remoteState, 'time']
 const error = [...localState, 'error']
 const errorText = [...error, 'text']
@@ -43,6 +45,9 @@ const backgroundColorPath = (team) =>
   R.lensPath([...colorsTeamBackgroundColor(team)])
 const currentTeamPath = R.lensPath([...currentTeam])
 
+const cardsIdPath = (id) => R.lensPath(cardsId(id))
+const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
+
 export default {
   timePath,
   errorPath,
@@ -61,4 +66,6 @@ export default {
   colorsPath,
   colorsTeamPath,
   settingsPath,
+  cardsIdPath,
+  cardsFlippedPath,
 }

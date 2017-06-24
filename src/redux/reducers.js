@@ -66,10 +66,8 @@ const pickRole = (state, {team, role}) => {
 const flipCard = (state, {id}) => {
   const cards = R.view(paths.cardsPath, state),
         cardIdx = R.findIndex((card) => card.id === id, cards)
-  return R.set(R.lensPath(['cards', cardIdx, 'flipped']), true, state)
+  return R.set(paths.cardsFlippedPath(cardIdx), true, state)
 }
-
-
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
