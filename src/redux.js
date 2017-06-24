@@ -50,6 +50,7 @@ const GAME_MODE_PICK_TEAM = 'pick team'
 const GAME_MODE_GAME = 'game'
 
 const initialState = {
+  currentTeam: (Math.random() > 0.5) ? '1' : '2',
   colors: {
     '1': { backgroundColor: '#f44336' },
     '2': { backgroundColor: '#2196f3' },
