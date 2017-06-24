@@ -1,15 +1,4 @@
-import {
-  replayingPath,
-  actionLogPath,
-  errorSeverityPath,
-  errorTextPath,
-  errorPath,
-  showTitlePath,
-  timePath,
-  playerTypePath,
-  gameModePath,
-  cardsPath,
-} from './paths.js'
+import paths from './paths.js'
 import {
   FLIP_CARD,
   CHANGE_COLOR,
@@ -32,43 +21,41 @@ import {
 import R from 'ramda'
 
 const replayingAction = (state, {flag}) =>
-  R.set(replayingPath, flag, state)
+  R.set(paths.replayingPath, flag, state)
 
 const clearActionLog = (state, _) =>
-  R.set(actionLogPath, initialActionLog, state)
+  R.set(paths.actionLogPath, initialActionLog, state)
 
 const addToActionLog = (state, action) =>
-  R.over(actionLogPath, R.append(action), state)
+  R.over(paths.actionLogPath, R.append(action), state)
 
 const hiError = (state, {
   text='The request failed',
   severity='error',
 }) =>
-  R.set(errorSeverityPath, severity, R.set(errorTextPath, text, state))
+  R.set(paths.errorSeverityPath, severity, R.set(paths.errorTextPath, text, state))
 
 const dismissError = (state, _) =>
-  R.set(errorPath, initialErrorState, state)
+  R.set(paths.errorPath, initialErrorState, state)
 
 const toggleTitle = (state, _) =>
-  R.over(showTitlePath, R.not, state)
+  R.over(paths.showTitlePath, R.not, state)
 
 const setTime = (state, {seconds}) =>
-  R.set(timePath, seconds, state)
+  R.set(paths.timePath, seconds, state)
 
 const otherTeam = (team) => team === 1 ? 2 : 1
 
-const teamColorPath = (team) => R.lensPath(['colors', team, 'backgroundColor'])
-
 const changeColor = (state, {team, color}) => {
-  const otherTeamsColor = R.view(teamColorPath(otherTeam(team)), state)
+  const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
   return (color !== otherTeamsColor)
-    ? R.set(teamColorPath(team), color, state)
+    ? R.set(paths.backgroundColorPath(team), color, state)
     : state
 }
 
 const pickRole = (state, {team, role}) => {
-  const withPlayerType = R.set(playerTypePath, ({team, role}))
-  const withGameMode = R.set(gameModePath, GAME_MODE_GAME)
+  const withPlayerType = R.set(paths.playerTypePath, ({team, role}))
+  const withGameMode = R.set(paths.gameModePath, GAME_MODE_GAME)
 
   return R.compose(
     withPlayerType,
@@ -77,7 +64,7 @@ const pickRole = (state, {team, role}) => {
 }
 
 const flipCard = (state, {id}) => {
-  const cards = R.view(cardsPath, state),
+  const cards = R.view(paths.cardsPath, state),
         cardIdx = R.findIndex((card) => card.id === id, cards)
   return R.set(R.lensPath(['cards', cardIdx, 'flipped']), true, state)
 }
