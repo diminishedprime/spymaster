@@ -4,6 +4,7 @@ import App from './components/app/app.jsx'
 import registerServiceWorker from './registerServiceWorker'
 import { Provider } from 'react-redux'
 import { store } from './redux/index.js'
+import { afConnectToWebsocket } from './sagas/connect-to-websocket.js'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -12,3 +13,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 registerServiceWorker()
+store.dispatch(afConnectToWebsocket())

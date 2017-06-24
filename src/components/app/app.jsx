@@ -5,6 +5,7 @@ import Game from '../game/game.jsx'
 import { CirclePicker } from 'react-color'
 import { afChangeColor, afPickRole, afToggleTitle } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
+import { afEmitAction } from '../../sagas/connect-to-websocket.js'
 import paths from '../../redux/paths.js'
 import R from 'ramda'
 import './app.css'
@@ -30,7 +31,7 @@ const TeamRow = connect(
     backgroundColor: R.view(paths.backgroundColorPath(team), state),
   }),
   (dispatch, {team}) => ({
-    onColorChange: ({hex}) => dispatch(afChangeColor(team, hex)),
+    onColorChange: ({hex}) => dispatch(afEmitAction(afChangeColor(team, hex))),
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
 )(({onColorChange, backgroundColor, pickRole}) => (

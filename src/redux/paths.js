@@ -24,6 +24,7 @@ const colorsTeam = (team) =>
 const colorsTeamBackgroundColor = (team) =>
   [...colorsTeam(team), 'backgroundColor']
 const currentTeam = [...remoteState, 'currentTeam']
+const ws = [...localState, 'ws']
 
 const settingsPath = R.lensPath([...settings])
 const timePath = R.lensPath([...time])
@@ -47,8 +48,10 @@ const currentTeamPath = R.lensPath([...currentTeam])
 
 const cardsIdPath = (id) => R.lensPath(cardsId(id))
 const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
+const wsPath = R.lensPath([...ws])
 
 export default {
+  wsPath,
   timePath,
   errorPath,
   errorTextPath,

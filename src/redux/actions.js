@@ -64,3 +64,9 @@ export const afReplaying = (flag) => ({
   type: CLEAR_ACTION_LOG,
   flag,
 })
+
+export const SET_WS = 'set ws'
+export const afSetWs = (ws) => ({
+  type: SET_WS,
+  ws,
+})
