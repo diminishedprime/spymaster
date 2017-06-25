@@ -20,6 +20,13 @@ import {
   setTime,
   updateHintNumber,
 } from '../../src/redux/reducers.js'
+import {
+  TEAM_1,
+  TEAM_2,
+  ASSASSIN,
+  ZERO,
+  INF,
+} from '../../src/constants.js'
 import paths from '../../src/redux/paths.js'
 import R from 'ramda'
 
@@ -43,7 +50,7 @@ const removeUser = (state, {user}) => {
   )(state)
 }
 
-const otherTeam = (team) => team === '1' ? '2' : '1'
+const otherTeam = (team) => team === TEAM_1 ? TEAM_2 : TEAM_1
 
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
@@ -71,7 +78,7 @@ const nextTurn = (state) => R.compose(
   R.set(paths.hintPath, initialHint)
 )(state)
 
-const loseGame = (state, {team}) => {
+const loseGame = (state, {team: _}) => {
   /* Implement actual game over logic team is the team that lost this makes it
      easy to do forfeit logic, if it is undefined, then the currentTeam just lost
    */
@@ -82,7 +89,7 @@ const loseGame = (state, {team}) => {
 
 const checkAssassin = (id) => (state) => {
   const cardTeam = R.view(paths.cardsTeamPath(id), state)
-  return (cardTeam === 'assassin')
+  return (cardTeam === ASSASSIN)
     ? loseGame(state)
     : state
 }
@@ -97,8 +104,8 @@ const checkCorrectCard = (id) => (state) => {
 
 const decreaseGuesses = (state) => {
   const numGuesses = R.view(paths.hintNumberPath, state)
-  // If they explicitly picked 'inf' or '0', they infinite guesses
-  if (numGuesses === 'inf' || numGuesses === '0') {
+  // If they explicitly picked 'inf' or '0', they have infinite guesses
+  if (numGuesses === INF || numGuesses === ZERO) {
     return state
   }
 
