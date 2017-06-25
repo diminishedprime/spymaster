@@ -29,6 +29,7 @@ const mapDispatchToProps = (dispatch) => {
 
   const onKeyPress = ({key}) => (key === 'Enter') ? updateUsername() : null
   const onChange = ({target: {value}}) => changeUsername(value)
+  const onFocus = (event) => event.target.select()
 
   return ({
     setEditing,
@@ -36,16 +37,22 @@ const mapDispatchToProps = (dispatch) => {
     onChange,
     updateUsername,
     onKeyPress,
+    onFocus,
   })
 }
 
 const EditUsername = connect(
   mapStateToProps,
   mapDispatchToProps
-)(({username, onChange, onKeyPress, updateUsername}) => (
-  <div>
-    <input className="usernameInput" value={username} onChange={onChange} onKeyPress={onKeyPress} />
-    <button onClick={updateUsername}>submit</button>
+)(({username, onChange, onKeyPress, updateUsername, onFocus}) => (
+  <div className="editUsername">
+    <input className="usernameInput"
+      value={username}
+      onChange={onChange}
+      onKeyPress={onKeyPress}
+      onFocus={onFocus}
+    />
+    <button className="usernameButton" onClick={updateUsername}>update</button>
   </div>
 ))
 
