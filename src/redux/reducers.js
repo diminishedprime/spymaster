@@ -1,5 +1,21 @@
 import paths from './paths.js'
-import {PICK_ROLE, SET_TIME, TOGGLE_TITLE, ERROR_OCCURED, DISMISS_ERROR, ADD_TO_ACTION_LOG, CLEAR_ACTION_LOG, RESET_STATE, REPLAYING, SET_WS, SET_USERNAME, SET_EDITING, UPDATE_USER_LIST, UPDATE_REMOTE_STATE } from './actions.js'
+import {
+  PICK_ROLE,
+  SET_TIME,
+  TOGGLE_TITLE,
+  ERROR_OCCURED,
+  DISMISS_ERROR,
+  ADD_TO_ACTION_LOG,
+  CLEAR_ACTION_LOG,
+  RESET_STATE,
+  REPLAYING,
+  SET_WS,
+  SET_USERNAME,
+  SET_EDITING,
+  UPDATE_USER_LIST,
+  UPDATE_REMOTE_STATE,
+  UPDATE_HINT,
+} from './actions.js'
 import { GAME_MODE_GAME } from '../constants.js'
 import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
 import R from 'ramda'
@@ -50,10 +66,11 @@ const setEditing = (state, {flag}) =>
 const updateUserList = (state, {users}) =>
   R.set(paths.userListPath, users, state)
 
-const updateRemoteState = (state, {remoteState}) => {
-  console.log(remoteState)
-  return R.set(paths.remoteStatePath, remoteState, state)
-}
+const updateRemoteState = (state, {remoteState}) =>
+  R.set(paths.remoteStatePath, remoteState, state)
+
+export const updateHint = (state, {hint}) =>
+  R.set(paths.hintTextPath, hint, state)
 
 
 export const app = (state=initialState, action) => {
@@ -86,6 +103,8 @@ export const app = (state=initialState, action) => {
       return updateUserList(state, action)
     case UPDATE_REMOTE_STATE:
       return updateRemoteState(state, action)
+    case UPDATE_HINT:
+      return updateHint(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

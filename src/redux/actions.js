@@ -113,3 +113,9 @@ export const afUpdateUsername = (user, username) => ({
   user,
   username,
 })
+
+export const UPDATE_HINT = 'update hint'
+export const afUpdateHint = (hint) => ({
+  type: UPDATE_HINT,
+  hint,
+})

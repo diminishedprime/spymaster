@@ -32,7 +32,12 @@ const userListUser = (idx) => [...userList, idx]
 const users = [...localState, 'users']
 const usersUser = (idx) => [...users, idx]
 const usersUserUsername = (idx) => [...usersUser(idx), 'userId']
+const hint = [...remoteState, 'hint']
+const hintText = [...hint, 'text']
+const hintNumber = [...hint, 'number']
 
+const hintTextPath = R.lensPath([...hintText])
+const hintNumberPath = R.lensPath([...hintNumber])
 const remoteStatePath = R.lensPath([...remoteState])
 const settingsPath = R.lensPath([...settings])
 const timePath = R.lensPath([...time])
@@ -68,6 +73,8 @@ const usersUserUsernamePath = (idx) =>
   R.lensPath([...usersUserUsername(idx)])
 
 export default {
+  hintTextPath,
+  hintNumberPath,
   usersUserUsernamePath,
   usersUserPath,
   userListUserPath,
