@@ -17,35 +17,52 @@ import {
 } from '../../redux/paths.js'
 import './pick-username.css'
 
-const Username = connect(
-  (state) => ({
-    username: R.view(usernamePath, state),
-    editing: R.view(editingPath, state),
-  }),
-  (dispatch) => ({
-    setEditing: () => dispatch(afSetEditing()),
-    changeUsername: (username) => dispatch(afSetUsername(username)),
-    updateUsername: () => dispatch(afSetServerUsername()),
-  })
-)(({editing, username, setEditing, changeUsername, updateUsername}) => (
-  <div>
-    {editing
-      ? (
-        <div>
-          <input className="usernameInput"
-            value={username}
-            onChange={({target: {value}}) => changeUsername(value)}
-          />
-          <button onClick={updateUsername}>submit</button>
-        </div>
-      )
-      : (
-        <div onClick={setEditing}>
-          {username}
-        </div>
-      )
+const mapStateToProps = (state) => ({
+  username: R.view(usernamePath, state),
+  editing: R.view(editingPath, state),
+})
 
-    }
+const mapDispatchToProps = (dispatch) => {
+  const setEditing = () => dispatch(afSetEditing())
+  const changeUsername = (username) => dispatch(afSetUsername(username))
+  const updateUsername = () => dispatch(afSetServerUsername())
+
+  const onKeyPress = ({key}) => (key === 'Enter') ? updateUsername() : null
+  const onChange = ({target: {value}}) => changeUsername(value)
+
+  return ({
+    setEditing,
+    changeUsername,
+    onChange,
+    updateUsername,
+    onKeyPress,
+  })
+}
+
+const EditUsername = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(({username, onChange, onKeyPress, updateUsername}) => (
+  <div>
+    <input className="usernameInput" value={username} onChange={onChange} onKeyPress={onKeyPress} />
+    <button onClick={updateUsername}>submit</button>
+  </div>
+))
+
+const ShowUsername = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(({setEditing, username}) => (
+  <div onClick={setEditing}>
+    {username}
+  </div>
+))
+
+const Username = connect(
+  mapStateToProps
+)(({editing}) => (
+  <div>
+    { editing ? <EditUsername /> : <ShowUsername /> }
   </div>
 ))
 
