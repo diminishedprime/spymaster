@@ -121,13 +121,26 @@ const decreaseGuesses = (state) => {
 }
 
 const determineTurn = (teamFlipping, cardIdx) => (state) => {
+  const cards = R.view(cardsPath, state)
   const cardTeam = R.view(cardsTeamPath(cardIdx), state)
   const pickedAssassan = (cardTeam === ASSASSIN)
   const currentTeam = R.view(currentTeamPath, state)
   const correctCard = (currentTeam === cardTeam)
+  const team1done = cards
+    .filter((card) => (card.team === TEAM_1))
+    .filter((card) => !card.fliped)
+    .length === 0
+  const team2done = cards
+    .filter((card) => (card.team === TEAM_2))
+    .filter((card) => !card.flipped)
+    .length === 0
 
   if (pickedAssassan) {
     return loseGame(state, afForfeit(teamFlipping))
+  } else if (team1done) {
+    return loseGame(state, afForfeit(TEAM_2))
+  } else if (team2done) {
+    return loseGame(state, afForfeit(TEAM_1))
   } else if (correctCard) {
     return decreaseGuesses(state)
   } else {
@@ -155,7 +168,8 @@ const newGame = (state, _) => {
     R.set(winnerPath, undefined),
     R.set(cardsPath, newCards()),
     R.set(scorePath, newScore()),
-    R.set(timePath, undefined)
+    R.set(timePath, undefined),
+    R.set(hintPath, initialHint)
   )(state)
 }
 
