@@ -15,7 +15,8 @@ import {
   usernamePath,
   editingPath,
 } from '../../redux/paths.js'
-import './pick-username.css'
+
+import s from './pick-username.css'
 
 const mapStateToProps = (state) => ({
   username: R.view(usernamePath, state),
@@ -45,14 +46,14 @@ const EditUsername = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({username, onChange, onKeyPress, updateUsername, onFocus}) => (
-  <div className="editUsername">
-    <input className="usernameInput"
-      value={username}
-      onChange={onChange}
-      onKeyPress={onKeyPress}
-      onFocus={onFocus}
+  <div className={s.editUsername}>
+    <input className={s.usernameInput}
+           value={username}
+           onChange={onChange}
+           onKeyPress={onKeyPress}
+           onFocus={onFocus}
     />
-    <button className="usernameButton" onClick={updateUsername}>update</button>
+    <button className={s.usernameButton} onClick={updateUsername}>update</button>
   </div>
 ))
 
@@ -74,7 +75,7 @@ const Username = connect(
 ))
 
 const PickUsername = () => (
-  <div className="pickUsername">
+  <div className={s.pickUsername}>
     <div>Your Name</div>
     <Username />
   </div>

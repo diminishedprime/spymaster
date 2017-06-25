@@ -15,7 +15,7 @@ import {
   usernamePath,
 } from '../../redux/paths.js'
 
-import './user.css'
+import s from './user.css'
 
 const User = connect(
   (state) => {
@@ -34,14 +34,14 @@ const User = connect(
     })
   }
 )(({role, username, style}) => (
-  <div className="user" style={style}>
-    <div className="userRow">
+  <div className={s.user} style={style}>
+    <div className={s.userRow}>
       <div>Role</div>
-      <div className="userRowValue">{role}</div>
+      <div className={s.userRowValue}>{role}</div>
     </div>
-    <div className="userRow">
+    <div className={s.userRow}>
       <div>Username</div>
-      <div className="userRowValue">{username}</div>
+      <div className={s.userRowValue}>{username}</div>
     </div>
   </div>
 ))

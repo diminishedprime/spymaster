@@ -22,7 +22,7 @@ import {
   currentTeamPath,
 } from '../../redux/paths.js'
 
-import './card.css'
+import cssStyle from './card.css'
 
 const mapStateToProps = (state, {
   team: cardTeam,
@@ -67,10 +67,10 @@ const Card = ({
   flip,
   disabled,
 }) => (
-  <button className="card"
-    disabled={disabled}
-    style={style}
-    onClick={flip}>
+  <button className={cssStyle.card}
+          disabled={disabled}
+          style={style}
+          onClick={flip}>
     {text}
   </button>
 )

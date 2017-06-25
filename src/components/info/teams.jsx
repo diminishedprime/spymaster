@@ -15,8 +15,7 @@ import {
 } from '../../redux/paths.js'
 
 import Forfeit from './forfeit.jsx'
-
-import './teams.css'
+import s from './teams.css'
 
 const Teams = connect(
   (state) => {
@@ -42,14 +41,14 @@ const Teams = connect(
     })
   }
 )(({currentTeamStyle, yourTeamStyle, yourTeam, currentTeam}) => (
-  <div className="teams">
-    <div className="teamsRow" style={currentTeamStyle}>
+  <div className={s.teams}>
+    <div className={s.teamsRow} style={currentTeamStyle}>
       <div>Current Team</div>
-      <div className="teamsValue">{currentTeam}</div>
+      <div className={s.teamsValue}>{currentTeam}</div>
     </div>
-    <div className="teamsRow" style={yourTeamStyle}>
+    <div className={s.teamsRow} style={yourTeamStyle}>
       <div>Your Team</div>
-      <div className="teamsValue">{yourTeam}</div>
+      <div className={s.teamsValue}>{yourTeam}</div>
       <Forfeit />
     </div>
   </div>

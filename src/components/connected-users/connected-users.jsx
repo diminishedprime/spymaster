@@ -8,16 +8,16 @@ import {
   userListPath,
 } from '../../redux/paths.js'
 
-import './connected-users.css'
+import s from './connected-users.css'
 
 const ConnectedUsers = connect(
   (state) => ({
     users: R.view(userListPath, state),
   })
 )(({users}) => (
-  <div className="connectedUsers">
+  <div className={s.connectedUsers}>
     <h3>Connected Users</h3>
-    <div className="users">
+    <div className={s.users}>
       {users
         .map((user) => (
           <div key={user}>{user}</div>

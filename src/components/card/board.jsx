@@ -2,9 +2,10 @@ import React from 'react'
 import R from 'ramda'
 
 import CardRow from './card-row.jsx'
+import style from './board.css'
 
 const Board = ({cards}) => (
-  <div className="board">
+  <div className={style.board}>
     { R
       .splitEvery(5, cards)
       .map((cards, idx) => (

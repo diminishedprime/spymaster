@@ -11,10 +11,10 @@ import {
   errorPath,
 } from '../../redux/paths.js'
 
-import './error-bar.css'
+import s from './error-bar.css'
 
 const ErrorBar = ({text, severity, dismiss}) => (
-  <div className={['errorBar', severity].join(' ')}>
+  <div className={[s.ErrorBar, s[severity]].join(' ')}>
     <div>{text}</div>
     <div className="dismiss" onClick={dismiss} title="dismiss">&times;</div>
   </div>

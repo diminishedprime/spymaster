@@ -13,7 +13,8 @@ import {
 import {
   timePath,
 } from '../../redux/paths.js'
-import './timer.css'
+
+import s from './timer.css'
 
 
 const Timer = connect(
@@ -22,7 +23,7 @@ const Timer = connect(
   }),
   (dispatch) => ({start: () => dispatch(afEmitAction(afStartTimer()))})
 )(({time, start}) => (
-  <div className="timer">
+  <div className={s.timer}>
     { time ?
       <div>Time Remaining: {time} </div> :
       <button onClick={start}>Start Timer</button>}

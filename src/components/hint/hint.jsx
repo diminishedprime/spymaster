@@ -18,8 +18,7 @@ import {
 } from '../../util.js'
 
 import SpymasterHint from './spymaster-hint.jsx'
-
-import './hint.css'
+import s from './hint.css'
 
 const mapStateToProps = (state) => {
   const text = R.view(hintTextPath, state)
@@ -48,11 +47,11 @@ const mapStateToProps = (state) => {
 const AgentHint = connect(
   mapStateToProps
 )(({hintSubmitted, text, number, style}) => (
-  <div className="hint" style={style}>
+  <div className={s.hint} style={style}>
     {!hintSubmitted && <div>Awaiting Hint</div>}
     {hintSubmitted && <div>Hint</div>}
-    {hintSubmitted && <div className="hintValue">{text}</div>}
-    {hintSubmitted && <div className="hintValue">{number}</div>}
+    {hintSubmitted && <div className={s.hintValue}>{text}</div>}
+    {hintSubmitted && <div className={s.hintValue}>{number}</div>}
   </div>
 ))
 

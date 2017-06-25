@@ -20,6 +20,8 @@ import {
   hexToRGB,
 } from '../../util.js'
 
+import s from './number-button.css'
+
 const mapStateToProps = (state, {number}) => {
   const cardTeam = R.view(teamPath, state)
   const selectedNumber = R.view(hintNumberPath, state)
@@ -55,11 +57,11 @@ const NumberButton = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({number, disabled, style, setHintNumber}) => (
-  <button className="hintButton"
-    key={number}
-    disabled={disabled}
-    style={style}
-    onClick={setHintNumber}
+  <button className={s.numberButton}
+          key={number}
+          disabled={disabled}
+          style={style}
+          onClick={setHintNumber}
   >
     {number}
   </button>

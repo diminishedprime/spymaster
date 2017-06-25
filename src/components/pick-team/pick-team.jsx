@@ -21,7 +21,8 @@ import {
 import {
   backgroundColorPath,
 } from '../../redux/paths.js'
-import './pick-team.css'
+
+import s from './pick-team.css'
 
 const StyledButton = ({backgroundColor, text, onClick}) => (
   <button onClick={onClick}
@@ -42,24 +43,24 @@ const TeamRow = connect(
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
 )(({onColorChange, backgroundColor, pickRole}) => (
-  <div className="teamRow">
-    <div className="teamButtons">
+  <div className={s.teamRow}>
+    <div className={s.teamButtons}>
       <StyledButton text="Spymaster"
-        backgroundColor={backgroundColor}
-        onClick={pickRole('spymaster')}
+                    backgroundColor={backgroundColor}
+                    onClick={pickRole('spymaster')}
       />
       <StyledButton text="Agent"
-        backgroundColor={backgroundColor}
-        onClick={pickRole('agent')}
+                    backgroundColor={backgroundColor}
+                    onClick={pickRole('agent')}
       />
     </div>
     <CirclePicker onChangeComplete={onColorChange}
-      color={backgroundColor}/>
+                  color={backgroundColor}/>
   </div>
 ))
 
 const PickTeam = () => (
-  <div className="pickTeam" >
+  <div className={s.pickTeam} >
     <TeamRow team="1" />
     <TeamRow team="2" />
   </div>
