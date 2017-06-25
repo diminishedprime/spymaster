@@ -24,12 +24,6 @@ import {
 
 import './card.css'
 
-/* {
- *   colors,
- *   localState: {playerType: {role, team: playerTeam}},
- *   currentTeam,
- * }*/
-
 const mapStateToProps = (state, {
   team: cardTeam,
   flipped,
