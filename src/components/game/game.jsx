@@ -80,8 +80,8 @@ const Info = connect(
 )(({role, team, currentTeam, backgroundColor, username}) => (
   <div className="info">
     <InfoColumn label="Current Team"
-                value={currentTeam}
-                backgroundColor={backgroundColor}
+      value={currentTeam}
+      backgroundColor={backgroundColor}
     />
     <Hint />
     <InfoColumn label="Your Role" value={role} />

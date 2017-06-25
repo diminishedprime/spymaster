@@ -42,8 +42,8 @@ const otherTeam = (team) => team === 1 ? 2 : 1
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
   return (color !== otherTeamsColor)
-       ? R.set(paths.backgroundColorPath(team), color, state)
-       : state
+    ? R.set(paths.backgroundColorPath(team), color, state)
+    : state
 }
 
 const updateUsername = (state, {user, username}) => {

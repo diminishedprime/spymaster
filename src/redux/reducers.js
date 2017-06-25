@@ -17,8 +17,14 @@ import {
   UPDATE_HINT,
   UPDATE_HINT_NUMBER,
 } from './actions.js'
-import { GAME_MODE_GAME } from '../constants.js'
-import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
+import {
+  GAME_MODE_GAME,
+} from '../constants.js'
+import {
+  initialActionLog,
+  initialErrorState,
+  initialState,
+} from './initial-state.js'
 import R from 'ramda'
 
 const replayingAction = (state, {flag}) =>
@@ -78,36 +84,21 @@ export const updateHintNumber = (state, {hintNumber}) =>
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
-    case REPLAYING:
-      return replayingAction(state, action)
-    case RESET_STATE:
-      return initialState
-    case CLEAR_ACTION_LOG:
-      return clearActionLog(state, action)
-    case ADD_TO_ACTION_LOG:
-      return addToActionLog(state, action)
-    case DISMISS_ERROR:
-      return dismissError(state, action)
-    case ERROR_OCCURED:
-      return hiError(state, action)
-    case TOGGLE_TITLE:
-      return toggleTitle(state, action)
-    case SET_TIME:
-      return setTime(state, action)
-    case PICK_ROLE:
-      return pickRole(state, action)
-    case SET_WS:
-      return setWs(state, action)
-    case SET_USERNAME:
-      return setUsername(state, action)
-    case SET_EDITING:
-      return setEditing(state, action)
-    case UPDATE_USER_LIST:
-      return updateUserList(state, action)
-    case UPDATE_REMOTE_STATE:
-      return updateRemoteState(state, action)
-    case UPDATE_HINT:
-      return updateHint(state, action)
+    case REPLAYING: return replayingAction(state, action)
+    case RESET_STATE: return initialState
+    case CLEAR_ACTION_LOG: return clearActionLog(state, action)
+    case ADD_TO_ACTION_LOG: return addToActionLog(state, action)
+    case DISMISS_ERROR: return dismissError(state, action)
+    case ERROR_OCCURED: return hiError(state, action)
+    case TOGGLE_TITLE: return toggleTitle(state, action)
+    case SET_TIME: return setTime(state, action)
+    case PICK_ROLE: return pickRole(state, action)
+    case SET_WS: return setWs(state, action)
+    case SET_USERNAME: return setUsername(state, action)
+    case SET_EDITING: return setEditing(state, action)
+    case UPDATE_USER_LIST: return updateUserList(state, action)
+    case UPDATE_REMOTE_STATE: return updateRemoteState(state, action)
+    case UPDATE_HINT: return updateHint(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     default:
       if (!(

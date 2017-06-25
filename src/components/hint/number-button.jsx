@@ -15,11 +15,11 @@ const mapStateToProps = (state, {number}) => {
     backgroundColor: '#ffffff',
   }
   const style = (disabled)
-              ? R.compose(
-                R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
-                R.assoc('backgroundColor', bgColor)
-              )(baseStyle)
-              : baseStyle
+    ? R.compose(
+      R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
+      R.assoc('backgroundColor', bgColor)
+    )(baseStyle)
+    : baseStyle
   return ({
     disabled,
     style,
@@ -27,7 +27,7 @@ const mapStateToProps = (state, {number}) => {
 }
 
 const mapDispatchToProps = (dispatch, {number}) => ({
-  setHintNumber: () => dispatch(afEmitAction(afUpdateHintNumber(number)))
+  setHintNumber: () => dispatch(afEmitAction(afUpdateHintNumber(number))),
 })
 
 const NumberButton = connect(
@@ -35,10 +35,10 @@ const NumberButton = connect(
   mapDispatchToProps
 )(({number, disabled, style, setHintNumber}) => (
   <button className="hintButton"
-          key={number}
-          disabled={disabled}
-          style={style}
-          onClick={setHintNumber}
+    key={number}
+    disabled={disabled}
+    style={style}
+    onClick={setHintNumber}
   >
     {number}
   </button>
