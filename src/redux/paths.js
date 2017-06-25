@@ -15,8 +15,6 @@ const time = [...remoteState, 'time']
 const error = [...localState, 'error']
 const errorText = [...error, 'text']
 const errorSeverity = [...error, 'severity']
-const actionLog = [...localState, 'actionLog']
-const replaying = [...localState, 'replaying']
 const settings = [...localState, 'settings']
 const showTitle = [...settings, 'showTitle']
 const colors = [...remoteState, 'colors']
@@ -48,8 +46,6 @@ const timePath = R.lensPath([...time])
 const errorPath = R.lensPath([...error])
 const errorTextPath = R.lensPath([...errorText])
 const errorSeverityPath = R.lensPath([...errorSeverity])
-const actionLogPath = R.lensPath([...actionLog])
-const replayingPath = R.lensPath([...replaying])
 const showTitlePath = R.lensPath([...showTitle])
 const playerTypePath = R.lensPath([...playerType])
 const rolePath = R.lensPath([...role])
@@ -96,8 +92,6 @@ export default {
   errorPath,
   errorTextPath,
   errorSeverityPath,
-  actionLogPath,
-  replayingPath,
   showTitlePath,
   playerTypePath,
   gameModePath,

@@ -1,7 +1,6 @@
 import uuid4 from 'uuid/v4'
 import words from './words.js'
 import R from 'ramda'
-import { GAME_MODE_PICK_TEAM } from '../constants.js'
 import shuffle from 'shuffle-array'
 import paths from './paths.js'
 import {
@@ -10,6 +9,7 @@ import {
   TEAM_1,
   TEAM_2,
   SPYMASTER,
+  GAME_MODE_PICK_TEAM,
 } from '../constants.js'
 
 shuffle(words)
@@ -34,7 +34,6 @@ const initialCards = R.compose(
   R.take(25)
 )(words)
 
-export const initialActionLog = []
 export const initialErrorState = {}
 export const initialUsersList = []
 export const initialHint = {
@@ -57,7 +56,6 @@ export const initialState = R.compose(
   R.set(paths.cardsPath, initialCards),
   R.set(paths.errorPath, initialErrorState),
   R.set(paths.showTitlePath, true),
-  R.set(paths.actionLogPath, initialActionLog),
   R.set(paths.replayingPath, false),
   R.set(paths.userListPath, initialUsersList),
   R.set(paths.usernamePath, ''),

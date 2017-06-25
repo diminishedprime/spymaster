@@ -5,10 +5,6 @@ import {
   TOGGLE_TITLE,
   ERROR_OCCURED,
   DISMISS_ERROR,
-  ADD_TO_ACTION_LOG,
-  CLEAR_ACTION_LOG,
-  RESET_STATE,
-  REPLAYING,
   SET_WS,
   SET_USERNAME,
   SET_EDITING,
@@ -21,20 +17,10 @@ import {
   GAME_MODE_GAME,
 } from '../constants.js'
 import {
-  initialActionLog,
   initialErrorState,
   initialState,
 } from './initial-state.js'
 import R from 'ramda'
-
-const replayingAction = (state, {flag}) =>
-  R.set(paths.replayingPath, flag, state)
-
-const clearActionLog = (state, _) =>
-  R.set(paths.actionLogPath, initialActionLog, state)
-
-const addToActionLog = (state, action) =>
-  R.over(paths.actionLogPath, R.append(action), state)
 
 const hiError = (state, {
   text='The request failed',
@@ -51,15 +37,10 @@ const toggleTitle = (state, _) =>
 export const setTime = (state, {seconds}) =>
   R.set(paths.timePath, seconds, state)
 
-const pickRole = (state, {team, role}) => {
-  const withPlayerType = R.set(paths.playerTypePath, ({team, role}))
-  const withGameMode = R.set(paths.gameModePath, GAME_MODE_GAME)
-
-  return R.compose(
-    withPlayerType,
-    withGameMode
-  )(state)
-}
+const pickRole = (state, {team, role}) => R.compose(
+  R.set(paths.playerTypePath, ({team, role})),
+  R.set(paths.gameModePath, GAME_MODE_GAME)
+)(state)
 
 const setWs = (state, {ws}) =>
   R.set(paths.wsPath, ws, state)
@@ -84,10 +65,6 @@ export const updateHintNumber = (state, {hintNumber}) =>
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
-    case REPLAYING: return replayingAction(state, action)
-    case RESET_STATE: return initialState
-    case CLEAR_ACTION_LOG: return clearActionLog(state, action)
-    case ADD_TO_ACTION_LOG: return addToActionLog(state, action)
     case DISMISS_ERROR: return dismissError(state, action)
     case ERROR_OCCURED: return hiError(state, action)
     case TOGGLE_TITLE: return toggleTitle(state, action)
@@ -110,5 +87,4 @@ export const app = (state=initialState, action) => {
       }
       return state
   }
-
 }

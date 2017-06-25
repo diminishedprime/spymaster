@@ -42,29 +42,6 @@ export const afDismissError = () => ({
   type: DISMISS_ERROR,
 })
 
-export const ADD_TO_ACTION_LOG = 'add to action log'
-export const afAddToActionLog = (action) => ({
-  type: ADD_TO_ACTION_LOG,
-  action,
-  timestamp: new Date(),
-})
-
-export const CLEAR_ACTION_LOG = 'clear action log'
-export const afClearActionLog = () => ({
-  type: CLEAR_ACTION_LOG,
-})
-
-export const RESET_STATE = 'reset state'
-export const afResetState = () => ({
-  type: RESET_STATE,
-})
-
-export const REPLAYING = 'replaying'
-export const afReplaying = (flag) => ({
-  type: CLEAR_ACTION_LOG,
-  flag,
-})
-
 export const SET_WS = 'set ws'
 export const afSetWs = (ws) => ({
   type: SET_WS,
