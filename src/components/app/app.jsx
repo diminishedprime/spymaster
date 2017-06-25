@@ -3,32 +3,22 @@ import R from 'ramda'
 import {
   connect,
 } from 'react-redux'
-import {
-  CirclePicker,
-} from 'react-color'
 
 import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
+import PickTeam from '../pick-team/pick-team.jsx'
 import {
-  afChangeColor,
-  afPickRole,
   afToggleTitle,
   afSetEditing,
   afSetUsername,
 } from '../../redux/actions.js'
 import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
-import {
-  afEmitAction,
   afSetServerUsername,
 } from '../../sagas/connect-to-websocket.js'
 import {
   errorTextPath,
   showTitlePath,
   gameModePath,
-  backgroundColorPath,
   usernamePath,
   editingPath,
   userListPath,
@@ -40,41 +30,6 @@ import './app.css'
  * setTimeout(() => {
  *   store.dispatch(afPickRole('1', 'spymaster'))
  * }, 300)*/
-
-const StyledButton = ({backgroundColor, text, onClick}) => (
-  <button onClick={onClick}
-    style={{
-      backgroundColor,
-      color: fgColorForRGB(hexToRGB(backgroundColor)),
-    }} >
-    {text}
-  </button>
-)
-
-const TeamRow = connect(
-  (state, {team}) => ({
-    backgroundColor: R.view(backgroundColorPath(team), state),
-  }),
-  (dispatch, {team}) => ({
-    onColorChange: ({hex}) => dispatch(afEmitAction(afChangeColor(team, hex))),
-    pickRole: (role) => () => dispatch(afPickRole(team, role)),
-  })
-)(({onColorChange, backgroundColor, pickRole}) => (
-  <div className="teamRow">
-    <div className="teamButtons">
-      <StyledButton text="Spymaster"
-        backgroundColor={backgroundColor}
-        onClick={pickRole('spymaster')}
-      />
-      <StyledButton text="Agent"
-        backgroundColor={backgroundColor}
-        onClick={pickRole('agent')}
-      />
-    </div>
-    <CirclePicker onChangeComplete={onColorChange}
-      color={backgroundColor}/>
-  </div>
-))
 
 const Username = connect(
   (state) => ({
@@ -112,13 +67,6 @@ const PickUsername = () => (
   <div className="pickUsername">
     <div>Your Name</div>
     <Username />
-  </div>
-)
-
-const PickTeam = () => (
-  <div className="pickTeam" >
-    <TeamRow team="1" />
-    <TeamRow team="2" />
   </div>
 )
 
