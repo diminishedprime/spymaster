@@ -8,20 +8,21 @@ import NumberButton from './number-button.jsx'
 const Hint = connect(
   (state) => ({
     text: R.view(paths.hintTextPath, state),
+    number: R.view(paths.hintNumberPath, state),
     role: R.view(paths.rolePath, state),
   }),
   (dispatch) => ({
     updateHint: (hint) => dispatch(afUpdateHint(hint)),
   })
-)(({text, number, role, updateHint}) => (
+)(({text, number, role, updateHint, hintSubmitted=true}) => (
   <div>
     {
       (role === 'agent')
         ? (
           <div className="infoColumn">
             <div>Hint</div>
-            <div className="infoColumnValue">{text}</div>
-            <div className="infoColumnValue">{number}</div>
+            {hintSubmitted && <div className="infoColumnValue">{text}</div>}
+            {hintSubmitted && <div className="infoColumnValue">{number}</div>}
           </div>
         )
         : (
