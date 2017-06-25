@@ -1,4 +1,7 @@
-import { initialState } from '../../src/redux/initial-state.js'
+import {
+  initialState,
+  initialHint,
+} from '../../src/redux/initial-state.js'
 import {
   FLIP_CARD,
   ADD_USER,
@@ -38,7 +41,7 @@ const removeUser = (state, {user}) => {
   )(state)
 }
 
-const otherTeam = (team) => team === 1 ? 2 : 1
+const otherTeam = (team) => team === '1' ? '2' : '1'
 
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
@@ -60,10 +63,57 @@ const updateUsername = (state, {user, username}) => {
   )(state)
 }
 
+const nextTurn = (state) => R.compose(
+  R.over(paths.currentTeamPath, otherTeam),
+  R.set(paths.hintPath, initialHint)
+)(state)
+
+const loseGame = (state) => {
+  /* Implement actual game over logic
+   * console.log('someone lost')*/
+  return state
+}
+
+const checkAssassin = (id) => (state) => {
+  const cardTeam = R.view(paths.cardsTeamPath(id), state)
+  return (cardTeam === 'assassin')
+    ? loseGame(state)
+    : state
+}
+
+const checkCorrectCard = (id) => (state) => {
+  const currentTeam = R.view(paths.currentTeamPath, state)
+  const cardTeam = R.view(paths.cardsTeamPath(id), state)
+  return (currentTeam === cardTeam)
+    ? state
+    : nextTurn(state)
+}
+
+const decreaseGuesses = (state) => {
+  const numGuesses = R.view(paths.hintNumberPath, state)
+  // If they explicitly picked 'inf' or '0', they infinite guesses
+  if (numGuesses === 'inf' || numGuesses === '0') {
+    return state
+  }
+
+  const asNumber = parseInt(numGuesses) - 1
+  if (asNumber === 0) {
+    return nextTurn(state)
+  } else {
+    return R.set(paths.hintNumberPath, asNumber + '', state)
+  }
+}
+
 const flipCard = (state, {id}) => {
-  const cards = R.view(paths.cardsPath, state),
-        cardIdx = R.findIndex((card) => card.id === id, cards)
-  return R.set(paths.cardsFlippedPath(cardIdx), true, state)
+  const cards = R.view(paths.cardsPath, state)
+  const cardIdx = R.findIndex((card) => card.id === id, cards)
+
+  return R.compose(
+    checkAssassin(cardIdx),
+    checkCorrectCard(cardIdx),
+    decreaseGuesses,
+    R.set(paths.cardsFlippedPath(cardIdx), true)
+  )(state)
 }
 
 const submitHint = (state, _) =>

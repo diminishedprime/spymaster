@@ -10,6 +10,7 @@ const gameMode = [...localState, 'gameMode']
 const cards = [...remoteState, 'cards']
 const cardsId = (id) => [...cards, id]
 const cardsFlipped = (id) => [...cardsId(id), 'flipped']
+const cardsTeam = (id) => [...cardsId(id), 'team']
 const time = [...remoteState, 'time']
 const error = [...localState, 'error']
 const errorText = [...error, 'text']
@@ -37,6 +38,7 @@ const hintText = [...hint, 'text']
 const hintNumber = [...hint, 'number']
 const hintSubmitted = [...hint, 'submitted']
 
+const hintPath = R.lensPath([...hint])
 const hintSubmittedPath = R.lensPath([...hintSubmitted])
 const hintTextPath = R.lensPath([...hintText])
 const hintNumberPath = R.lensPath([...hintNumber])
@@ -61,6 +63,7 @@ const backgroundColorPath = (team) =>
   R.lensPath([...colorsTeamBackgroundColor(team)])
 const currentTeamPath = R.lensPath([...currentTeam])
 const cardsIdPath = (id) => R.lensPath(cardsId(id))
+const cardsTeamPath = (id) => R.lensPath(cardsTeam(id))
 const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
 const wsPath = R.lensPath([...ws])
 const usernamePath = R.lensPath([...username])
@@ -75,6 +78,8 @@ const usersUserUsernamePath = (idx) =>
   R.lensPath([...usersUserUsername(idx)])
 
 export default {
+  cardsTeamPath,
+  hintPath,
   hintSubmittedPath,
   hintTextPath,
   hintNumberPath,

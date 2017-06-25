@@ -30,6 +30,11 @@ const initialCards = R.compose(
 export const initialActionLog = []
 export const initialErrorState = {}
 export const initialUsersList = []
+export const initialHint = {
+  text: '',
+  number: '',
+  submitted: false,
+}
 
 const currentTeam = (Math.random() > 0.5) ? '1' : '2'
 
@@ -49,7 +54,5 @@ export const initialState = R.compose(
   R.set(paths.replayingPath, false),
   R.set(paths.userListPath, initialUsersList),
   R.set(paths.usernamePath, ''),
-  R.set(paths.hintTextPath, 'John'),
-  R.set(paths.hintNumberPath, '3'),
-  R.set(paths.hintSubmittedPath, false)
+  R.set(paths.hintPath, initialHint)
 )({})

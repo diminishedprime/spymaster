@@ -12,7 +12,10 @@ const mapStateToProps = (state, {number}) => {
   const numberPicked = (selectedNumber === number)
   const playerTeam = R.view(paths.teamPath, state)
   const currentTeam = R.view(paths.currentTeamPath, state)
-  const disabled = numberPicked || (playerTeam !== currentTeam)
+  const hintSubmitted = R.view(paths.hintSubmittedPath, state)
+  const disabled = numberPicked ||
+                   (playerTeam !== currentTeam) ||
+                   hintSubmitted
   const bgColor = R.view(paths.backgroundColorPath(cardTeam), state)
   const baseStyle = {
     color: '#000000',

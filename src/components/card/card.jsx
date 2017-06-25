@@ -21,6 +21,7 @@ const mapStateToProps = (state, {
   const bgColor = R.view(paths.backgroundColorPath(cardTeam), state)
   const playerTeam = R.view(paths.teamPath, state)
   const currentTeam = R.view(paths.currentTeamPath, state)
+  const hintSubmitted = R.view(paths.hintSubmittedPath, state)
   const baseStyle = {
     color: '#000000',
     backgroundColor: '#ffffff',
@@ -31,12 +32,17 @@ const mapStateToProps = (state, {
       R.assoc('backgroundColor', bgColor)
     )(baseStyle)
     : baseStyle
+  const disabled = (role === 'spymaster') ||
+                   (playerTeam !== currentTeam) ||
+                   flipped ||
+                   (!hintSubmitted)
   return {
     style,
     playerTeam,
     role,
     currentTeam,
     flipped,
+    disabled,
   }
 }
 
@@ -48,13 +54,10 @@ const Card = ({
   text,
   style,
   flip,
-  playerTeam,
-  role,
-  currentTeam,
-  flipped,
+  disabled,
 }) => (
   <button className="card"
-    disabled={role === 'spymaster' || playerTeam !== currentTeam || flipped}
+    disabled={disabled}
     style={style}
     onClick={flip}>
     {text}
