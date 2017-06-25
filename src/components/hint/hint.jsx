@@ -51,8 +51,8 @@ const AgentHint = connect(
   <div className="hint" style={style}>
     {!hintSubmitted && <div>Awaiting Hint</div>}
     {hintSubmitted && <div>Hint</div>}
-    {hintSubmitted && <div className="infoColumnValue">{text}</div>}
-    {hintSubmitted && <div className="infoColumnValue">{number}</div>}
+    {hintSubmitted && <div className="hintValue">{text}</div>}
+    {hintSubmitted && <div className="hintValue">{number}</div>}
   </div>
 ))
 

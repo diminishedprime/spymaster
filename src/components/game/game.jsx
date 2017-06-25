@@ -65,74 +65,88 @@ const Timer = connect(
   </div>
 ))
 
-
-const InfoColumn = connect(
-  (state, {backgroundColor}) => {
-    const team = R.view(teamPath, state),
-          bgColor = backgroundColor ||
-                    R.view(backgroundColorPath(team), state),
-          fgColor = fgColorForRGB(hexToRGB(bgColor))
-    return {
-      style: {
-        color: fgColor,
-        backgroundColor: bgColor,
-      },
-    }
-  }
-)(({label, value, style}) => (
-  <div className="infoColumn" style={style}>
-    <div>{label}</div>
-    <div className="infoColumnValue">{value}</div>
-  </div>
-))
-
-const YourTeam = connect(
-  (state) => {
-    const team = R.view(teamPath, state),
-          bgColor = R.view(backgroundColorPath(team), state),
-          fgColor = fgColorForRGB(hexToRGB(bgColor)),
-          style = {
-            color: fgColor,
-            backgroundColor: bgColor,
-          }
-    return ({
-      team,
-      style,
-    })
-  },
+const Forfeit = connect(
+  (state) => ({team: R.view(teamPath, state)}),
   (dispatch) => ({
     forfeit: (team) => () => dispatch(afEmitAction(afForfeit(team))),
   })
-)(({team, style, forfeit}) => (
-  <div className="infoColumn" style={style}>
-    <div>Your Team</div>
-    <div className="infoColumnValue">{team}</div>
-    <button onClick={forfeit(team)}>Forfeit</button>
+)(({team, forfeit}) => (
+  <button onClick={forfeit(team)}>Forfeit</button>
+))
+
+const Teams = connect(
+  (state) => {
+    const currentTeam = R.view(currentTeamPath, state)
+    const yourTeam = R.view(teamPath, state)
+    const currentBackgroundColor = R.view(backgroundColorPath(currentTeam), state)
+    const yourBackgroundColor = R.view(backgroundColorPath(yourTeam), state)
+    const currentColor = fgColorForRGB(hexToRGB(currentBackgroundColor))
+    const yourColor = fgColorForRGB(hexToRGB(yourBackgroundColor))
+    const yourTeamStyle = {
+      color: yourColor,
+      backgroundColor: yourBackgroundColor,
+    }
+    const currentTeamStyle = {
+      color: currentColor,
+      backgroundColor: currentBackgroundColor,
+    }
+    return ({
+      yourTeam,
+      currentTeam,
+      currentTeamStyle,
+      yourTeamStyle,
+    })
+  }
+)(({currentTeamStyle, yourTeamStyle, yourTeam, currentTeam}) => (
+  <div className="teams">
+    <div className="teamsRow" style={currentTeamStyle}>
+      <div>Current Team</div>
+      <div className="teamsValue">{currentTeam}</div>
+    </div>
+    <div className="teamsRow" style={yourTeamStyle}>
+      <div>Your Team</div>
+      <div className="teamsValue">{yourTeam}</div>
+      <Forfeit />
+    </div>
   </div>
 ))
 
-const Info = connect(
+const User = connect(
   (state) => {
-    const currentTeam = R.view(currentTeamPath, state)
+    const role = R.view(rolePath, state)
+    const team = R.view(teamPath, state)
+    const backgroundColor = R.view(backgroundColorPath(team), state)
+    const color = fgColorForRGB(hexToRGB(backgroundColor))
+    const style = {
+      color,
+      backgroundColor,
+    }
     return ({
-      role: R.view(rolePath, state),
-      currentTeam,
-      backgroundColor: R.view(backgroundColorPath(currentTeam), state),
+      style,
+      role: role,
       username: R.view(usernamePath, state),
     })
   }
-)(({role, currentTeam, backgroundColor, username}) => (
-  <div className="info">
-    <Hint />
-    <InfoColumn label="Current Team"
-      value={currentTeam}
-      backgroundColor={backgroundColor}
-    />
-    <YourTeam />
-    <InfoColumn label="Your Role" value={role} />
-    <InfoColumn label="Username" value={username} />
+)(({role, username, style}) => (
+  <div className="user" style={style}>
+    <div className="userRow">
+      <div>Role</div>
+      <div className="userRowValue">{role}</div>
+    </div>
+    <div className="userRow">
+      <div>Username</div>
+      <div className="userRowValue">{username}</div>
+    </div>
   </div>
 ))
+
+const Info = () => (
+  <div className="info">
+    <Hint />
+    <Teams />
+    <User />
+  </div>
+)
 
 const Game = connect(
   (state) => ({

@@ -26,6 +26,7 @@ import {
 
 import NumberButton from './number-button.jsx'
 
+import './spymaster-hint.css'
 
 const NumberGroup = ({numberGroup}) => (
   <div>
@@ -90,7 +91,7 @@ const SpymasterHint = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({text, inputDisabled, onChange, submitDisabled, submitHint, style}) => (
-  <div className="infoColumn" style={style}>
+  <div className="spymaster" style={style}>
     <input value={text} onChange={onChange} disabled={inputDisabled} />
     <Numbers groupedNumbers={groupedNumbers} />
     <button disabled={submitDisabled} onClick={submitHint}>
