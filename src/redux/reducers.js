@@ -15,6 +15,7 @@ import {
   UPDATE_USER_LIST,
   UPDATE_REMOTE_STATE,
   UPDATE_HINT,
+  UPDATE_HINT_NUMBER,
 } from './actions.js'
 import { GAME_MODE_GAME } from '../constants.js'
 import {initialActionLog, initialErrorState, initialState} from './initial-state.js'
@@ -72,6 +73,8 @@ const updateRemoteState = (state, {remoteState}) =>
 export const updateHint = (state, {hint}) =>
   R.set(paths.hintTextPath, hint, state)
 
+export const updateHintNumber = (state, {hintNumber}) =>
+  R.set(paths.hintNumberPath, hintNumber, state)
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
@@ -105,6 +108,7 @@ export const app = (state=initialState, action) => {
       return updateRemoteState(state, action)
     case UPDATE_HINT:
       return updateHint(state, action)
+    case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

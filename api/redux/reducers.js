@@ -7,8 +7,13 @@ import {
   UPDATE_USERNAME,
   UPDATE_HINT,
   SET_TIME,
+  UPDATE_HINT_NUMBER,
 } from '../../src/redux/actions.js'
-import { updateHint, setTime } from '../../src/redux/reducers.js'
+import {
+  updateHint,
+  setTime,
+  updateHintNumber,
+} from '../../src/redux/reducers.js'
 import paths from '../../src/redux/paths.js'
 import R from 'ramda'
 
@@ -37,8 +42,8 @@ const otherTeam = (team) => team === 1 ? 2 : 1
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
   return (color !== otherTeamsColor)
-    ? R.set(paths.backgroundColorPath(team), color, state)
-    : state
+       ? R.set(paths.backgroundColorPath(team), color, state)
+       : state
 }
 
 const updateUsername = (state, {user, username}) => {
@@ -69,6 +74,7 @@ export const app = (state=initialState, action) => {
     case FLIP_CARD: return flipCard(state, action)
     case UPDATE_HINT: return updateHint(state, action)
     case SET_TIME: return setTime(state, action)
+    case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

@@ -1,9 +1,10 @@
 import React from 'react'
 import R from 'ramda'
 import { connect } from 'react-redux'
-import { afUpdateHint, afStartTimer } from '../../redux/actions.js'
+import { afStartTimer } from '../../redux/actions.js'
 import { afEmitAction } from '../../sagas/connect-to-websocket.js'
 import Card from '../card/card.jsx'
+import Hint from '../hint/hint.jsx'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
 import paths from '../../redux/paths.js'
 import './game.css'
@@ -65,45 +66,6 @@ const InfoColumn = connect(
   </div>
 ))
 
-const Hint = connect(
-  (state) => ({
-    text: R.view(paths.hintTextPath, state),
-    number: R.view(paths.hintNumberPath, state),
-    role: R.view(paths.rolePath, state),
-  }),
-  (dispatch) => ({
-    updateHint: (hint) => dispatch(afUpdateHint(hint)),
-  })
-)(({text, number, role, updateHint}) => (
-  <div>
-    {
-      (role === 'agent')
-        ? (
-          <div className="infoColumn">
-            <div>Hint</div>
-            <div className="infoColumnValue">{text}</div>
-            <div className="infoColumnValue">{number}</div>
-          </div>
-        )
-        : (
-          <div className="infoColumn">
-            <input value={text}
-              onChange={({target: {value}}) => updateHint(value)}/>
-            <div className="numbers">
-              {['0', '1', '2', '3'].map(
-                (number) => (
-                  <button key={number}>{number}</button>
-                )
-              )
-              }
-            </div>
-          </div>
-        )
-    }
-
-  </div>
-))
-
 const Info = connect(
   (state) => {
     const currentTeam = R.view(paths.currentTeamPath, state)
@@ -118,8 +80,8 @@ const Info = connect(
 )(({role, team, currentTeam, backgroundColor, username}) => (
   <div className="info">
     <InfoColumn label="Current Team"
-      value={currentTeam}
-      backgroundColor={backgroundColor}
+                value={currentTeam}
+                backgroundColor={backgroundColor}
     />
     <Hint />
     <InfoColumn label="Your Role" value={role} />
