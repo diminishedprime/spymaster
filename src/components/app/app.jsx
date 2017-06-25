@@ -8,6 +8,7 @@ import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
 import PickTeam from '../pick-team/pick-team.jsx'
 import PickUsername from '../pick-username/pick-username.jsx'
+import ConnectedUsers from '../connected-users/connected-users.jsx'
 import {
   afToggleTitle,
 } from '../../redux/actions.js'
@@ -15,25 +16,8 @@ import {
   errorTextPath,
   showTitlePath,
   gameModePath,
-  userListPath,
 } from '../../redux/paths.js'
 import './app.css'
-
-const ConnectedUsers = connect(
-  (state) => ({
-    users: R.view(userListPath, state),
-  })
-)(({users}) => (
-  <div className="connectedUsers">
-    <h3>Connected Users</h3>
-    <div className="users">
-      {users
-        .map((user) => (
-          <div key={user}>{user}</div>
-        ))}
-    </div>
-  </div>
-))
 
 const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
   <div className="app">
