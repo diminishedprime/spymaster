@@ -1,11 +1,13 @@
 import io from 'socket.io'
 import uuid4 from 'uuid/v4'
 import {
+  afPickRole,
   afSetUsername,
   afUpdateRemoteState,
   afAddUser,
   afRemoveUser,
   afUpdateUsername,
+  afToggleTitle,
 } from '../src/redux/actions.js'
 import R from 'ramda'
 import paths from '../src/redux/paths.js'
@@ -38,6 +40,15 @@ const addUser = (user) => {
   forceUpdateRemoteState()
 }
 
+// TEMP CODE
+const teamRotation = [
+  ['1', 'spymaster'],
+  ['1', 'agent'],
+  ['2', 'spymaster'],
+  ['2', 'agent'],
+]
+let teamIndex = 0
+
 const onConnect = (ws) => {
   const userId = uuid4().substring(0, 8),
         user = {
@@ -51,6 +62,12 @@ const onConnect = (ws) => {
   ws.emit('message', 'Thanks for connecting via websockets')
   ws.emit('action', afSetUsername(userId))
   addUser(user)
+
+  // TEMP CODE
+  teamIndex = teamIndex + 1
+  teamIndex = teamIndex % 4
+  ws.emit('action', afPickRole(...teamRotation[teamIndex]))
+  ws.emit('action', afToggleTitle())
 }
 
 const connect = (httpServer) => {
