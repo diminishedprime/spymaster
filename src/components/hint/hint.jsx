@@ -5,99 +5,59 @@ import {
 } from 'react-redux'
 
 import {
+  currentTeamPath,
+  backgroundColorPath,
   hintSubmittedPath,
   hintTextPath,
   hintNumberPath,
   rolePath,
-  teamPath,
-  currentTeamPath,
 } from '../../redux/paths.js'
 import {
-  afUpdateHint,
-  afSubmitHint,
-} from '../../redux/actions.js'
-import {
-  afEmitAction,
-} from '../../sagas/connect-to-websocket.js'
+  fgColorForRGB,
+  hexToRGB,
+} from '../../util.js'
 
-import NumberButton from './number-button.jsx'
+import SpymasterHint from './spymaster-hint.jsx'
+
+import './hint.css'
 
 const mapStateToProps = (state) => {
   const text = R.view(hintTextPath, state)
   const number = R.view(hintNumberPath, state)
   const role = R.view(rolePath, state)
   const hintSubmitted = R.view(hintSubmittedPath, state)
-  const playerTeam = R.view(teamPath, state)
-  const currentTeam = R.view(currentTeamPath, state)
-  const inputDisabled = (playerTeam !== currentTeam)
-  const submitDisabled = (text === '') ||
-                         (number === '') ||
-                         inputDisabled ||
-                         hintSubmitted
+  const isAgent = role === 'agent'
+  const showAgent = isAgent || hintSubmitted
+  const team = R.view(currentTeamPath, state)
+  const bgColor = R.view(backgroundColorPath(team), state)
+  const fgColor = fgColorForRGB(hexToRGB(bgColor))
+  const style = {
+    color: fgColor,
+    backgroundColor: bgColor,
+  }
+
   return ({
+    showAgent,
     text,
     number,
-    role,
     hintSubmitted,
-    submitDisabled,
-    inputDisabled,
+    style,
   })
 }
 
-const Hint = connect(
-  mapStateToProps,
-  (dispatch) => ({
-    updateHint: (hint) => dispatch(afUpdateHint(hint)),
-    submitHint: () => dispatch(afEmitAction(afSubmitHint())),
-  })
-)(({
-  text,
-  number,
-  role,
-  updateHint,
-  hintSubmitted,
-  submitHint,
-  submitDisabled,
-  inputDisabled,
-}) => (
-  <div>
-    {
-      (role === 'agent' || hintSubmitted)
-        ? (
-          <div className="infoColumn">
-            {!hintSubmitted && <div>Awaiting Hint</div>}
-            {hintSubmitted && <div>Hint</div>}
-            {hintSubmitted && <div className="infoColumnValue">{text}</div>}
-            {hintSubmitted && <div className="infoColumnValue">{number}</div>}
-          </div>
-        )
-        : (
-          <div className="infoColumn">
-            <input value={text}
-              onChange={({target: {value}}) => updateHint(value)}
-              disabled={inputDisabled}
-            />
-            <div className="numbers">
-              {R.splitEvery(5, ['0', '1', '2', '3', '4', '5', '6', '7', '8', 'inf'])
-                .map((group, idx) => (
-                  <div key={idx}>
-                    {
-                      group
-                        .map((number) => (
-                          <NumberButton key={number} number={number} />
-                        ))}
-                  </div>
-                ))
-              }
-            </div>
-            <button disabled={submitDisabled}
-              onClick={submitHint}>
-        Submit
-            </button>
-          </div>
-        )
-    }
+const AgentHint = connect(
+  mapStateToProps
+)(({hintSubmitted, text, number, style}) => (
+  <div className="hint" style={style}>
+    {!hintSubmitted && <div>Awaiting Hint</div>}
+    {hintSubmitted && <div>Hint</div>}
+    {hintSubmitted && <div className="infoColumnValue">{text}</div>}
+    {hintSubmitted && <div className="infoColumnValue">{number}</div>}
   </div>
 ))
+
+const Hint = connect(
+  mapStateToProps
+)(({showAgent}) => showAgent ? <AgentHint /> : <SpymasterHint />)
 
 export default Hint
