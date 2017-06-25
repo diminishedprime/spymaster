@@ -4,17 +4,24 @@ import R from 'ramda'
 import { GAME_MODE_PICK_TEAM } from '../constants.js'
 import shuffle from 'shuffle-array'
 import paths from './paths.js'
+import {
+  ASSASSIN,
+  BYSTANDER,
+  TEAM_1,
+  TEAM_2,
+  SPYMASTER,
+} from '../constants.js'
 
 shuffle(words)
 const randTeam = () => {
   const rnd = Math.random()
   return (rnd >= 0.0 && rnd < 0.25)
-    ? '1'
+    ? TEAM_1
     : (rnd >= 0.25 && rnd < 0.5)
-      ? '2'
+      ? TEAM_2
       : (rnd >= 0.5 && rnd < 0.75)
-        ? 'assassin'
-        : 'bystander'
+        ? ASSASSIN
+        : BYSTANDER
 }
 
 const initialCards = R.compose(
@@ -36,16 +43,16 @@ export const initialHint = {
   submitted: false,
 }
 
-const currentTeam = (Math.random() > 0.5) ? '1' : '2'
+const currentTeam = (Math.random() > 0.5) ? TEAM_1 : TEAM_2
 
 export const initialState = R.compose(
   R.set(paths.currentTeamPath, currentTeam),
-  R.set(paths.backgroundColorPath('1'), '#f44336'),
-  R.set(paths.backgroundColorPath('2'), '#2196f3'),
-  R.set(paths.backgroundColorPath('assassin'), '#000000'),
-  R.set(paths.backgroundColorPath('bystander'), '#686868'),
-  R.set(paths.rolePath, 'spymaster'),
-  R.set(paths.teamPath, '1'),
+  R.set(paths.backgroundColorPath(TEAM_1), '#f44336'),
+  R.set(paths.backgroundColorPath(TEAM_2), '#2196f3'),
+  R.set(paths.backgroundColorPath(ASSASSIN), '#000000'),
+  R.set(paths.backgroundColorPath(BYSTANDER), '#686868'),
+  R.set(paths.rolePath, SPYMASTER),
+  R.set(paths.teamPath, TEAM_1),
   R.set(paths.gameModePath, GAME_MODE_PICK_TEAM),
   R.set(paths.cardsPath, initialCards),
   R.set(paths.errorPath, initialErrorState),
