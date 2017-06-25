@@ -50,5 +50,6 @@ export const initialState = R.compose(
   R.set(paths.userListPath, initialUsersList),
   R.set(paths.usernamePath, ''),
   R.set(paths.hintTextPath, 'John'),
-  R.set(paths.hintNumberPath, '3')
+  R.set(paths.hintNumberPath, '3'),
+  R.set(paths.hintSubmittedPath, false)
 )({})

@@ -1,7 +1,13 @@
 import React from 'react'
 import R from 'ramda'
 import paths from '../../redux/paths.js'
-import { afUpdateHint } from '../../redux/actions.js'
+import {
+  afUpdateHint,
+  afSubmitHint,
+} from '../../redux/actions.js'
+import {
+  afEmitAction,
+} from '../../sagas/connect-to-websocket.js'
 import { connect } from 'react-redux'
 import NumberButton from './number-button.jsx'
 
@@ -10,11 +16,13 @@ const Hint = connect(
     text: R.view(paths.hintTextPath, state),
     number: R.view(paths.hintNumberPath, state),
     role: R.view(paths.rolePath, state),
+    hintSubmitted: R.view(paths.hintSubmittedPath, state),
   }),
   (dispatch) => ({
     updateHint: (hint) => dispatch(afUpdateHint(hint)),
+    submitHint: () => dispatch(afEmitAction(afSubmitHint())),
   })
-)(({text, number, role, updateHint, hintSubmitted=true}) => (
+)(({text, number, role, updateHint, hintSubmitted, submitHint}) => (
   <div>
     {
       (role === 'agent')
@@ -43,6 +51,7 @@ const Hint = connect(
                 ))
               }
             </div>
+            <button onClick={submitHint}>Submit</button>
           </div>
         )
     }

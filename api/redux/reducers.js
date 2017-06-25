@@ -8,6 +8,7 @@ import {
   UPDATE_HINT,
   SET_TIME,
   UPDATE_HINT_NUMBER,
+  SUBMIT_HINT,
 } from '../../src/redux/actions.js'
 import {
   updateHint,
@@ -65,6 +66,9 @@ const flipCard = (state, {id}) => {
   return R.set(paths.cardsFlippedPath(cardIdx), true, state)
 }
 
+const submitHint = (state, _) =>
+  R.set(paths.hintSubmittedPath, true, state)
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
     case ADD_USER: return addUser(state, action)
@@ -75,6 +79,7 @@ export const app = (state=initialState, action) => {
     case UPDATE_HINT: return updateHint(state, action)
     case SET_TIME: return setTime(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
+    case SUBMIT_HINT: return submitHint(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

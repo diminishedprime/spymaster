@@ -35,7 +35,9 @@ const usersUserUsername = (idx) => [...usersUser(idx), 'userId']
 const hint = [...remoteState, 'hint']
 const hintText = [...hint, 'text']
 const hintNumber = [...hint, 'number']
+const hintSubmitted = [...hint, 'submitted']
 
+const hintSubmittedPath = R.lensPath([...hintSubmitted])
 const hintTextPath = R.lensPath([...hintText])
 const hintNumberPath = R.lensPath([...hintNumber])
 const remoteStatePath = R.lensPath([...remoteState])
@@ -73,6 +75,7 @@ const usersUserUsernamePath = (idx) =>
   R.lensPath([...usersUserUsername(idx)])
 
 export default {
+  hintSubmittedPath,
   hintTextPath,
   hintNumberPath,
   usersUserUsernamePath,

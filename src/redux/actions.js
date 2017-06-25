@@ -130,3 +130,8 @@ export const afUpdateHintNumber = (hintNumber) => ({
   type: UPDATE_HINT_NUMBER,
   hintNumber,
 })
+
+export const SUBMIT_HINT = 'submit hint'
+export const afSubmitHint = () => ({
+  type: SUBMIT_HINT,
+})
