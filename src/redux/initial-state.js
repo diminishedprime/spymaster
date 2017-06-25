@@ -54,5 +54,6 @@ export const initialState = R.compose(
   R.set(paths.replayingPath, false),
   R.set(paths.userListPath, initialUsersList),
   R.set(paths.usernamePath, ''),
-  R.set(paths.hintPath, initialHint)
+  R.set(paths.hintPath, initialHint),
+  R.set(paths.timePath, undefined)
 )({})

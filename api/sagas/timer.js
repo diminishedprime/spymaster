@@ -17,7 +17,7 @@ import {
 } from '../websocket.js'
 
 const startTimer = function* () {
-  const seconds = 100
+  const seconds = 60
   let iv
   const timerChan = eventChannel((emitter) => {
     let remainingSeconds = seconds
@@ -39,8 +39,12 @@ const startTimer = function* () {
   try {
     for (;;) {
       const seconds = yield take(timerChan)
-      // This is where I can handle 0 seconds differently
-      yield put(afSetTime(seconds))
+      if (seconds === 0) {
+        yield put(afNextTurn())
+      } else {
+        yield put(afSetTime(seconds))
+      }
+
       forceUpdateRemoteState()
     }
   } finally {

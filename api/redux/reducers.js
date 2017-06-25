@@ -12,6 +12,7 @@ import {
   SET_TIME,
   UPDATE_HINT_NUMBER,
   SUBMIT_HINT,
+  NEXT_TURN,
 } from '../../src/redux/actions.js'
 import {
   updateHint,
@@ -64,6 +65,7 @@ const updateUsername = (state, {user, username}) => {
 }
 
 const nextTurn = (state) => R.compose(
+  R.set(paths.timePath, undefined),
   R.over(paths.currentTeamPath, otherTeam),
   R.set(paths.hintPath, initialHint)
 )(state)
@@ -130,6 +132,7 @@ export const app = (state=initialState, action) => {
     case SET_TIME: return setTime(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     case SUBMIT_HINT: return submitHint(state, action)
+    case NEXT_TURN: return nextTurn(state)
     default:
       if (!(
         action.type.startsWith('async') ||

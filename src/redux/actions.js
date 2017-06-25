@@ -135,3 +135,8 @@ export const SUBMIT_HINT = 'submit hint'
 export const afSubmitHint = () => ({
   type: SUBMIT_HINT,
 })
+
+export const NEXT_TURN = 'next turn'
+export const afNextTurn = () => ({
+  type: NEXT_TURN,
+})
