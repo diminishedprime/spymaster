@@ -106,11 +106,11 @@ const Info = connect(
   }
 )(({role, currentTeam, backgroundColor, username}) => (
   <div className="info">
+    <Hint />
     <InfoColumn label="Current Team"
       value={currentTeam}
       backgroundColor={backgroundColor}
     />
-    <Hint />
     <YourTeam />
     <InfoColumn label="Your Role" value={role} />
     <InfoColumn label="Username" value={username} />
