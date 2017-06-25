@@ -16,9 +16,11 @@ import {
   fgColorForRGB,
   hexToRGB,
 } from '../../util.js'
+import font from '../font.css'
 
 import SpymasterHint from './spymaster-hint.jsx'
 import s from './hint.css'
+
 
 const mapStateToProps = (state) => {
   const text = R.view(hintTextPath, state)
@@ -48,10 +50,10 @@ const AgentHint = connect(
   mapStateToProps
 )(({hintSubmitted, text, number, style}) => (
   <div className={s.hint} style={style}>
-    {!hintSubmitted && <div>Awaiting Hint</div>}
-    {hintSubmitted && <div>Hint</div>}
-    {hintSubmitted && <div className={s.hintValue}>{text}</div>}
-    {hintSubmitted && <div className={s.hintValue}>{number}</div>}
+  {!hintSubmitted && <div>Awaiting Hint</div>}
+  {hintSubmitted && <div>Hint</div>}
+  {hintSubmitted && <div className={font.largeText}>{text}</div>}
+  {hintSubmitted && <div className={font.largeText}>{number}</div>}
   </div>
 ))
 

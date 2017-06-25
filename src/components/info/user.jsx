@@ -14,6 +14,7 @@ import {
   backgroundColorPath,
   usernamePath,
 } from '../../redux/paths.js'
+import font from '../font.css'
 
 import s from './user.css'
 
@@ -37,11 +38,11 @@ const User = connect(
   <div className={s.user} style={style}>
     <div className={s.userRow}>
       <div>Role</div>
-      <div className={s.userRowValue}>{role}</div>
+      <div className={font.largeText}>{role}</div>
     </div>
     <div className={s.userRow}>
       <div>Username</div>
-      <div className={s.userRowValue}>{username}</div>
+      <div className={font.largeText}>{username}</div>
     </div>
   </div>
 ))
