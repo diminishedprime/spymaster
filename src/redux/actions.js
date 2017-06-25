@@ -140,3 +140,9 @@ export const NEXT_TURN = 'next turn'
 export const afNextTurn = () => ({
   type: NEXT_TURN,
 })
+
+export const FORFEIT = 'forfeit'
+export const afForfeit = (team) => ({
+  type: FORFEIT,
+  team,
+})

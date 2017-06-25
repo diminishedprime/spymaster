@@ -1,7 +1,10 @@
 import React from 'react'
 import R from 'ramda'
 import { connect } from 'react-redux'
-import { afStartTimer } from '../../redux/actions.js'
+import {
+  afStartTimer,
+  afForfeit,
+} from '../../redux/actions.js'
 import { afEmitAction } from '../../sagas/connect-to-websocket.js'
 import Card from '../card/card.jsx'
 import Hint from '../hint/hint.jsx'
@@ -66,27 +69,51 @@ const InfoColumn = connect(
   </div>
 ))
 
+const YourTeam = connect(
+  (state) => {
+    const team = R.view(paths.teamPath, state),
+          bgColor = R.view(paths.backgroundColorPath(team), state),
+          fgColor = fgColorForRGB(hexToRGB(bgColor)),
+          style = {
+            color: fgColor,
+            backgroundColor: bgColor,
+          }
+    return ({
+      team,
+      style,
+    })
+  },
+  (dispatch) => ({
+    forfeit: (team) => () => dispatch(afEmitAction(afForfeit(team))),
+  })
+)(({team, style, forfeit}) => (
+  <div className="infoColumn" style={style}>
+    <div>Your Team</div>
+    <div className="infoColumnValue">{team}</div>
+    <button onClick={forfeit(team)}>Forfeit</button>
+  </div>
+))
+
 const Info = connect(
   (state) => {
     const currentTeam = R.view(paths.currentTeamPath, state)
     return ({
       role: R.view(paths.rolePath, state),
-      team: R.view(paths.teamPath, state),
       currentTeam,
       backgroundColor: R.view(paths.backgroundColorPath(currentTeam), state),
       username: R.view(paths.usernamePath, state),
     })
   }
-)(({role, team, currentTeam, backgroundColor, username}) => (
+)(({role, currentTeam, backgroundColor, username}) => (
   <div className="info">
     <InfoColumn label="Current Team"
       value={currentTeam}
       backgroundColor={backgroundColor}
     />
     <Hint />
+    <YourTeam />
     <InfoColumn label="Your Role" value={role} />
     <InfoColumn label="Username" value={username} />
-    <InfoColumn label="Your Team" value={team} />
   </div>
 ))
 

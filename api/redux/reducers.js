@@ -13,6 +13,7 @@ import {
   UPDATE_HINT_NUMBER,
   SUBMIT_HINT,
   NEXT_TURN,
+  FORFEIT,
 } from '../../src/redux/actions.js'
 import {
   updateHint,
@@ -70,9 +71,12 @@ const nextTurn = (state) => R.compose(
   R.set(paths.hintPath, initialHint)
 )(state)
 
-const loseGame = (state) => {
-  /* Implement actual game over logic
-   * console.log('someone lost')*/
+const loseGame = (state, {team}) => {
+  /* Implement actual game over logic team is the team that lost this makes it
+     easy to do forfeit logic, if it is undefined, then the currentTeam just lost
+   */
+
+  // console.log('someone lost')
   return state
 }
 
@@ -133,6 +137,7 @@ export const app = (state=initialState, action) => {
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     case SUBMIT_HINT: return submitHint(state, action)
     case NEXT_TURN: return nextTurn(state)
+    case FORFEIT: return loseGame(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||
