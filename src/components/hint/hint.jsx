@@ -17,6 +17,7 @@ import {
   hexToRGB,
 } from '../../util.js'
 import font from '../font.css'
+import Forfeit from '../info/forfeit.jsx'
 
 import SpymasterHint from './spymaster-hint.jsx'
 import s from './hint.css'
@@ -54,6 +55,7 @@ const AgentHint = connect(
   {hintSubmitted && <div>Hint</div>}
   {hintSubmitted && <div className={font.largeText}>{text}</div>}
   {hintSubmitted && <div className={font.largeText}>{number}</div>}
+  <Forfeit />
   </div>
 ))
 

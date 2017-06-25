@@ -15,7 +15,7 @@ import {
 } from '../../redux/paths.js'
 import font from '../font.css'
 
-import Forfeit from './forfeit.jsx'
+import Pass from './pass.jsx'
 import s from './teams.css'
 
 
@@ -51,7 +51,7 @@ const Teams = connect(
     <div className={s.teamsRow} style={yourTeamStyle}>
       <div>Your Team</div>
       <div className={font.largeText}>{yourTeam}</div>
-      <Forfeit />
+      <Pass />
     </div>
   </div>
 ))
