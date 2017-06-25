@@ -1,9 +1,19 @@
 import React from 'react'
 import R from 'ramda'
-import { connect } from 'react-redux'
-import { afFlipCard } from '../../redux/actions.js'
-import { fgColorForRGB, hexToRGB } from '../../util.js'
-import { afEmitAction } from '../../sagas/connect-to-websocket.js'
+import {
+  connect,
+} from 'react-redux'
+
+import {
+  afFlipCard,
+} from '../../redux/actions.js'
+import {
+  fgColorForRGB,
+  hexToRGB,
+} from '../../util.js'
+import {
+  afEmitAction,
+} from '../../sagas/connect-to-websocket.js'
 import {
   hintSubmittedPath,
   rolePath,
@@ -11,6 +21,7 @@ import {
   backgroundColorPath,
   currentTeamPath,
 } from '../../redux/paths.js'
+
 import './card.css'
 
 /* {

@@ -67,5 +67,8 @@ module.exports = {
     "no-unused-vars": ["error", {"argsIgnorePattern": "^_$"}],
     "react/prop-types": "off",
     "redux-saga/no-unhandled-errors": "off",
+
+    "import/order": ["error", {"newlines-between": "always"}],
+    "import/namespace": ["error"],
   }
 }

@@ -1,7 +1,16 @@
 import uuid4 from 'uuid/v4'
-import words from './words.js'
 import R from 'ramda'
 import shuffle from 'shuffle-array'
+
+import {
+  ASSASSIN,
+  BYSTANDER,
+  TEAM_1,
+  TEAM_2,
+  SPYMASTER,
+  GAME_MODE_PICK_TEAM,
+} from '../constants.js'
+
 import {
   currentTeamPath,
   backgroundColorPath,
@@ -16,14 +25,7 @@ import {
   hintPath,
   timePath,
 } from './paths.js'
-import {
-  ASSASSIN,
-  BYSTANDER,
-  TEAM_1,
-  TEAM_2,
-  SPYMASTER,
-  GAME_MODE_PICK_TEAM,
-} from '../constants.js'
+import words from './words.js'
 
 shuffle(words)
 const randTeam = () => {

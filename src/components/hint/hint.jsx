@@ -1,16 +1,9 @@
 import React from 'react'
 import R from 'ramda'
 import {
-  afUpdateHint,
-  afSubmitHint,
-} from '../../redux/actions.js'
-import {
-  afEmitAction,
-} from '../../sagas/connect-to-websocket.js'
-import {
   connect,
 } from 'react-redux'
-import NumberButton from './number-button.jsx'
+
 import {
   hintSubmittedPath,
   hintTextPath,
@@ -19,6 +12,15 @@ import {
   teamPath,
   currentTeamPath,
 } from '../../redux/paths.js'
+import {
+  afUpdateHint,
+  afSubmitHint,
+} from '../../redux/actions.js'
+import {
+  afEmitAction,
+} from '../../sagas/connect-to-websocket.js'
+
+import NumberButton from './number-button.jsx'
 
 const mapStateToProps = (state) => {
   const text = R.view(hintTextPath, state)

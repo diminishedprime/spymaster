@@ -1,14 +1,16 @@
 import React from 'react'
+import R from 'ramda'
 import {
   connect,
 } from 'react-redux'
+
 import {
   afDismissError,
 } from '../../redux/actions.js'
 import {
   errorPath,
 } from '../../redux/paths.js'
-import R from 'ramda'
+
 import './error-bar.css'
 
 const ErrorBar = ({text, severity, dismiss}) => (

@@ -1,5 +1,7 @@
 import React from 'react'
 import R from 'ramda'
+import { connect } from 'react-redux'
+
 import {
   hintSubmittedPath,
   hintNumberPath,
@@ -7,10 +9,16 @@ import {
   backgroundColorPath,
   currentTeamPath,
 } from '../../redux/paths.js'
-import { afUpdateHintNumber } from '../../redux/actions.js'
-import { afEmitAction } from '../../sagas/connect-to-websocket.js'
-import { connect } from 'react-redux'
-import { fgColorForRGB, hexToRGB } from '../../util.js'
+import {
+  afUpdateHintNumber,
+} from '../../redux/actions.js'
+import {
+  afEmitAction,
+} from '../../sagas/connect-to-websocket.js'
+import {
+  fgColorForRGB,
+  hexToRGB,
+} from '../../util.js'
 
 const mapStateToProps = (state, {number}) => {
   const cardTeam = R.view(teamPath, state)

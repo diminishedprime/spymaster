@@ -3,6 +3,7 @@ import R from 'ramda'
 import {
   connect,
 } from 'react-redux'
+
 import {
   afStartTimer,
   afForfeit,
@@ -25,6 +26,7 @@ import {
   currentTeamPath,
   usernamePath,
 } from '../../redux/paths.js'
+
 import './game.css'
 
 const CardRow = ({cards}) => (

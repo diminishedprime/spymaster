@@ -1,11 +1,29 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import R from 'ramda'
+import {
+  connect,
+} from 'react-redux'
+import {
+  CirclePicker,
+} from 'react-color'
+
 import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
-import { CirclePicker } from 'react-color'
-import { afChangeColor, afPickRole, afToggleTitle, afSetEditing, afSetUsername } from '../../redux/actions.js'
-import { fgColorForRGB, hexToRGB } from '../../util.js'
-import { afEmitAction, afSetServerUsername } from '../../sagas/connect-to-websocket.js'
+import {
+  afChangeColor,
+  afPickRole,
+  afToggleTitle,
+  afSetEditing,
+  afSetUsername,
+} from '../../redux/actions.js'
+import {
+  fgColorForRGB,
+  hexToRGB,
+} from '../../util.js'
+import {
+  afEmitAction,
+  afSetServerUsername,
+} from '../../sagas/connect-to-websocket.js'
 import {
   errorTextPath,
   showTitlePath,
@@ -15,7 +33,6 @@ import {
   editingPath,
   userListPath,
 } from '../../redux/paths.js'
-import R from 'ramda'
 import './app.css'
 
 /*

@@ -1,5 +1,7 @@
 import io from 'socket.io'
 import uuid4 from 'uuid/v4'
+import R from 'ramda'
+
 import {
   afPickRole,
   afSetUsername,
@@ -9,12 +11,14 @@ import {
   afUpdateUsername,
   afToggleTitle,
 } from '../src/redux/actions.js'
-import R from 'ramda'
 import {
   remoteStatePath,
   usersPath,
 } from '../src/redux/paths.js'
-import { store } from './redux/index.js'
+
+import {
+  store,
+} from './redux/index.js'
 
 const onDisconnect = (user) => () => {
   store.dispatch(afRemoveUser(user))

@@ -1,12 +1,25 @@
-import { eventChannel, END } from 'redux-saga'
-import { takeLatest, take, put, select, takeEvery } from 'redux-saga/effects'
+import {
+  eventChannel,
+  END,
+} from 'redux-saga'
 import io from 'socket.io-client'
-import { afSetWs } from '../redux/actions.js'
 import R from 'ramda'
+
+import {
+  afSetWs,
+} from '../redux/actions.js'
 import {
   wsPath,
   usernamePath,
 } from '../redux/paths.js'
+
+import {
+  takeLatest,
+  take,
+  put,
+  select,
+  takeEvery,
+} from 'redux-saga/effects'
 
 export const SET_SERVER_USERNAME = 'async set server username'
 export const afSetServerUsername = () => ({

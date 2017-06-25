@@ -1,3 +1,5 @@
+import R from 'ramda'
+
 import {
   initialState,
   initialHint,
@@ -42,7 +44,6 @@ import {
   currentTeamPath,
   hintPath,
 } from '../../src/redux/paths.js'
-import R from 'ramda'
 
 const addUser = (state, {user}) => {
   const userId = user.userId

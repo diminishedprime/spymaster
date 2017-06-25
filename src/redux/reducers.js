@@ -1,3 +1,9 @@
+import R from 'ramda'
+
+import {
+  GAME_MODE_GAME,
+} from '../constants.js'
+
 import {
   hintTextPath,
   hintNumberPath,
@@ -29,13 +35,9 @@ import {
   UPDATE_HINT_NUMBER,
 } from './actions.js'
 import {
-  GAME_MODE_GAME,
-} from '../constants.js'
-import {
   initialErrorState,
   initialState,
 } from './initial-state.js'
-import R from 'ramda'
 
 const hiError = (state, {
   text='The request failed',
