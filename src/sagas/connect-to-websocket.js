@@ -6,6 +6,7 @@ import io from 'socket.io-client'
 import R from 'ramda'
 
 import {
+  afSetEditing,
   afSetWs,
 } from '../redux/actions.js'
 import {
@@ -46,6 +47,7 @@ const emitSetServerUsername = function* () {
   const username = yield select((state) => R.view(usernamePath, state))
   const ws = yield select((state) => R.view(wsPath, state))
   ws.emit('change username', username)
+  yield put(afSetEditing(false))
 }
 
 const emitAction = function* ({action}) {
