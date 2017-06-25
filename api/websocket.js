@@ -47,15 +47,6 @@ const addUser = (user) => {
   forceUpdateRemoteState()
 }
 
-// TEMP CODE
-const teamRotation = [
-  ['1', 'spymaster'],
-  ['1', 'agent'],
-  ['2', 'spymaster'],
-  ['2', 'agent'],
-]
-let teamIndex = 0
-
 const onConnect = (ws) => {
   const userId = uuid4().substring(0, 8),
         user = {
@@ -69,12 +60,6 @@ const onConnect = (ws) => {
   ws.emit('message', 'Thanks for connecting via websockets')
   ws.emit('action', afSetUsername(userId))
   addUser(user)
-
-  // TEMP CODE
-  teamIndex = teamIndex + 1
-  teamIndex = teamIndex % 4
-  ws.emit('action', afPickRole(...teamRotation[teamIndex]))
-  ws.emit('action', afToggleTitle())
 }
 
 const connect = (httpServer) => {
