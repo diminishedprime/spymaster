@@ -3,6 +3,9 @@ import R from 'ramda'
 import {
   initialState,
   initialHint,
+  newCards,
+  newScore,
+  newColors,
 } from '../../src/redux/initial-state.js'
 import {
   FLIP_CARD,
@@ -17,6 +20,7 @@ import {
   NEXT_TURN,
   FORFEIT,
   afForfeit,
+  NEW_GAME,
 } from '../../src/redux/actions.js'
 import {
   updateHint,
@@ -31,6 +35,8 @@ import {
   INF,
 } from '../../src/constants.js'
 import {
+  colorsPath,
+  scorePath,
   winnerPath,
   cardsTeamPath,
   cardsFlippedPath,
@@ -143,6 +149,16 @@ const flipCard = (state, {id}) => {
 const submitHint = (state, _) =>
   R.set(hintSubmittedPath, true, state)
 
+const newGame = (state, _) => {
+  return R.compose(
+    newColors,
+    R.set(winnerPath, undefined),
+    R.set(cardsPath, newCards()),
+    R.set(scorePath, newScore()),
+    R.set(timePath, undefined)
+  )(state)
+}
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
     case ADD_USER: return addUser(state, action)
@@ -156,6 +172,7 @@ export const app = (state=initialState, action) => {
     case SUBMIT_HINT: return submitHint(state, action)
     case NEXT_TURN: return nextTurn(state)
     case FORFEIT: return loseGame(state, action)
+    case NEW_GAME: return newGame(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

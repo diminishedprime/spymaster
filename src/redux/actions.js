@@ -123,3 +123,8 @@ export const afForfeit = (team) => ({
   type: FORFEIT,
   team,
 })
+
+export const NEW_GAME = 'new game'
+export const afNewGame = () => ({
+  type: NEW_GAME,
+})
