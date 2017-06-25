@@ -1,7 +1,20 @@
-import { eventChannel, END } from 'redux-saga'
-import { takeLatest, take, put } from 'redux-saga/effects'
-import { afSetTime, START_TIMER } from '../../src/redux/actions.js'
-import { forceUpdateRemoteState } from '../websocket.js'
+import {
+  eventChannel,
+  END,
+} from 'redux-saga'
+import {
+  takeLatest,
+  take,
+  put,
+} from 'redux-saga/effects'
+import {
+  afSetTime,
+  START_TIMER,
+  afNextTurn,
+} from '../../src/redux/actions.js'
+import {
+  forceUpdateRemoteState,
+} from '../websocket.js'
 
 const startTimer = function* () {
   const seconds = 100
