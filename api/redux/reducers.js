@@ -27,55 +27,69 @@ import {
   ZERO,
   INF,
 } from '../../src/constants.js'
-import paths from '../../src/redux/paths.js'
+import {
+  cardsTeamPath,
+  cardsFlippedPath,
+  hintSubmittedPath,
+  cardsPath,
+  userListUserPath,
+  hintNumberPath,
+  timePath,
+  userListPath,
+  usersPath,
+  backgroundColorPath,
+  usersUserUsernamePath,
+  currentTeamPath,
+  hintPath,
+} from '../../src/redux/paths.js'
 import R from 'ramda'
 
 const addUser = (state, {user}) => {
   const userId = user.userId
   return R.compose(
-    R.over(paths.userListPath, R.append(userId)),
-    R.over(paths.usersPath, R.append(user))
+    R.over(userListPath, R.append(userId)),
+    R.over(usersPath, R.append(user))
   )(state)
 }
 
 const removeUser = (state, {user}) => {
   const userId = user.userId
-  const userIds = R.view(paths.userListPath, state)
-  const users = R.view(paths.usersPath, state)
+  const userIds = R.view(userListPath, state)
+  const users = R.view(usersPath, state)
   const userIdIdx = userIds.indexOf(userId)
   const userIdx = users.indexOf(user)
   return R.compose(
-    R.over(paths.userListPath, R.remove(userIdIdx, 1)),
-    R.over(paths.usersPath, R.remove(userIdx, 1))
+    R.over(userListPath, R.remove(userIdIdx, 1)),
+    R.over(usersPath, R.remove(userIdx, 1))
   )(state)
 }
 
 const otherTeam = (team) => team === TEAM_1 ? TEAM_2 : TEAM_1
 
 const changeColor = (state, {team, color}) => {
-  const otherTeamsColor = R.view(paths.backgroundColorPath(otherTeam(team)), state)
+  const otherTeamsColor = R.view(backgroundColorPath(otherTeam(team)), state)
   return (color !== otherTeamsColor)
-    ? R.set(paths.backgroundColorPath(team), color, state)
+    ? R.set(backgroundColorPath(team), color, state)
     : state
 }
 
 const updateUsername = (state, {user, username}) => {
-  const users = R.view(paths.usersPath, state)
-  const userIds = R.view(paths.userListPath, state)
+  const users = R.view(usersPath, state)
+  const userIds = R.view(userListPath, state)
 
   const userIdx = users.indexOf(user)
   const userIdIdx = userIds.indexOf(user.userId)
 
   return R.compose(
-    R.set(paths.userListUserPath(userIdIdx), username),
-    R.set(paths.usersUserUsernamePath(userIdx), R.remove(userIdx, 1))
+    R.set(userListUserPath(userIdIdx), username),
+    R.set(usersUserUsernamePath(userIdx), R.remove(userIdx, 1))
   )(state)
 }
 
 const nextTurn = (state) => R.compose(
-  R.set(paths.timePath, undefined),
-  R.over(paths.currentTeamPath, otherTeam),
-  R.set(paths.hintPath, initialHint)
+  R.set(timePath, undefined),
+  R.over(currentTeamPath, otherTeam),
+  R.set(hintPath, initialHint)
 )(state)
 
 const loseGame = (state, {team: _}) => {
@@ -88,22 +102,22 @@ const loseGame = (state, {team: _}) => {
 }
 
 const checkAssassin = (id) => (state) => {
-  const cardTeam = R.view(paths.cardsTeamPath(id), state)
+  const cardTeam = R.view(cardsTeamPath(id), state)
   return (cardTeam === ASSASSIN)
     ? loseGame(state)
     : state
 }
 
 const checkCorrectCard = (id) => (state) => {
-  const currentTeam = R.view(paths.currentTeamPath, state)
-  const cardTeam = R.view(paths.cardsTeamPath(id), state)
+  const currentTeam = R.view(currentTeamPath, state)
+  const cardTeam = R.view(cardsTeamPath(id), state)
   return (currentTeam === cardTeam)
     ? state
     : nextTurn(state)
 }
 
 const decreaseGuesses = (state) => {
-  const numGuesses = R.view(paths.hintNumberPath, state)
+  const numGuesses = R.view(hintNumberPath, state)
   // If they explicitly picked 'inf' or '0', they have infinite guesses
   if (numGuesses === INF || numGuesses === ZERO) {
     return state
@@ -113,24 +127,24 @@ const decreaseGuesses = (state) => {
   if (asNumber === 0) {
     return nextTurn(state)
   } else {
-    return R.set(paths.hintNumberPath, asNumber + '', state)
+    return R.set(hintNumberPath, asNumber + '', state)
   }
 }
 
 const flipCard = (state, {id}) => {
-  const cards = R.view(paths.cardsPath, state)
+  const cards = R.view(cardsPath, state)
   const cardIdx = R.findIndex((card) => card.id === id, cards)
 
   return R.compose(
     checkAssassin(cardIdx),
     checkCorrectCard(cardIdx),
     decreaseGuesses,
-    R.set(paths.cardsFlippedPath(cardIdx), true)
+    R.set(cardsFlippedPath(cardIdx), true)
   )(state)
 }
 
 const submitHint = (state, _) =>
-  R.set(paths.hintSubmittedPath, true, state)
+  R.set(hintSubmittedPath, true, state)
 
 export const app = (state=initialState, action) => {
   switch(action.type) {

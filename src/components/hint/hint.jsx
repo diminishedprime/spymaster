@@ -1,6 +1,5 @@
 import React from 'react'
 import R from 'ramda'
-import paths from '../../redux/paths.js'
 import {
   afUpdateHint,
   afSubmitHint,
@@ -8,16 +7,26 @@ import {
 import {
   afEmitAction,
 } from '../../sagas/connect-to-websocket.js'
-import { connect } from 'react-redux'
+import {
+  connect,
+} from 'react-redux'
 import NumberButton from './number-button.jsx'
+import {
+  hintSubmittedPath,
+  hintTextPath,
+  hintNumberPath,
+  rolePath,
+  teamPath,
+  currentTeamPath,
+} from '../../redux/paths.js'
 
 const mapStateToProps = (state) => {
-  const text = R.view(paths.hintTextPath, state)
-  const number = R.view(paths.hintNumberPath, state)
-  const role = R.view(paths.rolePath, state)
-  const hintSubmitted = R.view(paths.hintSubmittedPath, state)
-  const playerTeam = R.view(paths.teamPath, state)
-  const currentTeam = R.view(paths.currentTeamPath, state)
+  const text = R.view(hintTextPath, state)
+  const number = R.view(hintNumberPath, state)
+  const role = R.view(rolePath, state)
+  const hintSubmitted = R.view(hintSubmittedPath, state)
+  const playerTeam = R.view(teamPath, state)
+  const currentTeam = R.view(currentTeamPath, state)
   const inputDisabled = (playerTeam !== currentTeam)
   const submitDisabled = (text === '') ||
                          (number === '') ||

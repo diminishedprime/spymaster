@@ -10,7 +10,10 @@ import {
   afToggleTitle,
 } from '../src/redux/actions.js'
 import R from 'ramda'
-import paths from '../src/redux/paths.js'
+import {
+  remoteStatePath,
+  usersPath,
+} from '../src/redux/paths.js'
 import { store } from './redux/index.js'
 
 const onDisconnect = (user) => () => {
@@ -18,9 +21,9 @@ const onDisconnect = (user) => () => {
 }
 
 export const forceUpdateRemoteState = () => {
-  const users = R.view(paths.usersPath, store.getState())
+  const users = R.view(usersPath, store.getState())
   const remoteStateAction = afUpdateRemoteState(
-    R.view(paths.remoteStatePath, store.getState())
+    R.view(remoteStatePath, store.getState())
   )
   users.forEach(({ws}) => ws.emit('action', remoteStateAction))
 }

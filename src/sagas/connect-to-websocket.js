@@ -3,7 +3,10 @@ import { takeLatest, take, put, select, takeEvery } from 'redux-saga/effects'
 import io from 'socket.io-client'
 import { afSetWs } from '../redux/actions.js'
 import R from 'ramda'
-import paths from '../redux/paths.js'
+import {
+  wsPath,
+  usernamePath,
+} from '../redux/paths.js'
 
 export const SET_SERVER_USERNAME = 'async set server username'
 export const afSetServerUsername = () => ({
@@ -27,18 +30,18 @@ export const afEmitAction = (action) => ({
 })
 
 const emitSetServerUsername = function* () {
-  const username = yield select((state) => R.view(paths.usernamePath, state))
-  const ws = yield select((state) => R.view(paths.wsPath, state))
+  const username = yield select((state) => R.view(usernamePath, state))
+  const ws = yield select((state) => R.view(wsPath, state))
   ws.emit('change username', username)
 }
 
 const emitAction = function* ({action}) {
-  const ws = yield select((state) => R.view(paths.wsPath, state))
+  const ws = yield select((state) => R.view(wsPath, state))
   ws.emit('client action', action)
 }
 
 const listenToWebsocket = function* () {
-  const ws = yield select((state) => R.view(paths.wsPath, state))
+  const ws = yield select((state) => R.view(wsPath, state))
 
   const wsChan = eventChannel((emitter) => {
     ws.on('message', (message) => emitter({message}))

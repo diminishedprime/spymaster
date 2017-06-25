@@ -1,22 +1,28 @@
 import React from 'react'
 import R from 'ramda'
-import paths from '../../redux/paths.js'
+import {
+  hintSubmittedPath,
+  hintNumberPath,
+  teamPath,
+  backgroundColorPath,
+  currentTeamPath,
+} from '../../redux/paths.js'
 import { afUpdateHintNumber } from '../../redux/actions.js'
 import { afEmitAction } from '../../sagas/connect-to-websocket.js'
 import { connect } from 'react-redux'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
 
 const mapStateToProps = (state, {number}) => {
-  const cardTeam = R.view(paths.teamPath, state)
-  const selectedNumber = R.view(paths.hintNumberPath, state)
+  const cardTeam = R.view(teamPath, state)
+  const selectedNumber = R.view(hintNumberPath, state)
   const numberPicked = (selectedNumber === number)
-  const playerTeam = R.view(paths.teamPath, state)
-  const currentTeam = R.view(paths.currentTeamPath, state)
-  const hintSubmitted = R.view(paths.hintSubmittedPath, state)
+  const playerTeam = R.view(teamPath, state)
+  const currentTeam = R.view(currentTeamPath, state)
+  const hintSubmitted = R.view(hintSubmittedPath, state)
   const disabled = numberPicked ||
                    (playerTeam !== currentTeam) ||
                    hintSubmitted
-  const bgColor = R.view(paths.backgroundColorPath(cardTeam), state)
+  const bgColor = R.view(backgroundColorPath(cardTeam), state)
   const baseStyle = {
     color: '#000000',
     backgroundColor: '#ffffff',

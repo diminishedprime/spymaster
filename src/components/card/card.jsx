@@ -4,7 +4,13 @@ import { connect } from 'react-redux'
 import { afFlipCard } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
 import { afEmitAction } from '../../sagas/connect-to-websocket.js'
-import paths from '../../redux/paths.js'
+import {
+  hintSubmittedPath,
+  rolePath,
+  teamPath,
+  backgroundColorPath,
+  currentTeamPath,
+} from '../../redux/paths.js'
 import './card.css'
 
 /* {
@@ -17,11 +23,11 @@ const mapStateToProps = (state, {
   team: cardTeam,
   flipped,
 }) => {
-  const role = R.view(paths.rolePath, state)
-  const bgColor = R.view(paths.backgroundColorPath(cardTeam), state)
-  const playerTeam = R.view(paths.teamPath, state)
-  const currentTeam = R.view(paths.currentTeamPath, state)
-  const hintSubmitted = R.view(paths.hintSubmittedPath, state)
+  const role = R.view(rolePath, state)
+  const bgColor = R.view(backgroundColorPath(cardTeam), state)
+  const playerTeam = R.view(teamPath, state)
+  const currentTeam = R.view(currentTeamPath, state)
+  const hintSubmitted = R.view(hintSubmittedPath, state)
   const baseStyle = {
     color: '#000000',
     backgroundColor: '#ffffff',

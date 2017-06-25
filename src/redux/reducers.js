@@ -1,4 +1,19 @@
-import paths from './paths.js'
+import {
+  hintTextPath,
+  hintNumberPath,
+  remoteStatePath,
+  errorSeverityPath,
+  timePath,
+  errorPath,
+  showTitlePath,
+  playerTypePath,
+  gameModePath,
+  wsPath,
+  usernamePath,
+  editingPath,
+  userListPath,
+  errorTextPath,
+} from './paths.js'
 import {
   PICK_ROLE,
   SET_TIME,
@@ -26,42 +41,42 @@ const hiError = (state, {
   text='The request failed',
   severity='error',
 }) =>
-  R.set(paths.errorSeverityPath, severity, R.set(paths.errorTextPath, text, state))
+  R.set(errorSeverityPath, severity, R.set(errorTextPath, text, state))
 
 const dismissError = (state, _) =>
-  R.set(paths.errorPath, initialErrorState, state)
+  R.set(errorPath, initialErrorState, state)
 
 const toggleTitle = (state, _) =>
-  R.over(paths.showTitlePath, R.not, state)
+  R.over(showTitlePath, R.not, state)
 
 export const setTime = (state, {seconds}) =>
-  R.set(paths.timePath, seconds, state)
+  R.set(timePath, seconds, state)
 
 const pickRole = (state, {team, role}) => R.compose(
-  R.set(paths.playerTypePath, ({team, role})),
-  R.set(paths.gameModePath, GAME_MODE_GAME)
+  R.set(playerTypePath, ({team, role})),
+  R.set(gameModePath, GAME_MODE_GAME)
 )(state)
 
 const setWs = (state, {ws}) =>
-  R.set(paths.wsPath, ws, state)
+  R.set(wsPath, ws, state)
 
 const setUsername = (state, {username}) =>
-  R.set(paths.usernamePath, username, state)
+  R.set(usernamePath, username, state)
 
 const setEditing = (state, {flag}) =>
-  R.set(paths.editingPath, flag, state)
+  R.set(editingPath, flag, state)
 
 const updateUserList = (state, {users}) =>
-  R.set(paths.userListPath, users, state)
+  R.set(userListPath, users, state)
 
 const updateRemoteState = (state, {remoteState}) =>
-  R.set(paths.remoteStatePath, remoteState, state)
+  R.set(remoteStatePath, remoteState, state)
 
 export const updateHint = (state, {hint}) =>
-  R.set(paths.hintTextPath, hint, state)
+  R.set(hintTextPath, hint, state)
 
 export const updateHintNumber = (state, {hintNumber}) =>
-  R.set(paths.hintNumberPath, hintNumber, state)
+  R.set(hintNumberPath, hintNumber, state)
 
 export const app = (state=initialState, action) => {
   switch(action.type) {

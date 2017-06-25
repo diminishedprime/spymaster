@@ -6,7 +6,15 @@ import { CirclePicker } from 'react-color'
 import { afChangeColor, afPickRole, afToggleTitle, afSetEditing, afSetUsername } from '../../redux/actions.js'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
 import { afEmitAction, afSetServerUsername } from '../../sagas/connect-to-websocket.js'
-import paths from '../../redux/paths.js'
+import {
+  errorTextPath,
+  showTitlePath,
+  gameModePath,
+  backgroundColorPath,
+  usernamePath,
+  editingPath,
+  userListPath,
+} from '../../redux/paths.js'
 import R from 'ramda'
 import './app.css'
 
@@ -28,7 +36,7 @@ const StyledButton = ({backgroundColor, text, onClick}) => (
 
 const TeamRow = connect(
   (state, {team}) => ({
-    backgroundColor: R.view(paths.backgroundColorPath(team), state),
+    backgroundColor: R.view(backgroundColorPath(team), state),
   }),
   (dispatch, {team}) => ({
     onColorChange: ({hex}) => dispatch(afEmitAction(afChangeColor(team, hex))),
@@ -53,8 +61,8 @@ const TeamRow = connect(
 
 const Username = connect(
   (state) => ({
-    username: R.view(paths.usernamePath, state),
-    editing: R.view(paths.editingPath, state),
+    username: R.view(usernamePath, state),
+    editing: R.view(editingPath, state),
   }),
   (dispatch) => ({
     setEditing: () => dispatch(afSetEditing()),
@@ -99,7 +107,7 @@ const PickTeam = () => (
 
 const ConnectedUsers = connect(
   (state) => ({
-    users: R.view(paths.userListPath, state),
+    users: R.view(userListPath, state),
   })
 )(({users}) => (
   <div className="connectedUsers">
@@ -125,9 +133,9 @@ const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
   </div>
 )
 const mapStateToProps = (state) => ({
-  hasError: R.view(paths.errorTextPath, state),
-  showTitle: R.view(paths.showTitlePath, state),
-  gameMode: R.view(paths.gameModePath, state),
+  hasError: R.view(errorTextPath, state),
+  showTitle: R.view(showTitlePath, state),
+  gameMode: R.view(gameModePath, state),
 })
 
 const mapDispatchToProps = (dispatch) => ({

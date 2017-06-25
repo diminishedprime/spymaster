@@ -18,10 +18,8 @@ const errorSeverity = [...error, 'severity']
 const settings = [...localState, 'settings']
 const showTitle = [...settings, 'showTitle']
 const colors = [...remoteState, 'colors']
-const colorsTeam = (team) =>
-  [...colors, team]
-const colorsTeamBackgroundColor = (team) =>
-  [...colorsTeam(team), 'backgroundColor']
+const colorsTeam = (team) => [...colors, team]
+const colorsTeamBackgroundColor = (team) => [...colorsTeam(team), 'backgroundColor']
 const currentTeam = [...remoteState, 'currentTeam']
 const ws = [...localState, 'ws']
 const username = [...localState, 'username']
@@ -36,73 +34,34 @@ const hintText = [...hint, 'text']
 const hintNumber = [...hint, 'number']
 const hintSubmitted = [...hint, 'submitted']
 
-const hintPath = R.lensPath([...hint])
-const hintSubmittedPath = R.lensPath([...hintSubmitted])
-const hintTextPath = R.lensPath([...hintText])
-const hintNumberPath = R.lensPath([...hintNumber])
-const remoteStatePath = R.lensPath([...remoteState])
-const settingsPath = R.lensPath([...settings])
-const timePath = R.lensPath([...time])
-const errorPath = R.lensPath([...error])
-const errorTextPath = R.lensPath([...errorText])
-const errorSeverityPath = R.lensPath([...errorSeverity])
-const showTitlePath = R.lensPath([...showTitle])
-const playerTypePath = R.lensPath([...playerType])
-const rolePath = R.lensPath([...role])
-const teamPath = R.lensPath([...team])
-const gameModePath = R.lensPath([...gameMode])
-const cardsPath = R.lensPath([...cards])
-const colorsPath = R.lensPath([...colors])
-const colorsTeamPath = (team) =>
-  R.lensPath(colorsTeam(team))
-const backgroundColorPath = (team) =>
-  R.lensPath([...colorsTeamBackgroundColor(team)])
-const currentTeamPath = R.lensPath([...currentTeam])
-const cardsIdPath = (id) => R.lensPath(cardsId(id))
-const cardsTeamPath = (id) => R.lensPath(cardsTeam(id))
-const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
-const wsPath = R.lensPath([...ws])
-const usernamePath = R.lensPath([...username])
-const editingPath = R.lensPath([...editing])
-const userListPath = R.lensPath([...userList])
-const userListUserPath = (idx) =>
-  R.lensPath([...userListUser(idx)])
-const usersPath = R.lensPath([...users])
-const usersUserPath = (idx) =>
-  R.lensPath([...usersUser(idx)])
-const usersUserUsernamePath = (idx) =>
-  R.lensPath([...usersUserUsername(idx)])
-
-export default {
-  cardsTeamPath,
-  hintPath,
-  hintSubmittedPath,
-  hintTextPath,
-  hintNumberPath,
-  usersUserUsernamePath,
-  usersUserPath,
-  userListUserPath,
-  usersPath,
-  remoteStatePath,
-  userListPath,
-  editingPath,
-  usernamePath,
-  wsPath,
-  timePath,
-  errorPath,
-  errorTextPath,
-  errorSeverityPath,
-  showTitlePath,
-  playerTypePath,
-  gameModePath,
-  cardsPath,
-  backgroundColorPath,
-  rolePath,
-  teamPath,
-  currentTeamPath,
-  colorsPath,
-  colorsTeamPath,
-  settingsPath,
-  cardsIdPath,
-  cardsFlippedPath,
-}
+export const hintPath = R.lensPath([...hint])
+export const hintSubmittedPath = R.lensPath([...hintSubmitted])
+export const hintTextPath = R.lensPath([...hintText])
+export const hintNumberPath = R.lensPath([...hintNumber])
+export const remoteStatePath = R.lensPath([...remoteState])
+export const settingsPath = R.lensPath([...settings])
+export const timePath = R.lensPath([...time])
+export const errorPath = R.lensPath([...error])
+export const errorTextPath = R.lensPath([...errorText])
+export const errorSeverityPath = R.lensPath([...errorSeverity])
+export const showTitlePath = R.lensPath([...showTitle])
+export const playerTypePath = R.lensPath([...playerType])
+export const rolePath = R.lensPath([...role])
+export const teamPath = R.lensPath([...team])
+export const gameModePath = R.lensPath([...gameMode])
+export const cardsPath = R.lensPath([...cards])
+export const colorsPath = R.lensPath([...colors])
+export const colorsTeamPath = (team) => R.lensPath(colorsTeam(team))
+export const backgroundColorPath = (team) => R.lensPath([...colorsTeamBackgroundColor(team)])
+export const currentTeamPath = R.lensPath([...currentTeam])
+export const cardsIdPath = (id) => R.lensPath(cardsId(id))
+export const cardsTeamPath = (id) => R.lensPath(cardsTeam(id))
+export const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
+export const wsPath = R.lensPath([...ws])
+export const usernamePath = R.lensPath([...username])
+export const editingPath = R.lensPath([...editing])
+export const userListPath = R.lensPath([...userList])
+export const userListUserPath = (idx) => R.lensPath([...userListUser(idx)])
+export const usersPath = R.lensPath([...users])
+export const usersUserPath = (idx) => R.lensPath([...usersUser(idx)])
+export const usersUserUsernamePath = (idx) => R.lensPath([...usersUserUsername(idx)])
