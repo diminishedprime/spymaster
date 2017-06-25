@@ -19,32 +19,6 @@
     margin: 10px;
 }
 
-.teamRow {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.pickTeam {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.teamButtons > button {
-    margin: 5px;
-    min-width: 100px;
-}
-
-.pickUsername {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.usernameInput {
-    min-width: 300px;
-}
 
 .connectedUsers {
     display: flex;

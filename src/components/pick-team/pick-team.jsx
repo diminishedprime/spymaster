@@ -21,7 +21,7 @@ import {
 import {
   backgroundColorPath,
 } from '../../redux/paths.js'
-
+import './pick-team.css'
 
 const StyledButton = ({backgroundColor, text, onClick}) => (
   <button onClick={onClick}

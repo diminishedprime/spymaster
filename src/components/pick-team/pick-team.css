@@ -1,0 +1,16 @@
+.teamRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.pickTeam {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.teamButtons > button {
+    margin: 5px;
+    min-width: 100px;
+}

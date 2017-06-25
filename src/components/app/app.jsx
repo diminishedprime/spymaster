@@ -7,68 +7,17 @@ import {
 import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
 import PickTeam from '../pick-team/pick-team.jsx'
+import PickUsername from '../pick-username/pick-username.jsx'
 import {
   afToggleTitle,
-  afSetEditing,
-  afSetUsername,
 } from '../../redux/actions.js'
-import {
-  afSetServerUsername,
-} from '../../sagas/connect-to-websocket.js'
 import {
   errorTextPath,
   showTitlePath,
   gameModePath,
-  usernamePath,
-  editingPath,
   userListPath,
 } from '../../redux/paths.js'
 import './app.css'
-
-/*
- * import {store} from '../../redux.js'
- * setTimeout(() => {
- *   store.dispatch(afPickRole('1', 'spymaster'))
- * }, 300)*/
-
-const Username = connect(
-  (state) => ({
-    username: R.view(usernamePath, state),
-    editing: R.view(editingPath, state),
-  }),
-  (dispatch) => ({
-    setEditing: () => dispatch(afSetEditing()),
-    changeUsername: (username) => dispatch(afSetUsername(username)),
-    updateUsername: () => dispatch(afSetServerUsername()),
-  })
-)(({editing, username, setEditing, changeUsername, updateUsername}) => (
-  <div>
-    {editing
-      ? (
-        <div>
-          <input className="usernameInput"
-            value={username}
-            onChange={({target: {value}}) => changeUsername(value)}
-          />
-          <button onClick={updateUsername}>submit</button>
-        </div>
-      )
-      : (
-        <div onClick={setEditing}>
-          {username}
-        </div>
-      )
-
-    }
-  </div>
-))
-
-const PickUsername = () => (
-  <div className="pickUsername">
-    <div>Your Name</div>
-    <Username />
-  </div>
-)
 
 const ConnectedUsers = connect(
   (state) => ({

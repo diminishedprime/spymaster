@@ -1,0 +1,9 @@
+.pickUsername {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.usernameInput {
+    min-width: 300px;
+}
