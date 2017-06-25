@@ -9,6 +9,7 @@ import Game from '../game/game.jsx'
 import PickTeam from '../pick-team/pick-team.jsx'
 import PickUsername from '../pick-username/pick-username.jsx'
 import ConnectedUsers from '../connected-users/connected-users.jsx'
+import Win from '../win/win.jsx'
 import {
   afToggleTitle,
 } from '../../redux/actions.js'
@@ -16,21 +17,13 @@ import {
   errorTextPath,
   showTitlePath,
   gameModePath,
+  winnerPath,
 } from '../../redux/paths.js'
 
 import style from './app.css'
 
-const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
-  <div className={style.app}>
-    {hasError && <ErrorBar />}
-    {showTitle && <div className={style.title} onClick={toggleTitle}>Spymaster</div>}
-    {gameMode === 'game' && <Game />}
-    {gameMode === 'pick team' && <PickUsername />}
-    {gameMode === 'pick team' && <PickTeam />}
-    <ConnectedUsers />
-  </div>
-)
 const mapStateToProps = (state) => ({
+  winner: R.view(winnerPath, state),
   hasError: R.view(errorTextPath, state),
   showTitle: R.view(showTitlePath, state),
   gameMode: R.view(gameModePath, state),
@@ -39,6 +32,22 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   toggleTitle: () => dispatch(afToggleTitle()),
 })
+
+const App = ({hasError, showTitle, toggleTitle, gameMode, winner}) => (
+  <div className={style.app}>
+    {hasError && <ErrorBar />}
+    {!winner && (
+       <div>
+         {showTitle && <div className={style.title} onClick={toggleTitle}>Spymaster</div>}
+         {gameMode === 'game' && <Game />}
+         {gameMode === 'pick team' && <PickUsername />}
+         {gameMode === 'pick team' && <PickTeam />}
+       </div>)
+    }
+    { winner && <Win />}
+    <ConnectedUsers />
+  </div>
+)
 
 export default connect(
   mapStateToProps,

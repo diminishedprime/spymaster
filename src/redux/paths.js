@@ -33,7 +33,9 @@ const hint = [...remoteState, 'hint']
 const hintText = [...hint, 'text']
 const hintNumber = [...hint, 'number']
 const hintSubmitted = [...hint, 'submitted']
+const winner = [...remoteState, 'winner']
 
+export const winnerPath = R.lensPath([...winner])
 export const hintPath = R.lensPath([...hint])
 export const hintSubmittedPath = R.lensPath([...hintSubmitted])
 export const hintTextPath = R.lensPath([...hintText])

@@ -16,6 +16,7 @@ import {
   SUBMIT_HINT,
   NEXT_TURN,
   FORFEIT,
+  afForfeit,
 } from '../../src/redux/actions.js'
 import {
   updateHint,
@@ -30,6 +31,7 @@ import {
   INF,
 } from '../../src/constants.js'
 import {
+  winnerPath,
   cardsTeamPath,
   cardsFlippedPath,
   hintSubmittedPath,
@@ -93,28 +95,8 @@ const nextTurn = (state) => R.compose(
   R.set(hintPath, initialHint)
 )(state)
 
-const loseGame = (state, {team: _}) => {
-  /* Implement actual game over logic team is the team that lost this makes it
-     easy to do forfeit logic, if it is undefined, then the currentTeam just lost
-   */
-
-  // console.log('someone lost')
-  return state
-}
-
-const checkAssassin = (id) => (state) => {
-  const cardTeam = R.view(cardsTeamPath(id), state)
-  return (cardTeam === ASSASSIN)
-    ? loseGame(state)
-    : state
-}
-
-const checkCorrectCard = (id) => (state) => {
-  const currentTeam = R.view(currentTeamPath, state)
-  const cardTeam = R.view(cardsTeamPath(id), state)
-  return (currentTeam === cardTeam)
-    ? state
-    : nextTurn(state)
+const loseGame = (state, {team}) => {
+  return R.set(winnerPath, otherTeam(team), state)
 }
 
 const decreaseGuesses = (state) => {
@@ -132,14 +114,28 @@ const decreaseGuesses = (state) => {
   }
 }
 
+const determineTurn = (teamFlipping, cardIdx) => (state) => {
+  const cardTeam = R.view(cardsTeamPath(cardIdx), state)
+  const pickedAssassan = (cardTeam === ASSASSIN)
+  const currentTeam = R.view(currentTeamPath, state)
+  const correctCard = (currentTeam === cardTeam)
+
+  if (pickedAssassan) {
+    return loseGame(state, afForfeit(teamFlipping))
+  } else if (correctCard) {
+    return decreaseGuesses(state)
+  } else {
+    return nextTurn(state)
+  }
+}
+
 const flipCard = (state, {id}) => {
   const cards = R.view(cardsPath, state)
   const cardIdx = R.findIndex((card) => card.id === id, cards)
+  const teamFlipping = R.view(currentTeamPath, state)
 
   return R.compose(
-    checkAssassin(cardIdx),
-    checkCorrectCard(cardIdx),
-    decreaseGuesses,
+    determineTurn(teamFlipping, cardIdx),
     R.set(cardsFlippedPath(cardIdx), true)
   )(state)
 }
