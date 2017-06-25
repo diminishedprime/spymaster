@@ -64,7 +64,7 @@
         "build": "node scripts/build.js",
         "test": "node scripts/test.js --env=jsdom",
         "start": "npm-run-all -p start-server start-js",
-        "start-server": "nodemon ./api/server.js --exec babel-node --presets es2015",
+        "start-server": "NODE_ENV='production' nodemon ./api/server.js --exec babel-node --presets es2015",
         "start-js": "node scripts/start.js",
         "lint": "eslint . --ignore-path .gitignore --ext .js --ext .jsx"
     },

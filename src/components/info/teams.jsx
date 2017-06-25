@@ -4,8 +4,6 @@ import {
   connect,
 } from 'react-redux'
 
-import Forfeit from './forfeit.jsx'
-
 import {
   fgColorForRGB,
   hexToRGB,
@@ -15,6 +13,8 @@ import {
   backgroundColorPath,
   currentTeamPath,
 } from '../../redux/paths.js'
+
+import Forfeit from './forfeit.jsx'
 
 import './teams.css'
 
