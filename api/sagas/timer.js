@@ -1,11 +1,7 @@
 import { eventChannel, END } from 'redux-saga'
 import { takeLatest, take, put } from 'redux-saga/effects'
-import { afSetTime } from '../redux/actions.js'
-
-const START_TIMER = 'async start timer'
-export const afStartTimer = () => ({
-  type: START_TIMER,
-})
+import { afSetTime, START_TIMER } from '../../src/redux/actions.js'
+import { forceUpdateRemoteState } from '../websocket.js'
 
 const startTimer = function* () {
   const seconds = 100
@@ -32,6 +28,7 @@ const startTimer = function* () {
       const seconds = yield take(timerChan)
       // This is where I can handle 0 seconds differently
       yield put(afSetTime(seconds))
+      forceUpdateRemoteState()
     }
   } finally {
     clearInterval(iv)

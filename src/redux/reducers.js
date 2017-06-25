@@ -41,7 +41,7 @@ const dismissError = (state, _) =>
 const toggleTitle = (state, _) =>
   R.over(paths.showTitlePath, R.not, state)
 
-const setTime = (state, {seconds}) =>
+export const setTime = (state, {seconds}) =>
   R.set(paths.timePath, seconds, state)
 
 const pickRole = (state, {team, role}) => {

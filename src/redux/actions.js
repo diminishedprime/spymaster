@@ -119,3 +119,8 @@ export const afUpdateHint = (hint) => ({
   type: UPDATE_HINT,
   hint,
 })
+
+export const START_TIMER = 'async start timer'
+export const afStartTimer = () => ({
+  type: START_TIMER,
+})

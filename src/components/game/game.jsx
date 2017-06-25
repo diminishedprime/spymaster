@@ -1,8 +1,8 @@
 import React from 'react'
 import R from 'ramda'
 import { connect } from 'react-redux'
-import { afUpdateHint } from '../../redux/actions.js'
-import { afStartTimer } from '../../sagas/timer.js'
+import { afUpdateHint, afStartTimer } from '../../redux/actions.js'
+import { afEmitAction } from '../../sagas/connect-to-websocket.js'
 import Card from '../card/card.jsx'
 import { fgColorForRGB, hexToRGB } from '../../util.js'
 import paths from '../../redux/paths.js'
@@ -35,7 +35,7 @@ const Timer = connect(
   (state) => ({
     time: R.view(paths.timePath, state),
   }),
-  (dispatch) => ({start: () => dispatch(afStartTimer())})
+  (dispatch) => ({start: () => dispatch(afEmitAction(afStartTimer()))})
 )(({time, start}) => (
   <div className="timer">
     { time ?

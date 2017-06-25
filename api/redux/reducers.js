@@ -1,6 +1,14 @@
 import { initialState } from '../../src/redux/initial-state.js'
-import { FLIP_CARD, ADD_USER, REMOVE_USER, CHANGE_COLOR, UPDATE_USERNAME, UPDATE_HINT } from '../../src/redux/actions.js'
-import { updateHint } from '../../src/redux/reducers.js'
+import {
+  FLIP_CARD,
+  ADD_USER,
+  REMOVE_USER,
+  CHANGE_COLOR,
+  UPDATE_USERNAME,
+  UPDATE_HINT,
+  SET_TIME,
+} from '../../src/redux/actions.js'
+import { updateHint, setTime } from '../../src/redux/reducers.js'
 import paths from '../../src/redux/paths.js'
 import R from 'ramda'
 
@@ -60,6 +68,7 @@ export const app = (state=initialState, action) => {
     case UPDATE_USERNAME: return updateUsername(state, action)
     case FLIP_CARD: return flipCard(state, action)
     case UPDATE_HINT: return updateHint(state, action)
+    case SET_TIME: return setTime(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

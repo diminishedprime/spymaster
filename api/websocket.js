@@ -17,7 +17,7 @@ const onDisconnect = (user) => () => {
   store.dispatch(afRemoveUser(user))
 }
 
-const forceUpdateRemoteState = () => {
+export const forceUpdateRemoteState = () => {
   const users = R.view(paths.usersPath, store.getState())
   const remoteStateAction = afUpdateRemoteState(
     R.view(paths.remoteStatePath, store.getState())
