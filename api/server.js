@@ -1,13 +1,17 @@
+import path from 'path'
 import {
   createServer,
 } from 'http'
 
 import express from 'express'
 
+import {
+  PORT,
+  BASE_URL,
+} from '../src/constants.js'
+
 import addRoutes from './routes.js'
 import connect from './websocket.js'
-
-const APP_PORT = 3003
 
 const app = express()
 
@@ -18,10 +22,9 @@ const server = createServer(app)
 connect(server)
 
 // Serve static resources
-/* import path from 'path'
- * app.use('/', express.static(path.resolve(__dirname, 'public')))*/
+app.use('/', express.static(path.resolve(__dirname + '/../build/')))
 
-server.listen(APP_PORT, () => {
+server.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`App is now running at http://localhost:${APP_PORT}`)
+  console.log(`App is now running at ${BASE_URL}:${PORT}`)
 })

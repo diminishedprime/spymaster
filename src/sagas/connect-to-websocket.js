@@ -13,6 +13,10 @@ import {
   wsPath,
   usernamePath,
 } from '../redux/paths.js'
+import {
+  PORT,
+  BASE_URL,
+} from '../constants.js'
 
 import {
   takeLatest,
@@ -82,7 +86,8 @@ const listenToWebsocket = function* () {
 }
 
 const connectToWebsocket = function* () {
-  const ws = yield io.connect('http://localhost:3000')
+  const url = BASE_URL + ':' + PORT
+  const ws = yield io.connect(url)
   yield put(afSetWs(ws))
   yield put(afListenToWebsocket())
 }
