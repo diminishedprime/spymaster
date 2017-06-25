@@ -13,18 +13,19 @@ import {
 
 import './game.css'
 
-const Game = connect(
-  (state) => ({
-    cards: R.view(cardsPath, state),
-  })
-)(({cards}) => (
+const mapStateToProps = (state) => ({
+  cards: R.view(cardsPath, state),
+})
+
+const Game = ({cards}) => (
   <div>
     <Timer />
     <Board cards={cards} />
     <Timer />
     <Info />
   </div>
+)
 
-))
-
-export default Game
+export default connect(
+  mapStateToProps
+)(Game)
