@@ -8,13 +8,17 @@ import { fgColorForRGB, hexToRGB } from '../../util.js'
 
 const mapStateToProps = (state, {number}) => {
   const cardTeam = R.view(paths.teamPath, state)
-  const disabled = R.view(paths.hintNumberPath, state) === number
+  const selectedNumber = R.view(paths.hintNumberPath, state)
+  const numberPicked = (selectedNumber === number)
+  const playerTeam = R.view(paths.teamPath, state)
+  const currentTeam = R.view(paths.currentTeamPath, state)
+  const disabled = numberPicked || (playerTeam !== currentTeam)
   const bgColor = R.view(paths.backgroundColorPath(cardTeam), state)
   const baseStyle = {
     color: '#000000',
     backgroundColor: '#ffffff',
   }
-  const style = (disabled)
+  const style = (numberPicked)
     ? R.compose(
       R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
       R.assoc('backgroundColor', bgColor)
