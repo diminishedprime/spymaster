@@ -17,17 +17,17 @@ import {
   showTitlePath,
   gameModePath,
 } from '../../redux/paths.js'
-import './app.css'
+
+import style from './app.css'
 
 const App = ({hasError, showTitle, toggleTitle, gameMode}) => (
-  <div className="app">
+  <div className={style.app}>
     {hasError && <ErrorBar />}
-    {showTitle && <div className="title" onClick={toggleTitle}>Spymaster</div>}
+    {showTitle && <div className={style.title} onClick={toggleTitle}>Spymaster</div>}
     {gameMode === 'game' && <Game />}
     {gameMode === 'pick team' && <PickUsername />}
     {gameMode === 'pick team' && <PickTeam />}
     <ConnectedUsers />
-
   </div>
 )
 const mapStateToProps = (state) => ({
