@@ -8,7 +8,7 @@ export const SPYMASTER = 'spymaster'
 export const INF = 'inf'
 export const ZERO = '0'
 
-/* export const PORT = 3000*/
+/* export const PORT = 3000
+ * export const BASE_URL = 'http://localhost'*/
 export const PORT = 3003
-/* export const BASE_URL = 'http://localhost'*/
 export const BASE_URL = 'http://mjh.io'

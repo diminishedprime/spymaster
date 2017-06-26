@@ -5,6 +5,9 @@ import {
 } from 'react-redux'
 
 import {
+  SPYMASTER,
+} from '../../constants.js'
+import {
   fgColorForRGB,
   hexToRGB,
 } from '../../util.js'
@@ -12,6 +15,7 @@ import {
   teamPath,
   backgroundColorPath,
   currentTeamPath,
+  rolePath,
 } from '../../redux/paths.js'
 import font from '../font.css'
 
@@ -21,6 +25,7 @@ import s from './teams.css'
 
 const Teams = connect(
   (state) => {
+    const role = R.view(rolePath, state)
     const currentTeam = R.view(currentTeamPath, state)
     const yourTeam = R.view(teamPath, state)
     const currentBackgroundColor = R.view(backgroundColorPath(currentTeam), state)
@@ -40,9 +45,10 @@ const Teams = connect(
       currentTeam,
       currentTeamStyle,
       yourTeamStyle,
+      role,
     })
   }
-)(({currentTeamStyle, yourTeamStyle, yourTeam, currentTeam}) => (
+)(({currentTeamStyle, yourTeamStyle, yourTeam, currentTeam, role}) => (
   <div className={s.teams}>
     <div className={s.teamsRow} style={currentTeamStyle}>
       <div>Current Team</div>
@@ -51,7 +57,7 @@ const Teams = connect(
     <div className={s.teamsRow} style={yourTeamStyle}>
       <div>Your Team</div>
       <div className={font.largeText}>{yourTeam}</div>
-      <Pass />
+      { role !== SPYMASTER && <Pass />}
     </div>
   </div>
 ))
