@@ -21,6 +21,7 @@ import {
   errorTextPath,
 } from './paths.js'
 import {
+  SET_GAME_MODE,
   PICK_ROLE,
   SET_TIME,
   TOGGLE_TITLE,
@@ -80,8 +81,12 @@ export const updateHint = (state, {hint}) =>
 export const updateHintNumber = (state, {hintNumber}) =>
   R.set(hintNumberPath, hintNumber, state)
 
+export const setGameMode = (state, {gameMode}) =>
+  R.set(gameModePath, gameMode, state)
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
+    case SET_GAME_MODE: return setGameMode(state, action)
     case DISMISS_ERROR: return dismissError(state, action)
     case ERROR_OCCURED: return hiError(state, action)
     case TOGGLE_TITLE: return toggleTitle(state, action)

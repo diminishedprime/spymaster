@@ -133,3 +133,9 @@ export const STOP_TIMER = 'async stop timer'
 export const afStopTimer = () => ({
   type: STOP_TIMER,
 })
+
+export const SET_GAME_MODE = 'game mode'
+export const afSetGameMode = (gameMode) => ({
+  type: SET_GAME_MODE,
+  gameMode,
+})

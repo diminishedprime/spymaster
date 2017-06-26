@@ -19,6 +19,10 @@ import {
   gameModePath,
   winnerPath,
 } from '../../redux/paths.js'
+import {
+  GAME_MODE_GAME,
+  GAME_MODE_PICK_TEAM,
+} from '../../constants.js'
 
 import style from './app.css'
 
@@ -39,9 +43,9 @@ const App = ({hasError, showTitle, toggleTitle, gameMode, winner}) => (
     {!winner && (
        <div>
          {showTitle && <div className={style.title} onClick={toggleTitle}>Spymaster</div>}
-         {gameMode === 'game' && <Game />}
-         {gameMode === 'pick team' && <PickUsername />}
-         {gameMode === 'pick team' && <PickTeam />}
+         {gameMode === GAME_MODE_GAME && <Game />}
+         {gameMode === GAME_MODE_PICK_TEAM && <PickUsername />}
+         {gameMode === GAME_MODE_PICK_TEAM && <PickTeam />}
        </div>)
     }
     { winner && <Win />}

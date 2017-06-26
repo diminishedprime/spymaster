@@ -3,18 +3,21 @@ import uuid4 from 'uuid/v4'
 import R from 'ramda'
 
 import {
-  afPickRole,
+  NEW_GAME,
+  afSetGameMode,
   afSetUsername,
   afUpdateRemoteState,
   afAddUser,
   afRemoveUser,
   afUpdateUsername,
-  afToggleTitle,
 } from '../src/redux/actions.js'
 import {
   remoteStatePath,
   usersPath,
 } from '../src/redux/paths.js'
+import {
+  GAME_MODE_PICK_TEAM,
+} from '../src/constants.js'
 
 import {
   store,
@@ -33,6 +36,12 @@ export const forceUpdateRemoteState = () => {
 }
 
 const broadcastAction = (action) => {
+  /* For some actions, we want to change clients local state. It would be better
+     if this was done in a saga instead of adhocly here.*/
+  if (action.type === NEW_GAME) {
+    const users = R.view(usersPath, store.getState())
+    users.forEach(({ws}) => ws.emit('action', afSetGameMode(GAME_MODE_PICK_TEAM)))
+  }
   store.dispatch(action)
   forceUpdateRemoteState()
 }
