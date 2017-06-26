@@ -41,6 +41,7 @@
         "eslint-plugin-redux-saga": "^0.4.0",
         "extract-text-webpack-plugin": "2.1.0",
         "file-loader": "0.11.1",
+        "forever": "^0.15.3",
         "fs-extra": "3.0.1",
         "html-webpack-plugin": "2.28.0",
         "jest": "20.0.3",
@@ -66,7 +67,8 @@
         "start": "npm-run-all -p start-server start-js",
         "start-server": "NODE_ENV='production' nodemon ./api/server.js --exec babel-node --presets es2015",
         "start-js": "node scripts/start.js",
-        "lint": "eslint . --ignore-path .eslintignore --ext .js --ext .jsx"
+        "lint": "eslint . --ignore-path .eslintignore --ext .js --ext .jsx",
+        "forever": "NODE_ENV='production' forever start node_modules/.bin/babel-node --presets es2015 ./api/server.js"
     },
     "jest": {
         "collectCoverageFrom": [
