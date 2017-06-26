@@ -128,3 +128,8 @@ export const NEW_GAME = 'new game'
 export const afNewGame = () => ({
   type: NEW_GAME,
 })
+
+export const STOP_TIMER = 'async stop timer'
+export const afStopTimer = () => ({
+  type: STOP_TIMER,
+})

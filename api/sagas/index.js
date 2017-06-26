@@ -1,4 +1,7 @@
-import timer from './timer.js'
+import {
+  runTimer,
+  stopTimer,
+} from './timer.js'
 
 import {
   all,
@@ -6,6 +9,7 @@ import {
 
 export const rootSaga = function* () {
   yield all([
-    timer(),
+    runTimer(),
+    stopTimer(),
   ])
 }
