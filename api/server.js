@@ -24,7 +24,7 @@ connect(server)
 // Serve static resources
 app.use('/', express.static(path.resolve(__dirname + '/../build/')))
 
-server.listen(PORT, () => {
+server.listen(3003, () => {
   // eslint-disable-next-line no-console
   console.log(`App is now running at ${BASE_URL}:${PORT}`)
 })

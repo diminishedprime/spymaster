@@ -6,9 +6,10 @@ import {
 
 import {
   rootSaga,
-} from '../sagas/index.js'
-
-import { app } from './reducers.js'
+} from './sagas/index.js'
+import {
+  app,
+} from './reducers.js'
 
 const sagaMiddleware = createSagaMiddleware()
 export const store = createStore(

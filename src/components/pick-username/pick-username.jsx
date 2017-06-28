@@ -10,7 +10,7 @@ import {
 } from '../../redux/actions.js'
 import {
   afSetServerUsername,
-} from '../../sagas/connect-to-websocket.js'
+} from '../../redux/sagas/connect-to-websocket.js'
 import {
   usernamePath,
   editingPath,

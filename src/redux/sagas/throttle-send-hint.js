@@ -4,7 +4,7 @@ import {
 
 import {
   UPDATE_HINT,
-} from '../redux/actions.js'
+} from '../actions.js'
 
 import {
   afEmitAction,

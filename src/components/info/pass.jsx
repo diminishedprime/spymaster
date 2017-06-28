@@ -10,7 +10,7 @@ import {
 }from '../../redux/paths.js'
 import {
   afEmitAction,
-} from '../../sagas/connect-to-websocket.js'
+} from '../../redux/sagas/connect-to-websocket.js'
 import {
   afNextTurn,
 } from '../../redux/actions.js'

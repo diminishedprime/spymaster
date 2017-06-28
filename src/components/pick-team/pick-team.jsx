@@ -17,7 +17,7 @@ import {
 } from '../../util.js'
 import {
   afEmitAction,
-} from '../../sagas/connect-to-websocket.js'
+} from '../../redux/sagas/connect-to-websocket.js'
 import {
   backgroundColorPath,
 } from '../../redux/paths.js'

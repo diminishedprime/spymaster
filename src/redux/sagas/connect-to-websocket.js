@@ -8,15 +8,15 @@ import R from 'ramda'
 import {
   afSetEditing,
   afSetWs,
-} from '../redux/actions.js'
+} from '../actions.js'
 import {
   wsPath,
   usernamePath,
-} from '../redux/paths.js'
+} from '../paths.js'
 import {
   PORT,
   BASE_URL,
-} from '../constants.js'
+} from '../../constants.js'
 
 import {
   takeLatest,

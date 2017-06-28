@@ -4,12 +4,12 @@ import {
   ASSASSIN,
   TEAM_1,
   TEAM_2,
-} from '../../src/constants.js'
+} from '../../../src/constants.js'
 import {
   cardsPath,
   currentTeamPath,
   cardsTeamPath,
-} from '../../src/redux/paths.js'
+} from '../../../src/redux/paths.js'
 import {
   afSetTime,
   START_TIMER,
@@ -17,10 +17,10 @@ import {
   STOP_TIMER,
   afNextTurn,
   FLIP_CARD,
-} from '../../src/redux/actions.js'
+} from '../../../src/redux/actions.js'
 import {
   forceUpdateRemoteState,
-} from '../websocket.js'
+} from '../../websocket.js'
 
 import {
   select,
