@@ -21,7 +21,7 @@ import font from '../font.css'
 
 import Pass from './pass.jsx'
 import s from './teams.css'
-
+import i from './info.css'
 
 const Teams = connect(
   (state) => {
@@ -49,7 +49,7 @@ const Teams = connect(
     })
   }
 )(({currentTeamStyle, yourTeamStyle, yourTeam, currentTeam, role}) => (
-  <div className={s.teams}>
+  <div className={s.teams + ' ' + i.infoBaby}>
     <div className={s.teamsRow} style={currentTeamStyle}>
       <div>Current Team</div>
       <div className={font.largeText}>{currentTeam}</div>

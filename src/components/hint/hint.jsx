@@ -18,6 +18,7 @@ import {
 } from '../../util.js'
 import font from '../font.css'
 import Forfeit from '../info/forfeit.jsx'
+import i from '../info/info.css'
 
 import SpymasterHint from './spymaster-hint.jsx'
 import s from './hint.css'
@@ -50,12 +51,12 @@ const mapStateToProps = (state) => {
 const AgentHint = connect(
   mapStateToProps
 )(({hintSubmitted, text, number, style}) => (
-  <div className={s.hint} style={style}>
-  {!hintSubmitted && <div>Awaiting Hint</div>}
-  {hintSubmitted && <div>Hint</div>}
-  {hintSubmitted && <div className={font.largeText}>{text}</div>}
-  {hintSubmitted && <div className={font.largeText}>{number}</div>}
-  <Forfeit />
+  <div className={s.hint + ' ' + i.infoBaby} style={style}>
+    {!hintSubmitted && <div>Awaiting Hint</div>}
+    {hintSubmitted && <div>Hint</div>}
+    {hintSubmitted && <div className={font.largeText}>{text}</div>}
+    {hintSubmitted && <div className={font.largeText}>{number}</div>}
+    <Forfeit />
   </div>
 ))
 

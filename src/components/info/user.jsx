@@ -18,6 +18,7 @@ import font from '../font.css'
 
 import Score from './score.jsx'
 import s from './user.css'
+import i from './info.css'
 
 const User = connect(
   (state) => {
@@ -36,7 +37,7 @@ const User = connect(
     })
   }
 )(({role, username, style}) => (
-  <div className={s.thing}>
+  <div className={s.thing + ' ' + i.infoBaby}>
     <div className={s.user} style={style}>
       <div className={s.userRow}>
         <div>Role</div>

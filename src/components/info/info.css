@@ -4,8 +4,9 @@
     flex-wrap: wrap;
 }
 
-.info > div {
+.infoBaby {
     width: 12em;
     margin-left: 5px;
     margin-right: 5px;
+    margin-top: 10px;
 }
