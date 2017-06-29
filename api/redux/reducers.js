@@ -35,7 +35,6 @@ import {
   INF,
 } from '../../src/constants.js'
 import {
-  colorsPath,
   scorePath,
   winnerPath,
   cardsTeamPath,
