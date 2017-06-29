@@ -28,6 +28,8 @@ import {
 } from './paths.js'
 import words from './words.js'
 
+let currentTeam
+
 export const newCards = () => {
   shuffle(words)
   let numAssassins = 1
@@ -36,6 +38,7 @@ export const newCards = () => {
   const smallerTeam = 8
   let numTeam1 = (Math.random() > 0.5) ? biggerTeam : smallerTeam
   let numTeam2 = (numTeam1 === smallerTeam) ? biggerTeam: smallerTeam
+  currentTeam = numTeam1 > numTeam2 ? TEAM_1 : TEAM_2
 
   const nextTeam = () => {
     if (numAssassins > 0) {
@@ -85,8 +88,6 @@ export const initialHint = {
   number: '',
   submitted: false,
 }
-
-const currentTeam = (Math.random() > 0.5) ? TEAM_1 : TEAM_2
 
 export const newColors = (state) => R.compose(
   R.set(backgroundColorPath(TEAM_1), '#f44336'),
