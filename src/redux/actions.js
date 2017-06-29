@@ -1,17 +1,4 @@
 // Actions & Action Creators
-export const FLIP_CARD = 'flip card'
-export const afFlipCard = (id) => ({
-  type: FLIP_CARD,
-  id,
-})
-
-export const CHANGE_COLOR = 'change color'
-export const afChangeColor = (team, color) => ({
-  type: CHANGE_COLOR,
-  team,
-  color,
-})
-
 export const PICK_ROLE = 'change role'
 export const afPickRole = (team, role) => ({
   type: PICK_ROLE,
@@ -108,11 +95,6 @@ export const afUpdateHintNumber = (hintNumber) => ({
   hintNumber,
 })
 
-export const SUBMIT_HINT = 'submit hint'
-export const afSubmitHint = () => ({
-  type: SUBMIT_HINT,
-})
-
 export const NEXT_TURN = 'next turn'
 export const afNextTurn = () => ({
   type: NEXT_TURN,
@@ -124,11 +106,6 @@ export const afForfeit = (team) => ({
   team,
 })
 
-export const NEW_GAME = 'new game'
-export const afNewGame = () => ({
-  type: NEW_GAME,
-})
-
 export const STOP_TIMER = 'async stop timer'
 export const afStopTimer = () => ({
   type: STOP_TIMER,
@@ -138,4 +115,48 @@ export const SET_GAME_MODE = 'game mode'
 export const afSetGameMode = (gameMode) => ({
   type: SET_GAME_MODE,
   gameMode,
+})
+
+export const NEW_GAME = 'async new game'
+export const afNewGame = () => ({
+  type: NEW_GAME,
+})
+
+export const EMIT_ACTION = 'async emit'
+export const afEmitAction = (action) => ({
+  type: EMIT_ACTION,
+  action,
+})
+
+export const SET_SERVER_USERNAME = 'async set server username'
+export const afSetServerUsername = () => ({
+  type: SET_SERVER_USERNAME,
+})
+
+export const CONNECT_TO_WEBSOCKET = 'async connect to websocket'
+export const afConnectToWebsocket = () => ({
+  type: CONNECT_TO_WEBSOCKET,
+})
+
+export const LISTEN_TO_WEBSOCKET = 'async listen to websocket'
+export const afListenToWebsocket = () => ({
+  type: LISTEN_TO_WEBSOCKET,
+})
+
+export const CHANGE_COLOR = 'async change color'
+export const afChangeColor = (team, color) => ({
+  type: CHANGE_COLOR,
+  team,
+  color,
+})
+
+export const SUBMIT_HINT = 'async submit hint'
+export const afSubmitHint = () => ({
+  type: SUBMIT_HINT,
+})
+
+export const FLIP_CARD = 'async flip card'
+export const afFlipCard = (id) => ({
+  type: FLIP_CARD,
+  id,
 })

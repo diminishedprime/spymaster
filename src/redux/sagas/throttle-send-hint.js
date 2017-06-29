@@ -4,11 +4,8 @@ import {
 
 import {
   UPDATE_HINT,
-} from '../actions.js'
-
-import {
   afEmitAction,
-} from './connect-to-websocket.js'
+} from '../actions.js'
 
 import {
   takeLatest,

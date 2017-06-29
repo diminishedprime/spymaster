@@ -9,9 +9,6 @@ import {
   teamPath,
 }from '../../redux/paths.js'
 import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
-import {
   afNextTurn,
 } from '../../redux/actions.js'
 
@@ -26,7 +23,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  pass: () => dispatch(afEmitAction(afNextTurn())),
+  pass: () => dispatch(afNextTurn()),
 })
 
 const Pass = ({pass, disabled}) => (

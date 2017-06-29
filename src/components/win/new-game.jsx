@@ -6,12 +6,9 @@ import {
 import {
   afNewGame,
 } from '../../redux/actions.js'
-import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
 
 const mapDispatchToProps = (dispatch) => ({
-  onClick: () => dispatch(afEmitAction(afNewGame())),
+  onClick: () => dispatch(afNewGame()),
 })
 
 const NewGame = ({onClick}) => (

@@ -12,9 +12,6 @@ import {
   hexToRGB,
 } from '../../util.js'
 import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
-import {
   hintSubmittedPath,
   rolePath,
   teamPath,
@@ -58,7 +55,7 @@ const mapStateToProps = (state, {
 }
 
 const mapDispatchToProps = (dispatch, {id}) => ({
-  flip: () => dispatch(afEmitAction(afFlipCard(id))),
+  flip: () => dispatch(afFlipCard(id)),
 })
 
 const Card = ({

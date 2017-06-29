@@ -13,9 +13,6 @@ import {
   afUpdateHintNumber,
 } from '../../redux/actions.js'
 import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
-import {
   fgColorForRGB,
   hexToRGB,
 } from '../../util.js'
@@ -50,7 +47,7 @@ const mapStateToProps = (state, {number}) => {
 }
 
 const mapDispatchToProps = (dispatch, {number}) => ({
-  setHintNumber: () => dispatch(afEmitAction(afUpdateHintNumber(number))),
+  setHintNumber: () => dispatch(afUpdateHintNumber(number)),
 })
 
 const NumberButton = connect(

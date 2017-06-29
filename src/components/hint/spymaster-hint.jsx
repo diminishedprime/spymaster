@@ -17,9 +17,6 @@ import {
   afSubmitHint,
 } from '../../redux/actions.js'
 import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
-import {
   fgColorForRGB,
   hexToRGB,
 } from '../../util.js'
@@ -76,7 +73,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const updateHint = (hint) => dispatch(afUpdateHint(hint))
-  const submitHint = () => dispatch(afEmitAction(afSubmitHint()))
+  const submitHint = () => dispatch(afSubmitHint())
 
   const onChange = ({target: {value}}) => updateHint(value)
 

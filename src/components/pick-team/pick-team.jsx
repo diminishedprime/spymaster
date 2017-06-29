@@ -16,9 +16,6 @@ import {
   hexToRGB,
 } from '../../util.js'
 import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
-import {
   backgroundColorPath,
 } from '../../redux/paths.js'
 
@@ -39,7 +36,7 @@ const TeamRow = connect(
     backgroundColor: R.view(backgroundColorPath(team), state),
   }),
   (dispatch, {team}) => ({
-    onColorChange: ({hex}) => dispatch(afEmitAction(afChangeColor(team, hex))),
+    onColorChange: ({hex}) => dispatch(afChangeColor(team, hex)),
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
 )(({onColorChange, backgroundColor, pickRole}) => (

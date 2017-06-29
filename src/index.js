@@ -11,7 +11,7 @@ import {
 } from './redux/index.js'
 import {
   afConnectToWebsocket,
-} from './redux/sagas/connect-to-websocket.js'
+} from './redux/actions.js'
 
 ReactDOM.render(
   <Provider store={store}>

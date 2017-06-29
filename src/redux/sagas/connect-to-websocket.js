@@ -8,6 +8,11 @@ import R from 'ramda'
 import {
   afSetEditing,
   afSetWs,
+  afListenToWebsocket,
+  CONNECT_TO_WEBSOCKET,
+  LISTEN_TO_WEBSOCKET,
+  EMIT_ACTION,
+  SET_SERVER_USERNAME,
 } from '../actions.js'
 import {
   wsPath,
@@ -25,27 +30,6 @@ import {
   select,
   takeEvery,
 } from 'redux-saga/effects'
-
-export const SET_SERVER_USERNAME = 'async set server username'
-export const afSetServerUsername = () => ({
-  type: SET_SERVER_USERNAME,
-})
-
-export const CONNECT_TO_WEBSOCKET = 'async connect to websocket'
-export const afConnectToWebsocket = () => ({
-  type: CONNECT_TO_WEBSOCKET,
-})
-
-export const LISTEN_TO_WEBSOCKET = 'async listen to websocket'
-export const afListenToWebsocket = () => ({
-  type: LISTEN_TO_WEBSOCKET,
-})
-
-export const EMIT_ACTION = 'async emit'
-export const afEmitAction = (action) => ({
-  type: EMIT_ACTION,
-  action,
-})
 
 const emitSetServerUsername = function* () {
   const username = yield select((state) => R.view(usernamePath, state))

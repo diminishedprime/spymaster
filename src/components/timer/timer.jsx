@@ -8,9 +8,6 @@ import {
   afStartTimer,
 } from '../../redux/actions.js'
 import {
-  afEmitAction,
-} from '../../redux/sagas/connect-to-websocket.js'
-import {
   timePath,
   hintSubmittedPath,
 } from '../../redux/paths.js'
@@ -28,7 +25,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  start: () => dispatch(afEmitAction(afStartTimer())),
+  start: () => dispatch(afStartTimer()),
 })
 
 const Timer = connect(
