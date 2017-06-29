@@ -16,6 +16,7 @@ import {
 } from '../../redux/paths.js'
 import font from '../font.css'
 
+import Score from './score.jsx'
 import s from './user.css'
 
 const User = connect(
@@ -35,15 +36,18 @@ const User = connect(
     })
   }
 )(({role, username, style}) => (
-  <div className={s.user} style={style}>
-    <div className={s.userRow}>
-      <div>Role</div>
-      <div className={font.largeText}>{role}</div>
+  <div className={s.thing}>
+    <div className={s.user} style={style}>
+      <div className={s.userRow}>
+        <div>Role</div>
+        <div className={font.largeText}>{role}</div>
+      </div>
+      <div className={s.userRow}>
+        <div>Username</div>
+        <div className={font.largeText}>{username}</div>
+      </div>
     </div>
-    <div className={s.userRow}>
-      <div>Username</div>
-      <div className={font.largeText}>{username}</div>
-    </div>
+    <Score />
   </div>
 ))
 
