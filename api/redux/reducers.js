@@ -9,10 +9,7 @@ import {
 } from '../../src/redux/initial-state.js'
 import {
   SET_CARD_FLIPPED,
-  ADD_USER,
-  REMOVE_USER,
   CHANGE_COLOR,
-  UPDATE_USERNAME,
   UPDATE_HINT,
   SET_TIME,
   UPDATE_HINT_NUMBER,
@@ -36,35 +33,32 @@ import {
   winnerPath,
   hintSubmittedPath,
   cardsPath,
-  userListUserPath,
   timePath,
-  userListPath,
-  usersPath,
   backgroundColorPath,
-  usersUserUsernamePath,
   currentTeamPath,
   hintPath,
+  clientUsersPath,
 } from '../../src/redux/paths.js'
 
-const addUser = (state, {user}) => {
-  const userId = user.userId
-  return R.compose(
-    R.over(userListPath, R.append(userId)),
-    R.over(usersPath, R.append(user))
-  )(state)
-}
+import {
+  usersPath,
+  userByUserIdPath,
+} from './paths.js'
+import {
+  ADD_USER,
+  REMOVE_USER,
+} from './actions.js'
 
-const removeUser = (state, {user}) => {
-  const userId = user.userId
-  const userIds = R.view(userListPath, state)
-  const users = R.view(usersPath, state)
-  const userIdIdx = userIds.indexOf(userId)
-  const userIdx = users.indexOf(user)
-  return R.compose(
-    R.over(userListPath, R.remove(userIdIdx, 1)),
-    R.over(usersPath, R.remove(userIdx, 1))
-  )(state)
-}
+const addUser = (state, {userId, ws}) => R.compose(
+  R.set(userByUserIdPath(userId), {userId, ws}),
+  R.over(clientUsersPath, R.assoc(userId, {userId}))
+)(state)
+
+const removeUser = (state, {userId}) => R.compose(
+  R.over(usersPath, R.dissoc(userId)),
+  R.over(clientUsersPath, R.dissoc(userId))
+)(state)
+
 
 const otherTeam = (team) => team === TEAM_1 ? TEAM_2 : TEAM_1
 
@@ -73,19 +67,6 @@ const changeColor = (state, {team, color}) => {
   return (color !== otherTeamsColor)
     ? R.set(backgroundColorPath(team), color, state)
     : state
-}
-
-const updateUsername = (state, {user, username}) => {
-  const users = R.view(usersPath, state)
-  const userIds = R.view(userListPath, state)
-
-  const userIdx = users.indexOf(user)
-  const userIdIdx = userIds.indexOf(user.userId)
-
-  return R.compose(
-    R.set(userListUserPath(userIdIdx), username),
-    R.set(usersUserUsernamePath(userIdx), R.remove(userIdx, 1))
-  )(state)
 }
 
 const nextTurn = (state) => R.compose(
@@ -124,7 +105,6 @@ export const app = (state=initialState, action) => {
     case ADD_USER: return addUser(state, action)
     case REMOVE_USER: return removeUser(state, action)
     case CHANGE_COLOR: return changeColor(state, action)
-    case UPDATE_USERNAME: return updateUsername(state, action)
     case UPDATE_HINT: return updateHint(state, action)
     case SET_TIME: return setTime(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)

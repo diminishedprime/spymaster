@@ -5,6 +5,7 @@ import {
 } from '../constants.js'
 
 import {
+  clientUsersPath,
   hintTextPath,
   hintNumberPath,
   remoteStatePath,
@@ -17,7 +18,6 @@ import {
   wsPath,
   usernamePath,
   editingPath,
-  userListPath,
   errorTextPath,
 } from './paths.js'
 import {
@@ -70,7 +70,7 @@ const setEditing = (state, {flag}) =>
   R.set(editingPath, flag, state)
 
 const updateUserList = (state, {users}) =>
-  R.set(userListPath, users, state)
+  R.set(clientUsersPath, users, state)
 
 const updateRemoteState = (state, {remoteState}) =>
   R.set(remoteStatePath, remoteState, state)

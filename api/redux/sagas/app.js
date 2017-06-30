@@ -11,6 +11,8 @@ import {
   afUpdateHintNumber,
   afForfeit,
   NEXT_TURN,
+  afUpdateRemoteState,
+  afSetUsername,
 } from '../../../src/redux/actions.js'
 import {
   TEAM_1,
@@ -24,10 +26,13 @@ import {
   cardsPath,
   currentTeamPath,
   hintNumberPath,
+  remoteStatePath,
 } from '../../../src/redux/paths.js'
 import {
-  forceUpdateRemoteState,
-} from '../../websocket.js'
+  afBroadcastActionToUserId,
+  afBroadcastActionToAll,
+  USER_CONNECTED,
+} from '../actions.js'
 
 import {
   put,
@@ -45,17 +50,31 @@ const wait = (millis) => (
   })
 )
 
+const forceUpdateRemoteState = function* () {
+  const remoteState = yield select(R.view(remoteStatePath))
+  const remoteStateAction = afUpdateRemoteState(remoteState)
+  yield put(afBroadcastActionToAll(remoteStateAction))
+}
+
+const userConnected = function* () {
+  yield takeEvery(USER_CONNECTED, function* ({userId}) {
+    const action = afSetUsername(userId)
+    yield put(afBroadcastActionToUserId(userId, action))
+    yield forceUpdateRemoteState()
+  })
+}
+
 const loseGame = function* (teamThatLost) {
   yield put(afForfeit(teamThatLost))
   yield put(afStopTimer())
-  forceUpdateRemoteState()
+  yield forceUpdateRemoteState()
 }
 
 const flipCard = function* () {
   yield takeEvery(FLIP_CARD, function* ({id}) {
     // Always flip the card, because that's a safe thing to do
     yield put(afSetCardFlipped(id))
-    forceUpdateRemoteState()
+    yield forceUpdateRemoteState()
 
     const state = yield select(R.identity)
     const cards = R.view(cardsPath, state)
@@ -88,16 +107,16 @@ const flipCard = function* () {
         if (asNumber === 0) {
           yield put(afNextTurn())
           yield put(afStopTimer())
-          forceUpdateRemoteState()
+          yield forceUpdateRemoteState()
         } else {
           yield put(afUpdateHintNumber(asNumber + ''))
-          forceUpdateRemoteState()
+          yield forceUpdateRemoteState()
         }
       }
     } else {
       yield put(afStopTimer())
       yield put(afNextTurn())
-      forceUpdateRemoteState()
+      yield forceUpdateRemoteState()
     }
   })
 }
@@ -123,18 +142,19 @@ const timer = function* () {
         break
       } else {
         yield put(afSetTime(seconds))
-        forceUpdateRemoteState()
+        yield forceUpdateRemoteState()
       }
     }
     if (!wasStopped) {
       yield put(afNextTurn())
-      forceUpdateRemoteState()
+      yield forceUpdateRemoteState()
     }
   })
 }
 
 export default function* () {
   yield all([
+    userConnected(),
     nextTurn(),
     timer(),
     flipCard(),

@@ -24,11 +24,9 @@ const currentTeam = [...remoteState, 'currentTeam']
 const ws = [...localState, 'ws']
 const username = [...localState, 'username']
 const editing = [...localState, 'editing']
-const userList = [...remoteState, 'users']
-const userListUser = (idx) => [...userList, idx]
-const users = [...localState, 'users']
-const usersUser = (idx) => [...users, idx]
-const usersUserUsername = (idx) => [...usersUser(idx), 'userId']
+
+const clientUsers = [...remoteState, 'clientUsers']
+
 const hint = [...remoteState, 'hint']
 const hintText = [...hint, 'text']
 const hintNumber = [...hint, 'number']
@@ -64,8 +62,4 @@ export const cardsFlippedPath = (id) => R.lensPath(cardsFlipped(id))
 export const wsPath = R.lensPath([...ws])
 export const usernamePath = R.lensPath([...username])
 export const editingPath = R.lensPath([...editing])
-export const userListPath = R.lensPath([...userList])
-export const userListUserPath = (idx) => R.lensPath([...userListUser(idx)])
-export const usersPath = R.lensPath([...users])
-export const usersUserPath = (idx) => R.lensPath([...usersUser(idx)])
-export const usersUserUsernamePath = (idx) => R.lensPath([...usersUserUsername(idx)])
+export const clientUsersPath = R.lensPath(clientUsers)

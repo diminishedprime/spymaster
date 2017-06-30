@@ -12,6 +12,7 @@ import {
 } from '../constants.js'
 
 import {
+  clientUsersPath,
   scorePath,
   currentTeamPath,
   backgroundColorPath,
@@ -21,7 +22,6 @@ import {
   cardsPath,
   errorPath,
   showTitlePath,
-  userListPath,
   usernamePath,
   hintPath,
   timePath,
@@ -86,7 +86,7 @@ const initialScore = newScore()
 const initialCards = newCards()
 
 export const initialErrorState = {}
-export const initialUsersList = []
+export const initialUsersList = {}
 export const initialHint = {
   text: '',
   number: '',
@@ -101,6 +101,7 @@ export const newColors = (state) => R.compose(
 )(state)
 
 export const initialState = R.compose(
+  R.set(clientUsersPath, {}),
   R.set(currentTeamPath, currentTeam),
   newColors,
   R.set(rolePath, SPYMASTER),
@@ -109,7 +110,6 @@ export const initialState = R.compose(
   R.set(cardsPath, initialCards),
   R.set(errorPath, initialErrorState),
   R.set(showTitlePath, true),
-  R.set(userListPath, initialUsersList),
   R.set(usernamePath, ''),
   R.set(hintPath, initialHint),
   R.set(timePath, undefined),
