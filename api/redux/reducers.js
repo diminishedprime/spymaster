@@ -23,7 +23,7 @@ import {
   TEAM_2,
 } from '../../src/constants.js'
 import {
-  cardsFlippedPath,
+  cardFlippedByCardId,
   scorePath,
   winnerPath,
   hintSubmittedPath,
@@ -62,8 +62,8 @@ const otherTeam = (team) => team === TEAM_1 ? TEAM_2 : TEAM_1
 const changeColor = (state, {team, color}) => {
   const otherTeamsColor = R.view(backgroundColorPath(otherTeam(team)), state)
   return (color !== otherTeamsColor)
-    ? R.set(backgroundColorPath(team), color, state)
-    : state
+       ? R.set(backgroundColorPath(team), color, state)
+       : state
 }
 
 const nextTurn = (state) => R.compose(
@@ -90,11 +90,8 @@ const newGame = (state, _) => {
   )(state)
 }
 
-const setCardFlipped = (state, {cardId}) => {
-  const cards = R.view(cardsPath, state)
-  const cardIdx = R.findIndex(({id}) => id === cardId, cards)
-  return R.set(cardsFlippedPath(cardIdx), true, state)
-}
+const setCardFlipped = (state, {cardId}) =>
+  R.set(cardFlippedByCardId(cardId), true, state)
 
 export const setTime = (state, {seconds}) =>
   R.set(timePath, seconds, state)

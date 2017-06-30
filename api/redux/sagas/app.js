@@ -22,7 +22,7 @@ import {
   ZERO,
 } from '../../../src/constants.js'
 import {
-  cardsTeamPath,
+  cardTeamByCardId,
   cardsPath,
   currentTeamPath,
   hintNumberPath,
@@ -70,28 +70,29 @@ const loseGame = function* (teamThatLost) {
   yield forceUpdateRemoteState()
 }
 
+const zeroRemainingCards = (team, cards) => R.compose(
+  R.equals(0),
+  R.length,
+  R.keys,
+  R.filter(({flipped}) => !flipped),
+  R.filter(({team: cardTeam}) => (cardTeam === team))
+)(cards)
+
 const flipCard = function* () {
-  yield takeEvery(FLIP_CARD, function* ({id}) {
+  yield takeEvery(FLIP_CARD, function* ({cardId}) {
     // Always flip the card, because that's a safe thing to do
-    yield put(afSetCardFlipped(id))
+    yield put(afSetCardFlipped(cardId))
     yield forceUpdateRemoteState()
 
     const state = yield select(R.identity)
     const cards = R.view(cardsPath, state)
-    const cardIdx = R.findIndex((card) => card.id === id, cards)
-    const teamForCard = R.view(cardsTeamPath(cardIdx), state)
+    const teamForCard = R.view(cardTeamByCardId(cardId), state)
     const currentTeam = R.view(currentTeamPath, state)
 
     const correctCard = (currentTeam === teamForCard)
     const pickedAssassin = (teamForCard === ASSASSIN)
-    const team1done = cards
-      .filter((card) => (card.team === TEAM_1))
-      .filter((card) => !card.fliped)
-      .length === 0
-    const team2done = cards
-      .filter((card) => (card.team === TEAM_2))
-      .filter((card) => !card.flipped)
-      .length === 0
+    const team1done = zeroRemainingCards(TEAM_1, cards)
+    const team2done = zeroRemainingCards(TEAM_2, cards)
 
     if (pickedAssassin) {
       yield loseGame(currentTeam)

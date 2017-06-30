@@ -4,12 +4,12 @@ import R from 'ramda'
 import CardRow from './card-row.jsx'
 import style from './board.css'
 
-const Board = ({cards}) => (
+const Board = ({cardIds}) => (
   <div className={style.board}>
     { R
-      .splitEvery(5, cards)
-      .map((cards, idx) => (
-        <CardRow key={idx} cards={cards} />
+      .splitEvery(5, cardIds)
+      .map((cardIds) => (
+        <CardRow key={cardIds} cardIds={cardIds} />
       ))
     }
   </div>

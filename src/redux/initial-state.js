@@ -58,6 +58,11 @@ export const newCards = () => {
   }
 
   const cards = R.compose(
+    R.reduce((acc, card) => R.assoc(card.id, card, acc), {}),
+    (cards) => {
+      shuffle(cards)
+      return cards
+    },
     R.map((card) => R.assoc('id', uuid4(), card)),
     R.map((text) => ({
       text,
@@ -67,9 +72,9 @@ export const newCards = () => {
     R.take(25)
   )(words)
 
-  shuffle(cards)
-
-  currentTeam = cards
+  currentTeam = R
+    .keys(cards)
+    .map((cardId) => cards[cardId])
     .filter(({team}) => team === TEAM_1)
     .length === 9 ? TEAM_1 : TEAM_2
 

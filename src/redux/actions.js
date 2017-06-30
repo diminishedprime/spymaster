@@ -162,7 +162,7 @@ export const afSubmitHint = () => ({
 })
 
 export const FLIP_CARD = 'async flip card'
-export const afFlipCard = (id) => ({
+export const afFlipCard = (cardId) => ({
   type: FLIP_CARD,
-  id,
+  cardId,
 })

@@ -15,8 +15,12 @@ import {
   usernamePath,
   editingPath,
   errorTextPath,
+  hintTextPath,
+  hintNumberPath,
 } from './paths.js'
 import {
+  UPDATE_HINT,
+  UPDATE_HINT_NUMBER,
   SET_GAME_MODE,
   PICK_ROLE,
   TOGGLE_TITLE,
@@ -61,8 +65,16 @@ const updateRemoteState = (state, {remoteState}) =>
 export const setGameMode = (state, {gameMode}) =>
   R.set(gameModePath, gameMode, state)
 
+export const updateHint = (state, {hint}) =>
+  R.set(hintTextPath, hint, state)
+
+export const updateHintNumber = (state, {hintNumber}) =>
+  R.set(hintNumberPath, hintNumber, state)
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
+    case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
+    case UPDATE_HINT: return updateHint(state, action)
     case SET_GAME_MODE: return setGameMode(state, action)
     case DISMISS_ERROR: return dismissError(state, action)
     case ERROR_OCCURED: return hiError(state, action)

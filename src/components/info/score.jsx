@@ -28,8 +28,8 @@ const Teams = connect(
     const team1ForegroundColor = fgColorForRGB(hexToRGB(team1BackgroundColor))
 
     const team1cards = R.filter(({team}) => team===TEAM_1, cards)
-    const team1Total = team1cards.length
-    const team1Flipped = R.filter(R.prop('flipped'), team1cards).length
+    const team1Total = R.keys(team1cards).length
+    const team1Flipped = R.keys(R.filter(R.prop('flipped'), team1cards)).length
 
     const team1Style = {
       color: team1ForegroundColor,
@@ -40,8 +40,8 @@ const Teams = connect(
     const team2ForegroundColor = fgColorForRGB(hexToRGB(team2BackgroundColor))
 
     const team2cards = R.filter(({team}) => team===TEAM_2, cards)
-    const team2Total = team2cards.length
-    const team2Flipped = R.filter(R.prop('flipped'), team2cards).length
+    const team2Total = R.keys(team2cards).length
+    const team2Flipped = R.keys(R.filter(R.prop('flipped'), team2cards)).length
 
     const team2Style = {
       color: team2ForegroundColor,

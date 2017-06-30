@@ -14,13 +14,13 @@ import {
 import './game.css'
 
 const mapStateToProps = (state) => ({
-  cards: R.view(cardsPath, state),
+  cardIds: R.keys(R.view(cardsPath, state)),
 })
 
-const Game = ({cards}) => (
+const Game = ({cardIds}) => (
   <div>
     <Timer />
-    <Board cards={cards} />
+    <Board cardIds={cardIds} />
     <Timer />
     <Info />
   </div>

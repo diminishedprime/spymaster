@@ -17,14 +17,17 @@ import {
   teamPath,
   backgroundColorPath,
   currentTeamPath,
+  cardFlippedByCardId,
+  cardTeamByCardId,
+  cardTextByCardId,
 } from '../../redux/paths.js'
 
 import cssStyle from './card.css'
 
-const mapStateToProps = (state, {
-  team: cardTeam,
-  flipped,
-}) => {
+const mapStateToProps = (state, {cardId}) => {
+  const cardTeam = R.view(cardTeamByCardId(cardId), state)
+  const text = R.view(cardTextByCardId(cardId), state)
+  const flipped = R.view(cardFlippedByCardId(cardId), state)
   const role = R.view(rolePath, state)
   const bgColor = R.view(backgroundColorPath(cardTeam), state)
   const playerTeam = R.view(teamPath, state)
@@ -45,17 +48,17 @@ const mapStateToProps = (state, {
                    flipped ||
                    (!hintSubmitted)
   return {
+    text,
     style,
     playerTeam,
     role,
     currentTeam,
-    flipped,
     disabled,
   }
 }
 
-const mapDispatchToProps = (dispatch, {id}) => ({
-  flip: () => dispatch(afFlipCard(id)),
+const mapDispatchToProps = (dispatch, {cardId}) => ({
+  flip: () => dispatch(afFlipCard(cardId)),
 })
 
 const Card = ({

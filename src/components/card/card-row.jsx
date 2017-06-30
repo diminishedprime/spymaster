@@ -3,9 +3,9 @@ import React from 'react'
 import Card from './card.jsx'
 import style from './card-row.css'
 
-const CardRow = ({cards}) => (
+const CardRow = ({cardIds}) => (
   <div className={style.cardRow}>
-    { cards.map((card) => (<Card key={card.id} {...card}/>)) }
+    { cardIds.map((cardId) => (<Card key={cardId} cardId={cardId} />)) }
   </div>
 )
 
