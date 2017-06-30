@@ -10,16 +10,19 @@ import {
   BASE_URL,
 } from '../src/constants.js'
 
-import addRoutes from './routes.js'
-import connect from './websocket.js'
+import {
+  store,
+} from './redux/index.js'
+import {
+  afConnectWebsocketServer,
+} from './redux/actions.js'
 
 const app = express()
 
-// Add api routes
-addRoutes(app)
-
 const server = createServer(app)
-connect(server)
+
+// Connect websocket server
+store.dispatch(afConnectWebsocketServer(server))
 
 // Serve static resources
 app.use('/', express.static(path.resolve(__dirname + '/../build/')))
