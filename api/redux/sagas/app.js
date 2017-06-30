@@ -10,6 +10,7 @@ import {
   afSetCardFlipped,
   afUpdateHintNumber,
   afForfeit,
+  NEXT_TURN,
 } from '../../../src/redux/actions.js'
 import {
   TEAM_1,
@@ -101,6 +102,12 @@ const flipCard = function* () {
   })
 }
 
+const nextTurn = function* () {
+  yield takeEvery(NEXT_TURN, function* () {
+    yield put(afStopTimer())
+  })
+}
+
 const timer = function* () {
   yield takeEvery(START_TIMER, function* () {
     let wasStopped = false
@@ -128,6 +135,7 @@ const timer = function* () {
 
 export default function* () {
   yield all([
+    nextTurn(),
     timer(),
     flipCard(),
   ])
