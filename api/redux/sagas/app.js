@@ -86,6 +86,7 @@ const flipCard = function* () {
         const asNumber = parseInt(numGuesses) - 1
         if (asNumber === 0) {
           yield put(afNextTurn())
+          yield put(afStopTimer())
           forceUpdateRemoteState()
         } else {
           yield put(afUpdateHintNumber(asNumber + ''))
