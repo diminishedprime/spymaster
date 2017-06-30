@@ -19,11 +19,6 @@ import {
   NEW_GAME,
 } from '../../src/redux/actions.js'
 import {
-  updateHint,
-  setTime,
-  updateHintNumber,
-} from '../../src/redux/reducers.js'
-import {
   TEAM_1,
   TEAM_2,
 } from '../../src/constants.js'
@@ -38,6 +33,8 @@ import {
   currentTeamPath,
   hintPath,
   clientUsersPath,
+  hintTextPath,
+  hintNumberPath,
 } from '../../src/redux/paths.js'
 
 import {
@@ -98,6 +95,15 @@ const setCardFlipped = (state, {cardId}) => {
   const cardIdx = R.findIndex(({id}) => id === cardId, cards)
   return R.set(cardsFlippedPath(cardIdx), true, state)
 }
+
+export const setTime = (state, {seconds}) =>
+  R.set(timePath, seconds, state)
+
+export const updateHint = (state, {hint}) =>
+  R.set(hintTextPath, hint, state)
+
+export const updateHintNumber = (state, {hintNumber}) =>
+  R.set(hintNumberPath, hintNumber, state)
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
