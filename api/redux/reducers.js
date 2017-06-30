@@ -8,7 +8,7 @@ import {
   newColors,
 } from '../../src/redux/initial-state.js'
 import {
-  FLIP_CARD,
+  SET_CARD_FLIPPED,
   ADD_USER,
   REMOVE_USER,
   CHANGE_COLOR,
@@ -19,7 +19,6 @@ import {
   SUBMIT_HINT,
   NEXT_TURN,
   FORFEIT,
-  afForfeit,
   NEW_GAME,
 } from '../../src/redux/actions.js'
 import {
@@ -30,19 +29,14 @@ import {
 import {
   TEAM_1,
   TEAM_2,
-  ASSASSIN,
-  ZERO,
-  INF,
 } from '../../src/constants.js'
 import {
+  cardsFlippedPath,
   scorePath,
   winnerPath,
-  cardsTeamPath,
-  cardsFlippedPath,
   hintSubmittedPath,
   cardsPath,
   userListUserPath,
-  hintNumberPath,
   timePath,
   userListPath,
   usersPath,
@@ -104,60 +98,6 @@ const loseGame = (state, {team}) => {
   return R.set(winnerPath, otherTeam(team), state)
 }
 
-const decreaseGuesses = (state) => {
-  const numGuesses = R.view(hintNumberPath, state)
-  // If they explicitly picked 'inf' or '0', they have infinite guesses
-  if (numGuesses === INF || numGuesses === ZERO) {
-    return state
-  }
-
-  const asNumber = parseInt(numGuesses) - 1
-  if (asNumber === 0) {
-    return nextTurn(state)
-  } else {
-    return R.set(hintNumberPath, asNumber + '', state)
-  }
-}
-
-const determineTurn = (teamFlipping, cardIdx) => (state) => {
-  const cards = R.view(cardsPath, state)
-  const cardTeam = R.view(cardsTeamPath(cardIdx), state)
-  const pickedAssassan = (cardTeam === ASSASSIN)
-  const currentTeam = R.view(currentTeamPath, state)
-  const correctCard = (currentTeam === cardTeam)
-  const team1done = cards
-    .filter((card) => (card.team === TEAM_1))
-    .filter((card) => !card.fliped)
-    .length === 0
-  const team2done = cards
-    .filter((card) => (card.team === TEAM_2))
-    .filter((card) => !card.flipped)
-    .length === 0
-
-  if (pickedAssassan) {
-    return loseGame(state, afForfeit(teamFlipping))
-  } else if (team1done) {
-    return loseGame(state, afForfeit(TEAM_2))
-  } else if (team2done) {
-    return loseGame(state, afForfeit(TEAM_1))
-  } else if (correctCard) {
-    return decreaseGuesses(state)
-  } else {
-    return nextTurn(state)
-  }
-}
-
-const flipCard = (state, {id}) => {
-  const cards = R.view(cardsPath, state)
-  const cardIdx = R.findIndex((card) => card.id === id, cards)
-  const teamFlipping = R.view(currentTeamPath, state)
-
-  return R.compose(
-    determineTurn(teamFlipping, cardIdx),
-    R.set(cardsFlippedPath(cardIdx), true)
-  )(state)
-}
-
 const submitHint = (state, _) =>
   R.set(hintSubmittedPath, true, state)
 
@@ -172,13 +112,19 @@ const newGame = (state, _) => {
   )(state)
 }
 
+const setCardFlipped = (state, {cardId}) => {
+  const cards = R.view(cardsPath, state)
+  const cardIdx = R.findIndex(({id}) => id === cardId, cards)
+  return R.set(cardsFlippedPath(cardIdx), true, state)
+}
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
+    case SET_CARD_FLIPPED: return setCardFlipped(state, action)
     case ADD_USER: return addUser(state, action)
     case REMOVE_USER: return removeUser(state, action)
     case CHANGE_COLOR: return changeColor(state, action)
     case UPDATE_USERNAME: return updateUsername(state, action)
-    case FLIP_CARD: return flipCard(state, action)
     case UPDATE_HINT: return updateHint(state, action)
     case SET_TIME: return setTime(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)

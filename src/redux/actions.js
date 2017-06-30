@@ -1,4 +1,10 @@
 // Actions & Action Creators
+export const SET_CARD_FLIPPED = 'flip this card'
+export const afSetCardFlipped = (cardId) => ({
+  type: SET_CARD_FLIPPED,
+  cardId,
+})
+
 export const PICK_ROLE = 'change role'
 export const afPickRole = (team, role) => ({
   type: PICK_ROLE,

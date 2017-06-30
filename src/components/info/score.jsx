@@ -22,27 +22,32 @@ import s from './score.css'
 
 const Teams = connect(
   (state) => {
-    const currentTeam = TEAM_1
-    const yourTeam = TEAM_2
-    const currentBackgroundColor = R.view(backgroundColorPath(currentTeam), state)
-    const yourBackgroundColor = R.view(backgroundColorPath(yourTeam), state)
-    const currentColor = fgColorForRGB(hexToRGB(currentBackgroundColor))
-    const yourColor = fgColorForRGB(hexToRGB(yourBackgroundColor))
-    const team1Style = {
-      color: yourColor,
-      backgroundColor: yourBackgroundColor,
-    }
-    const team2Style = {
-      color: currentColor,
-      backgroundColor: currentBackgroundColor,
-    }
     const cards = R.view(cardsPath, state)
-    const team1 = R.filter(({team}) => team===TEAM_1, cards)
-    const team1Total = team1.length
-    const team1Flipped = R.filter(R.prop('flipped'), team1).length
-    const team2 = R.filter(({team}) => team===TEAM_2, cards)
-    const team2Total = team2.length
-    const team2Flipped = R.filter(R.prop('flipped'), team2).length
+
+    const team1BackgroundColor = R.view(backgroundColorPath(TEAM_1), state)
+    const team1ForegroundColor = fgColorForRGB(hexToRGB(team1BackgroundColor))
+
+    const team1cards = R.filter(({team}) => team===TEAM_1, cards)
+    const team1Total = team1cards.length
+    const team1Flipped = R.filter(R.prop('flipped'), team1cards).length
+
+    const team1Style = {
+      color: team1ForegroundColor,
+      backgroundColor: team1BackgroundColor,
+    }
+
+    const team2BackgroundColor = R.view(backgroundColorPath(TEAM_2), state)
+    const team2ForegroundColor = fgColorForRGB(hexToRGB(team2BackgroundColor))
+
+    const team2cards = R.filter(({team}) => team===TEAM_2, cards)
+    const team2Total = team2cards.length
+    const team2Flipped = R.filter(R.prop('flipped'), team2cards).length
+
+    const team2Style = {
+      color: team2ForegroundColor,
+      backgroundColor: team2BackgroundColor,
+    }
+
     return ({
       team1Flipped,
       team1Total,

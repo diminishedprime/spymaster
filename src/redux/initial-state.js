@@ -37,8 +37,7 @@ export const newCards = () => {
   const biggerTeam = 9
   const smallerTeam = 8
   let numTeam1 = (Math.random() > 0.5) ? biggerTeam : smallerTeam
-  let numTeam2 = (numTeam1 === smallerTeam) ? biggerTeam: smallerTeam
-  currentTeam = numTeam1 > numTeam2 ? TEAM_1 : TEAM_2
+  let numTeam2 = (numTeam1 === smallerTeam) ? biggerTeam : smallerTeam
 
   const nextTeam = () => {
     if (numAssassins > 0) {
@@ -69,6 +68,11 @@ export const newCards = () => {
   )(words)
 
   shuffle(cards)
+
+  currentTeam = cards
+    .filter(({team}) => team === TEAM_1)
+    .length === 9 ? TEAM_1 : TEAM_2
+
   return cards
 }
 
