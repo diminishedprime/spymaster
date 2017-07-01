@@ -72,11 +72,15 @@ export const newCards = () => {
     R.take(25)
   )(words)
 
-  currentTeam = R
-    .keys(cards)
-    .map((cardId) => cards[cardId])
-    .filter(({team}) => team === TEAM_1)
-    .length === 9 ? TEAM_1 : TEAM_2
+  currentTeam = R.compose(
+    R.cond([
+      [R.equals(9), R.always(TEAM_1)],
+      [R.T, R.always(TEAM_2)],
+    ]),
+    R.length,
+    R.keys,
+    R.filter(({team}) => team === TEAM_1)
+  )(cards)
 
   return cards
 }
