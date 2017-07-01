@@ -38,9 +38,10 @@ const mapStateToProps = (state, {cardId}) => {
     backgroundColor: '#ffffff',
   }
   const style = (flipped || role === 'spymaster')
-    ? R.compose(
-      R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
-      R.assoc('backgroundColor', bgColor)
+              ? R.compose(
+                R.assoc('opacity', flipped ? 0.2 : 1.0),
+                R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
+                R.assoc('backgroundColor', bgColor)
     )(baseStyle)
     : baseStyle
   const disabled = (role === 'spymaster') ||
