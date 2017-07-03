@@ -10,7 +10,7 @@ import {
   errorPath,
   showTitlePath,
   playerTypePath,
-  gameModePath,
+  page as pagePath,
   wsPath,
   usernamePath,
   editingPath,
@@ -21,7 +21,7 @@ import {
 import {
   UPDATE_HINT,
   UPDATE_HINT_NUMBER,
-  SET_GAME_MODE,
+  SET_PAGE,
   PICK_ROLE,
   TOGGLE_TITLE,
   ERROR_OCCURED,
@@ -47,7 +47,7 @@ const toggleTitle = (state, _) =>
 
 const pickRole = (state, {team, role}) => R.compose(
   R.set(playerTypePath, ({team, role})),
-  R.set(gameModePath, GAME_MODE_GAME)
+  R.set(pagePath, GAME_MODE_GAME)
 )(state)
 
 const setWs = (state, {ws}) =>
@@ -62,8 +62,8 @@ const setEditing = (state, {flag}) =>
 const updateRemoteState = (state, {remoteState}) =>
   R.set(remoteStatePath, remoteState, state)
 
-export const setGameMode = (state, {gameMode}) =>
-  R.set(gameModePath, gameMode, state)
+const setPage = (state, {page}) =>
+  R.set(pagePath, page, state)
 
 export const updateHint = (state, {hint}) =>
   R.set(hintTextPath, hint, state)
@@ -75,7 +75,7 @@ export const app = (state=initialState, action) => {
   switch(action.type) {
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     case UPDATE_HINT: return updateHint(state, action)
-    case SET_GAME_MODE: return setGameMode(state, action)
+    case SET_PAGE: return setPage(state, action)
     case DISMISS_ERROR: return dismissError(state, action)
     case ERROR_OCCURED: return hiError(state, action)
     case TOGGLE_TITLE: return toggleTitle(state, action)

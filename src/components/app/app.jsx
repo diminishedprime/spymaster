@@ -4,11 +4,11 @@ import {
   connect,
 } from 'react-redux'
 
+import Lobby from '../lobby/lobby.jsx'
 import ErrorBar from '../error-bar/error-bar.jsx'
 import Game from '../game/game.jsx'
 import PickTeam from '../pick-team/pick-team.jsx'
 import PickUsername from '../pick-username/pick-username.jsx'
-import ConnectedUsers from '../connected-users/connected-users.jsx'
 import Win from '../win/win.jsx'
 import {
   afToggleTitle,
@@ -16,10 +16,11 @@ import {
 import {
   errorTextPath,
   showTitlePath,
-  gameModePath,
+  page,
   winnerPath,
 } from '../../redux/paths.js'
 import {
+  LOBBY,
   GAME_MODE_GAME,
   GAME_MODE_PICK_TEAM,
 } from '../../constants.js'
@@ -30,26 +31,26 @@ const mapStateToProps = (state) => ({
   winner: R.view(winnerPath, state),
   hasError: R.view(errorTextPath, state),
   showTitle: R.view(showTitlePath, state),
-  gameMode: R.view(gameModePath, state),
+  page: R.view(page, state),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   toggleTitle: () => dispatch(afToggleTitle()),
 })
 
-const App = ({hasError, showTitle, toggleTitle, gameMode, winner}) => (
+const App = ({hasError, showTitle, toggleTitle, page, winner}) => (
   <div className={style.app}>
     {hasError && <ErrorBar />}
     {!winner && (
        <div>
          {showTitle && <div className={style.title} onClick={toggleTitle}>Spymaster</div>}
-         {gameMode === GAME_MODE_GAME && <Game />}
-         {gameMode === GAME_MODE_PICK_TEAM && <PickUsername />}
-         {gameMode === GAME_MODE_PICK_TEAM && <PickTeam />}
+         {page === LOBBY && <Lobby />}
+         {page === GAME_MODE_GAME && <Game />}
+         {page === GAME_MODE_PICK_TEAM && <PickUsername />}
+         {page === GAME_MODE_PICK_TEAM && <PickTeam />}
        </div>)
     }
     { winner && <Win />}
-    <ConnectedUsers />
   </div>
 )
 

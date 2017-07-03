@@ -1,5 +1,6 @@
 export const GAME_MODE_PICK_TEAM = 'pick team'
 export const GAME_MODE_GAME = 'game'
+export const LOBBY = 'lobby'
 export const ASSASSIN = 'assassin'
 export const BYSTANDER = 'bystander'
 export const TEAM_1 = '1'

@@ -1,4 +1,10 @@
 // Actions & Action Creators
+export const SET_PAGE = 'set page'
+export const afSetPage = (page) => ({
+  type: SET_PAGE,
+  page,
+})
+
 export const SET_CARD_FLIPPED = 'flip this card'
 export const afSetCardFlipped = (cardId) => ({
   type: SET_CARD_FLIPPED,
@@ -115,12 +121,6 @@ export const afForfeit = (team) => ({
 export const STOP_TIMER = 'async stop timer'
 export const afStopTimer = () => ({
   type: STOP_TIMER,
-})
-
-export const SET_GAME_MODE = 'game mode'
-export const afSetGameMode = (gameMode) => ({
-  type: SET_GAME_MODE,
-  gameMode,
 })
 
 export const NEW_GAME = 'async new game'

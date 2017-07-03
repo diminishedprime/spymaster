@@ -6,7 +6,6 @@ const remoteState = ['remoteState']
 const playerType = [...localState, 'playerType']
 const role = [...playerType, 'role']
 const team = [...playerType, 'team']
-const gameMode = [...localState, 'gameMode']
 const cards = [...remoteState, 'cards']
 const cardByCardIdA = (cardId) => [...cards, cardId]
 const cardFlippedByCardIdA = (cardId) => [...cardByCardIdA(cardId), 'flipped']
@@ -25,6 +24,7 @@ const currentTeam = [...remoteState, 'currentTeam']
 const ws = [...localState, 'ws']
 const username = [...localState, 'username']
 const editing = [...localState, 'editing']
+const pageA = [...localState, 'page']
 
 const clientUsers = [...remoteState, 'clientUsers']
 
@@ -51,7 +51,6 @@ export const showTitlePath = R.lensPath([...showTitle])
 export const playerTypePath = R.lensPath([...playerType])
 export const rolePath = R.lensPath([...role])
 export const teamPath = R.lensPath([...team])
-export const gameModePath = R.lensPath([...gameMode])
 export const cardsPath = R.lensPath([...cards])
 export const colorsPath = R.lensPath([...colors])
 export const colorsTeamPath = (team) => R.lensPath(colorsTeam(team))
@@ -69,3 +68,4 @@ export const wsPath = R.lensPath([...ws])
 export const usernamePath = R.lensPath([...username])
 export const editingPath = R.lensPath([...editing])
 export const clientUsersPath = R.lensPath(clientUsers)
+export const page = R.lensPath(pageA)

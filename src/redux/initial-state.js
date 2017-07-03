@@ -8,7 +8,7 @@ import {
   TEAM_1,
   TEAM_2,
   SPYMASTER,
-  GAME_MODE_PICK_TEAM,
+  LOBBY,
 } from '../constants.js'
 
 import {
@@ -18,7 +18,7 @@ import {
   backgroundColorPath,
   rolePath,
   teamPath,
-  gameModePath,
+  page,
   cardsPath,
   errorPath,
   showTitlePath,
@@ -115,7 +115,7 @@ export const initialState = R.compose(
   newColors,
   R.set(rolePath, SPYMASTER),
   R.set(teamPath, TEAM_1),
-  R.set(gameModePath, GAME_MODE_PICK_TEAM),
+  R.set(page, LOBBY),
   R.set(cardsPath, initialCards),
   R.set(errorPath, initialErrorState),
   R.set(showTitlePath, true),
