@@ -179,3 +179,15 @@ export const afSetUserId = (userId) => ({
   type: SET_USER_ID,
   userId,
 })
+
+export const SET_GAME_IDS = 'set game ids'
+export const afSetGameIds = (gameIds) => ({
+  type: SET_GAME_IDS,
+  gameIds,
+})
+
+export const JOIN_GAME = 'async join game'
+export const afJoinGame = (gameId) => ({
+  type: JOIN_GAME,
+  gameId,
+})

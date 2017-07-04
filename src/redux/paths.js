@@ -40,6 +40,7 @@ const hintNumber = [...hint, 'number']
 const hintSubmitted = [...hint, 'submitted']
 const winner = [...remoteState, 'winner']
 const score = [...remoteState, 'score']
+const gameIds = [...localState, 'gameIds']
 
 export const userIdPath = R.lensPath(userIdA)
 export const scorePath = R.lensPath([...score])
@@ -79,3 +80,4 @@ export const foregroundColorForTeamPath = (team) =>
   R.lensPath(foregroundColorForTeamA(team))
 export const backgroundColorForTeamPath = (team) =>
   R.lensPath(backgroundColorForTeamA(team))
+export const gameIdsPath = R.lensPath(gameIds)

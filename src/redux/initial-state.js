@@ -7,6 +7,7 @@ import {
 } from '../constants.js'
 
 import {
+  gameIdsPath,
   remoteStatePath,
   clientUsersPath,
   scorePath,
@@ -37,6 +38,7 @@ export const initialHint = {
 }
 
 const newState = R.compose(
+  R.set(gameIdsPath, []),
   R.set(clientUsersPath, {}),
   R.set(rolePath, SPYMASTER),
   R.set(teamPath, TEAM_1),

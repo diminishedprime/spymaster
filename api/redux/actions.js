@@ -69,3 +69,10 @@ export const afNewGame2Server = (userId, gameId, gameState) => ({
   gameId,
   gameState,
 })
+
+export const JOIN_GAME_SERVER = 'join game server'
+export const afJoinGameServer = (userId, gameId) => ({
+  type: JOIN_GAME_SERVER,
+  userId,
+  gameId,
+})

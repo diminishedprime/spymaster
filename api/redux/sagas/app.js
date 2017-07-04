@@ -5,6 +5,8 @@ import {
   newGame,
 } from '../initial-state.js'
 import {
+  JOIN_GAME,
+  afSetGameIds,
   NEW_GAME_2,
   afSetUserId,
   FLIP_CARD,
@@ -37,6 +39,7 @@ import {
   remoteStatePath,
 } from '../../../src/redux/paths.js'
 import {
+  afJoinGameServer,
   afBroadcastActionToUserIds,
   afBroadcastActionToUserId,
   afBroadcastActionToAll,
@@ -44,6 +47,7 @@ import {
   afNewGame2Server,
 } from '../actions.js'
 import {
+  gamesPath,
   gameUsersPath,
   gameByGameIdPath as gameByGameId,
 } from '../paths.js'
@@ -74,6 +78,9 @@ const userConnected = function* () {
   yield takeEvery(USER_CONNECTED, function* ({userId}) {
     const action = afSetUsername(userId.substring(0, 8))
     const action1 = afSetUserId(userId)
+    const gameIds = yield select(R.compose(R.keys,R.view(gamesPath)))
+    const setGameIds = afSetGameIds(gameIds)
+    yield put(afBroadcastActionToUserId(userId, setGameIds))
     yield put(afBroadcastActionToUserId(userId, action1))
     yield put(afBroadcastActionToUserId(userId, action))
     yield forceUpdateRemoteState()
@@ -169,11 +176,27 @@ const timer = function* () {
   })
 }
 
+const joinGame = function* () {
+  yield takeEvery(JOIN_GAME, function* ({userId, gameId}) {
+    yield put(afJoinGameServer(userId, gameId))
+
+    const remoteState = yield select(R.view(gameByGameId(gameId)))
+    const remoteStateAction = afUpdateRemoteState(remoteState)
+    const userIds = R.view(gameUsersPath, remoteState)
+    yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
+    yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
+  })
+}
+
 const newGame2 = function* () {
   yield takeEvery(NEW_GAME_2, function* ({userId}) {
     const gameId = uuid4()
     const gameState = newGame(userId)
     yield put(afNewGame2Server(userId, gameId, gameState))
+
+    const gameIds = yield select(R.compose(R.keys,R.view(gamesPath)))
+    const setGameIds = afSetGameIds(gameIds)
+    yield put(afBroadcastActionToAll(setGameIds))
 
     const remoteState = yield select(R.view(gameByGameId(gameId)))
     const remoteStateAction = afUpdateRemoteState(remoteState)
@@ -185,6 +208,7 @@ const newGame2 = function* () {
 
 export default function* () {
   yield all([
+    joinGame(),
     newGame2(),
     userConnected(),
     nextTurn(),

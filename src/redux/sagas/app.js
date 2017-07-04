@@ -4,6 +4,7 @@ import {
   userIdPath,
 } from '../paths.js'
 import {
+  JOIN_GAME,
   NEW_GAME_2,
   NEW_GAME,
   CHANGE_COLOR,
@@ -71,6 +72,12 @@ const nextTurn = function* () {
   })
 }
 
+const joinGame = function* () {
+  yield takeEvery(JOIN_GAME, function* (action) {
+    yield put(afEmitAction(action))
+  })
+}
+
 const newGame2 = function* () {
   yield takeEvery(NEW_GAME_2, function* (action) {
     const userId = yield select(R.view(userIdPath))
@@ -81,6 +88,7 @@ const newGame2 = function* () {
 
 export default function* () {
   yield all([
+    joinGame(),
     newGame2(),
     updateHintNumber(),
     nextTurn(),
