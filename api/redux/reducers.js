@@ -43,6 +43,7 @@ import {
   userByUserIdPath,
 } from './paths.js'
 import {
+  REMOVE_USER_FROM_GAME,
   CHANGE_BACKGROUND_COLOR_SERVER,
   JOIN_GAME_SERVER,
   NEW_GAME_2_SERVER,
@@ -103,16 +104,24 @@ const setBackgroundColor = (gameState, {team, backgroundColor}) => {
   return newState
 }
 
+const removeUserFromGame = (gameState, {userId}) => {
+  const gameUserIds = R.view(gameUsersPath, gameState)
+  const userIdx = gameUserIds.indexOf(userId)
+  return R.over(gameUsersPath, R.remove(userIdx, 1), gameState)
+}
+
 const gameApp = (action) => (gameState) => {
   switch (action.type) {
     case JOIN_GAME_SERVER: return joinGameServer(gameState, action)
     case CHANGE_BACKGROUND_COLOR_SERVER: return setBackgroundColor(gameState, action)
+    case REMOVE_USER_FROM_GAME: return removeUserFromGame(gameState, action)
     default: return gameState
   }
 }
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
+    case REMOVE_USER_FROM_GAME:
     case CHANGE_BACKGROUND_COLOR_SERVER:
     case JOIN_GAME_SERVER: return R.over(gameByGameId(action.gameId),
                                          gameApp(action),

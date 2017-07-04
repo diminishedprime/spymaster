@@ -62,6 +62,12 @@ export const afUserConnected = (userId) => ({
   userId,
 })
 
+export const USER_DISCONNECTED = asyncConst('user disconnected')
+export const afUserDisconnected = (userId) => ({
+  type: USER_DISCONNECTED,
+  userId,
+})
+
 export const NEW_GAME_2_SERVER = 'new game 2 server'
 export const afNewGame2Server = (gameId, gameState) => ({
   type: NEW_GAME_2_SERVER,
@@ -81,5 +87,12 @@ export const afChangeBackgroundColorServer = (gameId, team, backgroundColor) => 
   type: CHANGE_BACKGROUND_COLOR_SERVER,
   team,
   backgroundColor,
+  gameId,
+})
+
+export const REMOVE_USER_FROM_GAME = 'remove user from games'
+export const afRemoveUserFromGame = (gameId, userId) => ({
+  type: REMOVE_USER_FROM_GAME,
+  userId,
   gameId,
 })

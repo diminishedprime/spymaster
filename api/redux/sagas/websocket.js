@@ -21,9 +21,9 @@ import {
   BROADCAST_ACTION_TO_USER_IDS,
   BROADCAST_ACTION_TO_USER_ID,
   BROADCAST_ACTION_TO_ALL,
-  afAddUser,
-  afRemoveUser,
   afBroadcastMessageToUserId,
+  afAddUser,
+  afUserDisconnected,
   afUserConnected,
 } from '../actions.js'
 
@@ -89,7 +89,7 @@ const broadcastActionToAll = function* () {
 
 const onDisconnect = function* (wsChan) {
   const userId = yield take(wsChan)
-  yield (put(afRemoveUser(userId)))
+  yield put(afUserDisconnected(userId))
 }
 
 const onClientAction = function* (wsChan) {

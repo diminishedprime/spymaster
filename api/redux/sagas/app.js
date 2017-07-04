@@ -39,16 +39,18 @@ import {
   cardsPath,
   currentTeamPath,
   hintNumberPath,
-  remoteStatePath,
 } from '../../../src/redux/paths.js'
 import {
+  afRemoveUser,
   afChangeBackgroundColorServer,
   afJoinGameServer,
   afBroadcastActionToUserIds,
   afBroadcastActionToUserId,
   afBroadcastActionToAll,
+  USER_DISCONNECTED,
   USER_CONNECTED,
   afNewGame2Server,
+  afRemoveUserFromGame,
 } from '../actions.js'
 import {
   gamesPath,
@@ -66,11 +68,39 @@ import {
   select,
 } from 'redux-saga/effects'
 
+const pushGameState = function* (gameId) {
+  const remoteState = yield select(R.view(gameByGameId(gameId)))
+  const remoteStateAction = afUpdateRemoteState(remoteState)
+  const userIds = R.view(gameUsersPath, remoteState)
+  yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
+}
+
 const wait = (millis) => (
   new Promise((resolve) => {
     setTimeout(() => resolve(), millis)
   })
 )
+
+const removeUserFromGame = function* (gameId, userId) {
+  const game = yield select(R.view(gameByGameId(gameId)))
+  const gameUserIds = R.view(gameUsersPath, game)
+  if (gameUserIds.indexOf(userId) > -1) {
+    yield put(afRemoveUserFromGame(gameId, userId))
+    yield pushGameState(gameId)
+
+  }
+}
+
+const userDisconnected = function* () {
+  yield takeEvery(USER_DISCONNECTED, function* ({userId}) {
+    yield put(afRemoveUser(userId))
+    const gameIds = yield select(R.compose(R.keys,R.view(gamesPath)))
+    for (let i = 0; i < gameIds.length; i++) {
+      const gameId = gameIds[i]
+      yield removeUserFromGame(gameId, userId)
+    }
+  })
+}
 
 const userConnected = function* () {
   yield takeEvery(USER_CONNECTED, function* ({userId}) {
@@ -174,13 +204,6 @@ const timer = function* () {
   })
 }
 
-const pushGameState = function* (gameId) {
-  const remoteState = yield select(R.view(gameByGameId(gameId)))
-  const remoteStateAction = afUpdateRemoteState(remoteState)
-  const userIds = R.view(gameUsersPath, remoteState)
-  yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
-}
-
 const joinGame = function* () {
   yield takeEvery(JOIN_GAME, function* ({userId, gameId}) {
     yield put(afJoinGameServer(userId, gameId))
@@ -217,6 +240,7 @@ export default function* () {
     joinGame(),
     newGame2(),
     userConnected(),
+    userDisconnected(),
     nextTurn(),
     timer(),
     flipCard(),
