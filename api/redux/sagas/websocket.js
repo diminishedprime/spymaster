@@ -6,12 +6,6 @@ import {
 } from 'redux-saga'
 
 import {
-  afUpdateRemoteState,
-} from '../../../src/redux/actions.js'
-import {
-  remoteStatePath,
-} from '../../../src/redux/paths.js'
-import {
   MESSAGE,
   ACTION,
 } from '../../../src/constants.js'
@@ -30,7 +24,6 @@ import {
   afAddUser,
   afRemoveUser,
   afBroadcastMessageToUserId,
-  afBroadcastActionToAll,
   afUserConnected,
 } from '../actions.js'
 
