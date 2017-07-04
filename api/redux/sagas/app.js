@@ -5,6 +5,7 @@ import {
   newGame,
 } from '../initial-state.js'
 import {
+  afJoinGame,
   CHANGE_BACKGROUND_COLOR,
   JOIN_GAME,
   afSetGameId,
@@ -71,29 +72,23 @@ const wait = (millis) => (
   })
 )
 
-const forceUpdateRemoteState = function* () {
-  const remoteState = yield select(R.view(remoteStatePath))
-  const remoteStateAction = afUpdateRemoteState(remoteState)
-  yield put(afBroadcastActionToAll(remoteStateAction))
-}
-
 const userConnected = function* () {
   yield takeEvery(USER_CONNECTED, function* ({userId}) {
-    const action = afSetUsername(userId.substring(0, 8))
-    const action1 = afSetUserId(userId)
+    const setUsername = afSetUsername(userId.substring(0, 8))
+    const setUserId = afSetUserId(userId)
     const gameIds = yield select(R.compose(R.keys,R.view(gamesPath)))
     const setGameIds = afSetGameIds(gameIds)
     yield put(afBroadcastActionToUserId(userId, setGameIds))
-    yield put(afBroadcastActionToUserId(userId, action1))
-    yield put(afBroadcastActionToUserId(userId, action))
-    yield forceUpdateRemoteState()
+    yield put(afBroadcastActionToUserId(userId, setUsername))
+    yield put(afBroadcastActionToUserId(userId, setUserId))
+    /* yield forceUpdateRemoteState()*/
   })
 }
 
 const loseGame = function* (teamThatLost) {
   yield put(afForfeit(teamThatLost))
   yield put(afStopTimer())
-  yield forceUpdateRemoteState()
+  /*yield forceUpdateRemoteState()*/
 }
 
 const zeroRemainingCards = (team, cards) => R.compose(
@@ -108,7 +103,7 @@ const flipCard = function* () {
   yield takeEvery(FLIP_CARD, function* ({cardId}) {
     // Always flip the card, because that's a safe thing to do
     yield put(afSetCardFlipped(cardId))
-    yield forceUpdateRemoteState()
+    /* yield forceUpdateRemoteState()*/
 
     const state = yield select(R.identity)
     const cards = R.view(cardsPath, state)
@@ -134,16 +129,16 @@ const flipCard = function* () {
         if (asNumber === 0) {
           yield put(afNextTurn())
           yield put(afStopTimer())
-          yield forceUpdateRemoteState()
+          /* yield forceUpdateRemoteState()*/
         } else {
           yield put(afUpdateHintNumber(asNumber + ''))
-          yield forceUpdateRemoteState()
+          /* yield forceUpdateRemoteState()*/
         }
       }
     } else {
       yield put(afStopTimer())
       yield put(afNextTurn())
-      yield forceUpdateRemoteState()
+      /* yield forceUpdateRemoteState()*/
     }
   })
 }
@@ -169,26 +164,13 @@ const timer = function* () {
         break
       } else {
         yield put(afSetTime(seconds))
-        yield forceUpdateRemoteState()
+        /* yield forceUpdateRemoteState()*/
       }
     }
     if (!wasStopped) {
       yield put(afNextTurn())
-      yield forceUpdateRemoteState()
+      /* yield forceUpdateRemoteState()*/
     }
-  })
-}
-
-const joinGame = function* () {
-  yield takeEvery(JOIN_GAME, function* ({userId, gameId}) {
-    yield put(afJoinGameServer(userId, gameId))
-
-    const remoteState = yield select(R.view(gameByGameId(gameId)))
-    const remoteStateAction = afUpdateRemoteState(remoteState)
-    const userIds = R.view(gameUsersPath, remoteState)
-    yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
-    yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
-    yield put(afBroadcastActionToUserId(userId, afSetGameId(gameId)))
   })
 }
 
@@ -197,6 +179,16 @@ const pushGameState = function* (gameId) {
   const remoteStateAction = afUpdateRemoteState(remoteState)
   const userIds = R.view(gameUsersPath, remoteState)
   yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
+}
+
+const joinGame = function* () {
+  yield takeEvery(JOIN_GAME, function* ({userId, gameId}) {
+    yield put(afJoinGameServer(userId, gameId))
+
+    yield put(afBroadcastActionToUserId(userId, afSetGameId(gameId)))
+    yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
+    yield pushGameState(gameId)
+  })
 }
 
 const changeBackgroundColor = function* () {
@@ -209,19 +201,13 @@ const changeBackgroundColor = function* () {
 const newGame2 = function* () {
   yield takeEvery(NEW_GAME_2, function* ({userId}) {
     const gameId = uuid4()
-    const gameState = newGame(userId)
-    yield put(afNewGame2Server(userId, gameId, gameState))
+    const gameState = newGame()
+    yield put(afNewGame2Server(gameId, gameState))
 
     const gameIds = yield select(R.compose(R.keys,R.view(gamesPath)))
-    const setGameIds = afSetGameIds(gameIds)
-    yield put(afBroadcastActionToAll(setGameIds))
+    yield put(afBroadcastActionToAll(afSetGameIds(gameIds)))
 
-    const remoteState = yield select(R.view(gameByGameId(gameId)))
-    const remoteStateAction = afUpdateRemoteState(remoteState)
-    const userIds = R.view(gameUsersPath, remoteState)
-    yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
-    yield put(afBroadcastActionToUserId(userId, afSetGameId(gameId)))
-    yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
+    yield put(afJoinGame(gameId, userId))
   })
 }
 

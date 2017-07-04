@@ -63,9 +63,8 @@ export const afUserConnected = (userId) => ({
 })
 
 export const NEW_GAME_2_SERVER = 'new game 2 server'
-export const afNewGame2Server = (userId, gameId, gameState) => ({
+export const afNewGame2Server = (gameId, gameState) => ({
   type: NEW_GAME_2_SERVER,
-  userId,
   gameId,
   gameState,
 })

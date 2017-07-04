@@ -69,7 +69,7 @@ export const newCards = () => {
   return cards
 }
 
-export const newGame = (userId) => R.compose(
+export const newGame = () => R.compose(
 
   R.set(backgroundColorForTeamPath(TEAM_1), '#f44336'),
   R.set(foregroundColorForTeamPath(TEAM_1), fgForHex('#f44336')),
@@ -84,7 +84,7 @@ export const newGame = (userId) => R.compose(
   R.set(foregroundColorForTeamPath(BYSTANDER), fgForHex('#686868')),
 
   R.set(hintPath, {}),
-  R.set(gameUsersPath, userId ? [userId] : []),
+  R.set(gameUsersPath, []),
   R.set(cardsPath, newCards())
 )({})
 

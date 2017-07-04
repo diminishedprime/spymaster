@@ -88,7 +88,8 @@ export const updateHint = (state, {hint}) =>
 export const updateHintNumber = (state, {hintNumber}) =>
   R.set(hintNumberPath, hintNumber, state)
 
-const setNewGame2Server = (_, {gameState}) => gameState
+const setNewGame2Server = (state, {gameId, gameState}) =>
+  R.set(gameByGameId(gameId), gameState, state)
 
 const joinGameServer = (gameState, {userId}) =>
   R.over(gameUsersPath, R.append(userId), gameState)
@@ -105,9 +106,7 @@ const setBackgroundColor = (gameState, {team, backgroundColor}) => {
 const gameApp = (action) => (gameState) => {
   switch (action.type) {
     case JOIN_GAME_SERVER: return joinGameServer(gameState, action)
-    case NEW_GAME_2_SERVER: return setNewGame2Server(gameState, action)
-    case CHANGE_BACKGROUND_COLOR_SERVER:
-      return setBackgroundColor(gameState, action)
+    case CHANGE_BACKGROUND_COLOR_SERVER: return setBackgroundColor(gameState, action)
     default: return gameState
   }
 }
@@ -115,9 +114,11 @@ const gameApp = (action) => (gameState) => {
 export const app = (state=initialState, action) => {
   switch(action.type) {
     case CHANGE_BACKGROUND_COLOR_SERVER:
-    case NEW_GAME_2_SERVER:
-    case JOIN_GAME_SERVER: return R.over(gameByGameId(action.gameId), gameApp(action), state)
+    case JOIN_GAME_SERVER: return R.over(gameByGameId(action.gameId),
+                                         gameApp(action),
+                                         state)
 
+    case NEW_GAME_2_SERVER: return setNewGame2Server(state, action)
     case SET_CARD_FLIPPED: return setCardFlipped(state, action)
     case ADD_USER: return addUser(state, action)
     case REMOVE_USER: return removeUser(state, action)

@@ -99,10 +99,10 @@ const onDisconnect = function* (wsChan) {
   yield (put(afRemoveUser(userId)))
 }
 
-const onClientAction = function* (userId, wsChan) {
+const onClientAction = function* (wsChan) {
   let action
   while ((action = yield take(wsChan))) {
-    yield put({...action, userId})
+    yield put(action)
   }
 }
 
@@ -127,7 +127,7 @@ const connectWS = function* (ws) {
     userId,
     'thanks for connecting via websockets'))
   yield put(afUserConnected(userId))
-  yield fork(onClientAction, userId, clientActionChan)
+  yield fork(onClientAction, clientActionChan)
   yield onDisconnect(disconnectChan)
 
 }

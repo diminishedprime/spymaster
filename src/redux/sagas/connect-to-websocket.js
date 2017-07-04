@@ -14,6 +14,7 @@ import {
 } from '../actions.js'
 import {
   gameIdPath,
+  userIdPath,
   wsPath,
 } from '../paths.js'
 import {
@@ -32,7 +33,14 @@ import {
 const emitAction = function* ({action}) {
   const ws = yield select((state) => R.view(wsPath, state))
   const gameId = yield select(R.view(gameIdPath))
-  ws.emit('client action', {...action, gameId})
+  const userId = yield select(R.view(userIdPath))
+  if (gameId) {
+    action = R.assoc('gameId', gameId, action)
+  }
+  if (userId) {
+    action = R.assoc('userId', userId, action)
+  }
+  ws.emit('client action', action)
 }
 
 const listenToWebsocket = function* () {

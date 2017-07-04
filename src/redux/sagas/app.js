@@ -1,8 +1,3 @@
-import R from 'ramda'
-
-import {
-  userIdPath,
-} from '../paths.js'
 import {
   afSetEditing,
   SET_SERVER_USERNAME,
@@ -20,7 +15,6 @@ import {
 } from '../actions.js'
 
 import {
-  select,
   all,
   takeEvery,
   put,
@@ -82,9 +76,7 @@ const joinGame = function* () {
 
 const newGame2 = function* () {
   yield takeEvery(NEW_GAME_2, function* (action) {
-    const userId = yield select(R.view(userIdPath))
-    const actionWithUserId = R.assoc('userId', userId, action)
-    yield put(afEmitAction(actionWithUserId))
+    yield put(afEmitAction(action))
   })
 }
 

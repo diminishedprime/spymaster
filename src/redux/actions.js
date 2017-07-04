@@ -193,7 +193,8 @@ export const afSetGameId = (gameId) => ({
 })
 
 export const JOIN_GAME = 'async join game'
-export const afJoinGame = (gameId) => ({
+export const afJoinGame = (gameId, userId) => ({
   type: JOIN_GAME,
   gameId,
+  userId,
 })
