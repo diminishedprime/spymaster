@@ -14,6 +14,7 @@ import {
 } from '../../src/constants.js'
 
 import {
+  currentTeamPath,
   foregroundColorForTeamPath,
   backgroundColorForTeamPath,
   hintPath,
@@ -69,24 +70,34 @@ export const newCards = () => {
   return cards
 }
 
-export const newGame = () => R.compose(
+export const newGame = () => {
+  const baseGame = R.compose(
+    R.set(backgroundColorForTeamPath(TEAM_1), '#f44336'),
+    R.set(foregroundColorForTeamPath(TEAM_1), fgForHex('#f44336')),
 
-  R.set(backgroundColorForTeamPath(TEAM_1), '#f44336'),
-  R.set(foregroundColorForTeamPath(TEAM_1), fgForHex('#f44336')),
+    R.set(backgroundColorForTeamPath(TEAM_2), '#2196f3'),
+    R.set(foregroundColorForTeamPath(TEAM_2), fgForHex('#2196f3')),
 
-  R.set(backgroundColorForTeamPath(TEAM_2), '#2196f3'),
-  R.set(foregroundColorForTeamPath(TEAM_2), fgForHex('#2196f3')),
+    R.set(backgroundColorForTeamPath(ASSASSIN), '#000000'),
+    R.set(foregroundColorForTeamPath(ASSASSIN), fgForHex('#000000')),
 
-  R.set(backgroundColorForTeamPath(ASSASSIN), '#000000'),
-  R.set(foregroundColorForTeamPath(ASSASSIN), fgForHex('#000000')),
+    R.set(backgroundColorForTeamPath(BYSTANDER), '#686868'),
+    R.set(foregroundColorForTeamPath(BYSTANDER), fgForHex('#686868')),
 
-  R.set(backgroundColorForTeamPath(BYSTANDER), '#686868'),
-  R.set(foregroundColorForTeamPath(BYSTANDER), fgForHex('#686868')),
-
-  R.set(hintPath, {}),
-  R.set(gameUsersPath, []),
-  R.set(cardsPath, newCards())
-)({})
+    R.set(hintPath, {}),
+    R.set(gameUsersPath, []),
+    R.set(cardsPath, newCards())
+  )({})
+  const currentTeam = R.compose(
+    R.ifElse(R.equals(9), R.always(TEAM_1), R.always(TEAM_2)),
+    R.length,
+    R.keys,
+    R.filter(({team: cardTeam}) => (cardTeam === TEAM_1))
+  )(R.view(cardsPath, baseGame))
+  return R.compose(
+    R.set(currentTeamPath, currentTeam)
+  )(baseGame)
+}
 
 export const initialState = R.compose(
   R.set(users, []),

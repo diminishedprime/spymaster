@@ -18,6 +18,7 @@ const foregroundColorForTeamA = (team) =>
   [...styleForTeamA(team), 'color']
 const backgroundColorForTeamA = (team) =>
   [...styleForTeamA(team), 'backgroundColor']
+const currentTeamA = ['currentTeam']
 
 export const usersPath = R.lensPath(usersA)
 export const gamesPath = R.lensPath(gamesA)
@@ -35,3 +36,4 @@ export const foregroundColorForTeamPath = (team) =>
   R.lensPath(foregroundColorForTeamA(team))
 export const backgroundColorForTeamPath = (team) =>
   R.lensPath(backgroundColorForTeamA(team))
+export const currentTeamPath = R.lensPath(currentTeamA)
