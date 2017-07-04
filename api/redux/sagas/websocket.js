@@ -103,9 +103,6 @@ const onClientAction = function* (userId, wsChan) {
   let action
   while ((action = yield take(wsChan))) {
     yield put({...action, userId})
-    const remoteState = yield select(R.view(remoteStatePath))
-    const remoteStateAction = afUpdateRemoteState(remoteState)
-    yield put(afBroadcastActionToAll(remoteStateAction))
   }
 }
 

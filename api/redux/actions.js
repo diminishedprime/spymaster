@@ -76,3 +76,11 @@ export const afJoinGameServer = (userId, gameId) => ({
   userId,
   gameId,
 })
+
+export const CHANGE_BACKGROUND_COLOR_SERVER = 'change backgroundColorServer'
+export const afChangeBackgroundColorServer = (gameId, team, backgroundColor) => ({
+  type: CHANGE_BACKGROUND_COLOR_SERVER,
+  team,
+  backgroundColor,
+  gameId,
+})

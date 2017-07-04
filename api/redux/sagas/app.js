@@ -5,7 +5,9 @@ import {
   newGame,
 } from '../initial-state.js'
 import {
+  CHANGE_BACKGROUND_COLOR,
   JOIN_GAME,
+  afSetGameId,
   afSetGameIds,
   NEW_GAME_2,
   afSetUserId,
@@ -39,6 +41,7 @@ import {
   remoteStatePath,
 } from '../../../src/redux/paths.js'
 import {
+  afChangeBackgroundColorServer,
   afJoinGameServer,
   afBroadcastActionToUserIds,
   afBroadcastActionToUserId,
@@ -185,6 +188,21 @@ const joinGame = function* () {
     const userIds = R.view(gameUsersPath, remoteState)
     yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
     yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
+    yield put(afBroadcastActionToUserId(userId, afSetGameId(gameId)))
+  })
+}
+
+const pushGameState = function* (gameId) {
+  const remoteState = yield select(R.view(gameByGameId(gameId)))
+  const remoteStateAction = afUpdateRemoteState(remoteState)
+  const userIds = R.view(gameUsersPath, remoteState)
+  yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
+}
+
+const changeBackgroundColor = function* () {
+  yield takeEvery(CHANGE_BACKGROUND_COLOR, function* ({gameId, team, backgroundColor}) {
+    yield put(afChangeBackgroundColorServer(gameId, team, backgroundColor))
+    yield pushGameState(gameId)
   })
 }
 
@@ -202,12 +220,14 @@ const newGame2 = function* () {
     const remoteStateAction = afUpdateRemoteState(remoteState)
     const userIds = R.view(gameUsersPath, remoteState)
     yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
+    yield put(afBroadcastActionToUserId(userId, afSetGameId(gameId)))
     yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
   })
 }
 
 export default function* () {
   yield all([
+    changeBackgroundColor(),
     joinGame(),
     newGame2(),
     userConnected(),

@@ -6,17 +6,15 @@ import io from 'socket.io-client'
 import R from 'ramda'
 
 import {
-  afSetEditing,
   afSetWs,
   afListenToWebsocket,
   CONNECT_TO_WEBSOCKET,
   LISTEN_TO_WEBSOCKET,
   EMIT_ACTION,
-  SET_SERVER_USERNAME,
 } from '../actions.js'
 import {
+  gameIdPath,
   wsPath,
-  usernamePath,
 } from '../paths.js'
 import {
   PORT,
@@ -31,16 +29,10 @@ import {
   takeEvery,
 } from 'redux-saga/effects'
 
-const emitSetServerUsername = function* () {
-  const username = yield select((state) => R.view(usernamePath, state))
-  const ws = yield select((state) => R.view(wsPath, state))
-  ws.emit('change username', username)
-  yield put(afSetEditing(false))
-}
-
 const emitAction = function* ({action}) {
   const ws = yield select((state) => R.view(wsPath, state))
-  ws.emit('client action', action)
+  const gameId = yield select(R.view(gameIdPath))
+  ws.emit('client action', {...action, gameId})
 }
 
 const listenToWebsocket = function* () {
@@ -80,5 +72,4 @@ export default function* () {
   yield takeLatest(CONNECT_TO_WEBSOCKET, connectToWebsocket)
   yield takeLatest(LISTEN_TO_WEBSOCKET, listenToWebsocket)
   yield takeEvery(EMIT_ACTION, emitAction)
-  yield takeEvery(SET_SERVER_USERNAME, emitSetServerUsername)
 }

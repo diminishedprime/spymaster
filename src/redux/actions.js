@@ -149,11 +149,11 @@ export const afListenToWebsocket = () => ({
   type: LISTEN_TO_WEBSOCKET,
 })
 
-export const CHANGE_COLOR = 'async change color'
-export const afChangeColor = (team, color) => ({
-  type: CHANGE_COLOR,
+export const CHANGE_BACKGROUND_COLOR = 'async change backgroundColor'
+export const afChangeBackgroundColor = (team, backgroundColor) => ({
+  type: CHANGE_BACKGROUND_COLOR,
   team,
-  color,
+  backgroundColor,
 })
 
 export const SUBMIT_HINT = 'async submit hint'
@@ -184,6 +184,12 @@ export const SET_GAME_IDS = 'set game ids'
 export const afSetGameIds = (gameIds) => ({
   type: SET_GAME_IDS,
   gameIds,
+})
+
+export const SET_GAME_ID = 'set game id'
+export const afSetGameId = (gameId) => ({
+  type: SET_GAME_ID,
+  gameId,
 })
 
 export const JOIN_GAME = 'async join game'

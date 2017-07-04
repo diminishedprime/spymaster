@@ -41,7 +41,9 @@ const hintSubmitted = [...hint, 'submitted']
 const winner = [...remoteState, 'winner']
 const score = [...remoteState, 'score']
 const gameIds = [...localState, 'gameIds']
+const gameIdA = [...localState, 'gameId']
 
+export const gameIdPath = R.lensPath(gameIdA)
 export const userIdPath = R.lensPath(userIdA)
 export const scorePath = R.lensPath([...score])
 export const winnerPath = R.lensPath([...winner])

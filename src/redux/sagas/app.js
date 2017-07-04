@@ -4,10 +4,12 @@ import {
   userIdPath,
 } from '../paths.js'
 import {
+  afSetEditing,
+  SET_SERVER_USERNAME,
   JOIN_GAME,
   NEW_GAME_2,
   NEW_GAME,
-  CHANGE_COLOR,
+  CHANGE_BACKGROUND_COLOR,
   START_TIMER,
   FLIP_CARD,
   FORFEIT,
@@ -36,8 +38,8 @@ const newGame = function* () {
   })
 }
 
-const changeColor = function* () {
-  yield takeEvery(CHANGE_COLOR, function* (action) {
+const changeBackgroundColor = function* () {
+  yield takeEvery(CHANGE_BACKGROUND_COLOR, function* (action) {
     yield put(afEmitAction(action))
   })
 }
@@ -86,8 +88,17 @@ const newGame2 = function* () {
   })
 }
 
+const setServerUsername = function* () {
+  yield takeEvery(SET_SERVER_USERNAME, function* (action) {
+    /* const username = yield select((state) => R.view(usernamePath, state))*/
+    yield put(afEmitAction(action))
+    yield put(afSetEditing(false))
+  })
+}
+
 export default function* () {
   yield all([
+    setServerUsername(),
     joinGame(),
     newGame2(),
     updateHintNumber(),
@@ -96,7 +107,7 @@ export default function* () {
     forfeit(),
     flipCard(),
     newGame(),
-    changeColor(),
+    changeBackgroundColor(),
     startTimer(),
   ])
 }

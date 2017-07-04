@@ -12,7 +12,7 @@ import {
   SPYMASTER,
 } from '../../constants.js'
 import {
-  afChangeColor,
+  afChangeBackgroundColor,
   afPickRole,
 } from '../../redux/actions.js'
 import {
@@ -34,7 +34,7 @@ const TeamRow = connect(
     backgroundColor: R.view(backgroundColorForTeamPath(team), state),
   }),
   (dispatch, {team}) => ({
-    onColorChange: ({hex}) => dispatch(afChangeColor(team, hex)),
+    onColorChange: ({hex}) => dispatch(afChangeBackgroundColor(team, hex)),
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
 )(({onColorChange, style, pickRole, backgroundColor}) => (

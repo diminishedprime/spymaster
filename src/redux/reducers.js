@@ -5,6 +5,7 @@ import {
 } from '../constants.js'
 
 import {
+  gameIdPath,
   gameIdsPath,
   userIdPath,
   remoteStatePath,
@@ -21,6 +22,7 @@ import {
   hintNumberPath,
 } from './paths.js'
 import {
+  SET_GAME_ID,
   SET_GAME_IDS,
   SET_USER_ID,
   UPDATE_HINT,
@@ -81,10 +83,14 @@ export const setUserId = (state, {userId}) =>
 const setGameIds = (state, {gameIds}) =>
   R.set(gameIdsPath, gameIds, state)
 
+const setGameId = (state, {gameId}) =>
+  R.set(gameIdPath, gameId, state)
+
 export const app = (state=initialState, action) => {
   //eslint-disable-next-line
   console.log(action)
   switch(action.type) {
+    case SET_GAME_ID: return setGameId(state, action)
     case SET_GAME_IDS: return setGameIds(state, action)
     case SET_USER_ID: return setUserId(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)

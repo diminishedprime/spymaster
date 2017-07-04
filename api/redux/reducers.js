@@ -1,21 +1,19 @@
 import R from 'ramda'
 
 import {
+  fgForHex,
+} from '../../src/util.js'
+import {
   initialHint,
-  newCards,
-  newScore,
-  newColors,
 } from '../../src/redux/initial-state.js'
 import {
   SET_CARD_FLIPPED,
-  CHANGE_COLOR,
   UPDATE_HINT,
   SET_TIME,
   UPDATE_HINT_NUMBER,
   SUBMIT_HINT,
   NEXT_TURN,
   FORFEIT,
-  NEW_GAME,
 } from '../../src/redux/actions.js'
 import {
   TEAM_1,
@@ -23,12 +21,9 @@ import {
 } from '../../src/constants.js'
 import {
   cardFlippedByCardId,
-  scorePath,
   winnerPath,
   hintSubmittedPath,
-  cardsPath,
   timePath,
-  backgroundColorPath,
   currentTeamPath,
   hintPath,
   clientUsersPath,
@@ -40,12 +35,15 @@ import {
   initialState,
 } from './initial-state.js'
 import {
+  backgroundColorForTeamPath,
+  foregroundColorForTeamPath,
   gameUsersPath,
   gameByGameIdPath as gameByGameId,
   usersPath,
   userByUserIdPath,
 } from './paths.js'
 import {
+  CHANGE_BACKGROUND_COLOR_SERVER,
   JOIN_GAME_SERVER,
   NEW_GAME_2_SERVER,
   ADD_USER,
@@ -65,13 +63,6 @@ const removeUser = (state, {userId}) => R.compose(
 
 const otherTeam = (team) => team === TEAM_1 ? TEAM_2 : TEAM_1
 
-const changeColor = (state, {team, color}) => {
-  const otherTeamsColor = R.view(backgroundColorPath(otherTeam(team)), state)
-  return (color !== otherTeamsColor)
-       ? R.set(backgroundColorPath(team), color, state)
-       : state
-}
-
 const nextTurn = (state) => R.compose(
   R.set(timePath, undefined),
   R.over(currentTeamPath, otherTeam),
@@ -85,17 +76,6 @@ const loseGame = (state, {team}) => {
 const submitHint = (state, _) =>
   R.set(hintSubmittedPath, true, state)
 
-const newGame = (state, _) => {
-  return R.compose(
-    newColors,
-    R.set(winnerPath, undefined),
-    R.set(cardsPath, newCards()),
-    R.set(scorePath, newScore()),
-    R.set(timePath, undefined),
-    R.set(hintPath, initialHint)
-  )(state)
-}
-
 const setCardFlipped = (state, {cardId}) =>
   R.set(cardFlippedByCardId(cardId), true, state)
 
@@ -108,29 +88,45 @@ export const updateHint = (state, {hint}) =>
 export const updateHintNumber = (state, {hintNumber}) =>
   R.set(hintNumberPath, hintNumber, state)
 
-const setNewGame2Server = (state, {gameId, gameState}) =>
-  R.set(gameByGameId(gameId), gameState, state)
+const setNewGame2Server = (_, {gameState}) => gameState
 
-const joinGameServer = (state, {userId, gameId}) =>
-  R.over(gameByGameId(gameId),
-         (gameState) => R.over(gameUsersPath, R.append(userId), gameState),
-         state)
+const joinGameServer = (gameState, {userId}) =>
+  R.over(gameUsersPath, R.append(userId), gameState)
+
+const setBackgroundColor = (gameState, {team, backgroundColor}) => {
+  const foregroundColor = fgForHex(backgroundColor)
+  const newState = R.compose(
+    R.set(foregroundColorForTeamPath(team), foregroundColor),
+    R.set(backgroundColorForTeamPath(team), backgroundColor)
+  )(gameState)
+  return newState
+}
+
+const gameApp = (action) => (gameState) => {
+  switch (action.type) {
+    case JOIN_GAME_SERVER: return joinGameServer(gameState, action)
+    case NEW_GAME_2_SERVER: return setNewGame2Server(gameState, action)
+    case CHANGE_BACKGROUND_COLOR_SERVER:
+      return setBackgroundColor(gameState, action)
+    default: return gameState
+  }
+}
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
-    case JOIN_GAME_SERVER: return joinGameServer(state, action)
-    case NEW_GAME_2_SERVER: return setNewGame2Server(state, action)
+    case CHANGE_BACKGROUND_COLOR_SERVER:
+    case NEW_GAME_2_SERVER:
+    case JOIN_GAME_SERVER: return R.over(gameByGameId(action.gameId), gameApp(action), state)
+
     case SET_CARD_FLIPPED: return setCardFlipped(state, action)
     case ADD_USER: return addUser(state, action)
     case REMOVE_USER: return removeUser(state, action)
-    case CHANGE_COLOR: return changeColor(state, action)
     case UPDATE_HINT: return updateHint(state, action)
     case SET_TIME: return setTime(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     case SUBMIT_HINT: return submitHint(state, action)
     case NEXT_TURN: return nextTurn(state)
     case FORFEIT: return loseGame(state, action)
-    case NEW_GAME: return newGame(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||
