@@ -49,7 +49,7 @@ import {
   afBroadcastActionToAll,
   USER_DISCONNECTED,
   USER_CONNECTED,
-  afNewGame2Server,
+  afNewGameServer,
   afRemoveUserFromGame,
 } from '../actions.js'
 import {
@@ -221,11 +221,11 @@ const changeBackgroundColor = function* () {
   })
 }
 
-const newGame2 = function* () {
+const newGameSaga = function* () {
   yield takeEvery(NEW_GAME_2, function* ({userId}) {
     const gameId = uuid4()
     const gameState = newGame()
-    yield put(afNewGame2Server(gameId, gameState))
+    yield put(afNewGameServer(gameId, gameState))
 
     const gameIds = yield select(R.compose(R.keys,R.view(gamesPath)))
     yield put(afBroadcastActionToAll(afSetGameIds(gameIds)))
@@ -238,7 +238,7 @@ export default function* () {
   yield all([
     changeBackgroundColor(),
     joinGame(),
-    newGame2(),
+    newGameSaga(),
     userConnected(),
     userDisconnected(),
     nextTurn(),

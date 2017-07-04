@@ -46,7 +46,7 @@ import {
   REMOVE_USER_FROM_GAME,
   CHANGE_BACKGROUND_COLOR_SERVER,
   JOIN_GAME_SERVER,
-  NEW_GAME_2_SERVER,
+  NEW_GAME_SERVER,
   ADD_USER,
   REMOVE_USER,
 } from './actions.js'
@@ -127,7 +127,7 @@ export const app = (state=initialState, action) => {
                                          gameApp(action),
                                          state)
 
-    case NEW_GAME_2_SERVER: return setNewGame2Server(state, action)
+    case NEW_GAME_SERVER: return setNewGame2Server(state, action)
     case SET_CARD_FLIPPED: return setCardFlipped(state, action)
     case ADD_USER: return addUser(state, action)
     case REMOVE_USER: return removeUser(state, action)

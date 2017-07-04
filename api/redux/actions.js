@@ -68,9 +68,9 @@ export const afUserDisconnected = (userId) => ({
   userId,
 })
 
-export const NEW_GAME_2_SERVER = 'new game 2 server'
-export const afNewGame2Server = (gameId, gameState) => ({
-  type: NEW_GAME_2_SERVER,
+export const NEW_GAME_SERVER = 'new game 2 server'
+export const afNewGameServer = (gameId, gameState) => ({
+  type: NEW_GAME_SERVER,
   gameId,
   gameState,
 })
