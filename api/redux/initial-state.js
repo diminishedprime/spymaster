@@ -14,6 +14,7 @@ import {
 } from '../../src/constants.js'
 
 import {
+  hintTextPath,
   currentTeamPath,
   foregroundColorForTeamPath,
   backgroundColorForTeamPath,
@@ -84,6 +85,7 @@ export const newGame = () => {
     R.set(backgroundColorForTeamPath(BYSTANDER), '#686868'),
     R.set(foregroundColorForTeamPath(BYSTANDER), fgForHex('#686868')),
 
+    R.set(hintTextPath, ''),
     R.set(hintPath, {}),
     R.set(gameUsersPath, []),
     R.set(cardsPath, newCards())
