@@ -5,6 +5,7 @@ import {
 } from '../constants.js'
 
 import {
+  userIdPath,
   remoteStatePath,
   errorSeverityPath,
   errorPath,
@@ -19,6 +20,7 @@ import {
   hintNumberPath,
 } from './paths.js'
 import {
+  SET_USER_ID,
   UPDATE_HINT,
   UPDATE_HINT_NUMBER,
   SET_PAGE,
@@ -71,8 +73,12 @@ export const updateHint = (state, {hint}) =>
 export const updateHintNumber = (state, {hintNumber}) =>
   R.set(hintNumberPath, hintNumber, state)
 
+export const setUserId = (state, {userId}) =>
+  R.set(userIdPath, userId, state)
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
+    case SET_USER_ID: return setUserId(state, action)
     case UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
     case UPDATE_HINT: return updateHint(state, action)
     case SET_PAGE: return setPage(state, action)

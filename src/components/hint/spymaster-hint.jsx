@@ -5,7 +5,7 @@ import {
 } from 'react-redux'
 
 import {
-  backgroundColorPath,
+  styleForTeamPath,
   hintSubmittedPath,
   hintTextPath,
   hintNumberPath,
@@ -16,10 +16,6 @@ import {
   afUpdateHint,
   afSubmitHint,
 } from '../../redux/actions.js'
-import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
 
 import NumberButton from './number-button.jsx'
 import s from './spymaster-hint.css'
@@ -55,12 +51,7 @@ const mapStateToProps = (state) => {
                          inputDisabled ||
                          hintSubmitted
   const team = R.view(currentTeamPath, state)
-  const bgColor = R.view(backgroundColorPath(team), state)
-  const fgColor = fgColorForRGB(hexToRGB(bgColor))
-  const style = {
-    color: fgColor,
-    backgroundColor: bgColor,
-  }
+  const style = R.view(styleForTeamPath(team), state)
 
   return ({
     style,

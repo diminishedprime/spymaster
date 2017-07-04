@@ -5,13 +5,9 @@ import {
 } from 'react-redux'
 
 import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
-import {
   rolePath,
   teamPath,
-  backgroundColorPath,
+  styleForTeamPath,
   usernamePath,
 } from '../../redux/paths.js'
 import font from '../font.css'
@@ -24,12 +20,7 @@ const User = connect(
   (state) => {
     const role = R.view(rolePath, state)
     const team = R.view(teamPath, state)
-    const backgroundColor = R.view(backgroundColorPath(team), state)
-    const color = fgColorForRGB(hexToRGB(backgroundColor))
-    const style = {
-      color,
-      backgroundColor,
-    }
+    const style = R.view(styleForTeamPath(team), state)
     return ({
       style,
       role: role,

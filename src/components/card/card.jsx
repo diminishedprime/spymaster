@@ -8,14 +8,10 @@ import {
   afFlipCard,
 } from '../../redux/actions.js'
 import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
-import {
   hintSubmittedPath,
   rolePath,
   teamPath,
-  backgroundColorPath,
+  styleForTeamPath,
   currentTeamPath,
   cardFlippedByCardId,
   cardTeamByCardId,
@@ -29,7 +25,7 @@ const mapStateToProps = (state, {cardId}) => {
   const text = R.view(cardTextByCardId(cardId), state)
   const flipped = R.view(cardFlippedByCardId(cardId), state)
   const role = R.view(rolePath, state)
-  const bgColor = R.view(backgroundColorPath(cardTeam), state)
+  const styleForTeam = R.view(styleForTeamPath(cardTeam), state)
   const playerTeam = R.view(teamPath, state)
   const currentTeam = R.view(currentTeamPath, state)
   const hintSubmitted = R.view(hintSubmittedPath, state)
@@ -39,11 +35,9 @@ const mapStateToProps = (state, {cardId}) => {
   }
   const style = (flipped || role === 'spymaster')
               ? R.compose(
-                R.assoc('opacity', flipped ? 0.2 : 1.0),
-                R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
-                R.assoc('backgroundColor', bgColor)
-    )(baseStyle)
-    : baseStyle
+                R.assoc('opacity', flipped ? 0.2 : 1.0)
+              )(styleForTeam)
+              : baseStyle
   const disabled = (role === 'spymaster') ||
                    (playerTeam !== currentTeam) ||
                    flipped ||

@@ -6,16 +6,12 @@ import {
 
 import {
   currentTeamPath,
-  backgroundColorPath,
+  styleForTeamPath,
   hintSubmittedPath,
   hintTextPath,
   hintNumberPath,
   rolePath,
 } from '../../redux/paths.js'
-import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
 import font from '../font.css'
 import Forfeit from '../info/forfeit.jsx'
 import i from '../info/info.css'
@@ -32,12 +28,7 @@ const mapStateToProps = (state) => {
   const isAgent = role === 'agent'
   const showAgent = isAgent || hintSubmitted
   const team = R.view(currentTeamPath, state)
-  const bgColor = R.view(backgroundColorPath(team), state)
-  const fgColor = fgColorForRGB(hexToRGB(bgColor))
-  const style = {
-    color: fgColor,
-    backgroundColor: bgColor,
-  }
+  const style = R.view(styleForTeamPath(team), state)
 
   return ({
     showAgent,

@@ -8,12 +8,8 @@ import {
   SPYMASTER,
 } from '../../constants.js'
 import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
-import {
   teamPath,
-  backgroundColorPath,
+  styleForTeamPath,
   currentTeamPath,
   rolePath,
 } from '../../redux/paths.js'
@@ -28,18 +24,9 @@ const Teams = connect(
     const role = R.view(rolePath, state)
     const currentTeam = R.view(currentTeamPath, state)
     const yourTeam = R.view(teamPath, state)
-    const currentBackgroundColor = R.view(backgroundColorPath(currentTeam), state)
-    const yourBackgroundColor = R.view(backgroundColorPath(yourTeam), state)
-    const currentColor = fgColorForRGB(hexToRGB(currentBackgroundColor))
-    const yourColor = fgColorForRGB(hexToRGB(yourBackgroundColor))
-    const yourTeamStyle = {
-      color: yourColor,
-      backgroundColor: yourBackgroundColor,
-    }
-    const currentTeamStyle = {
-      color: currentColor,
-      backgroundColor: currentBackgroundColor,
-    }
+    const yourTeamStyle = R.view(styleForTeamPath(yourTeam), state)
+    const currentTeamStyle = R.view(styleForTeamPath(currentTeam), state)
+
     return ({
       yourTeam,
       currentTeam,

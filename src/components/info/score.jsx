@@ -9,11 +9,7 @@ import {
   TEAM_2,
 } from '../../constants.js'
 import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
-import {
-  backgroundColorPath,
+  styleForTeamPath,
   cardsPath,
 } from '../../redux/paths.js'
 
@@ -24,29 +20,15 @@ const Teams = connect(
   (state) => {
     const cards = R.view(cardsPath, state)
 
-    const team1BackgroundColor = R.view(backgroundColorPath(TEAM_1), state)
-    const team1ForegroundColor = fgColorForRGB(hexToRGB(team1BackgroundColor))
-
     const team1cards = R.filter(({team}) => team===TEAM_1, cards)
     const team1Total = R.keys(team1cards).length
     const team1Flipped = R.keys(R.filter(R.prop('flipped'), team1cards)).length
-
-    const team1Style = {
-      color: team1ForegroundColor,
-      backgroundColor: team1BackgroundColor,
-    }
-
-    const team2BackgroundColor = R.view(backgroundColorPath(TEAM_2), state)
-    const team2ForegroundColor = fgColorForRGB(hexToRGB(team2BackgroundColor))
+    const team1Style = R.view(styleForTeamPath(TEAM_1), state)
 
     const team2cards = R.filter(({team}) => team===TEAM_2, cards)
     const team2Total = R.keys(team2cards).length
     const team2Flipped = R.keys(R.filter(R.prop('flipped'), team2cards)).length
-
-    const team2Style = {
-      color: team2ForegroundColor,
-      backgroundColor: team2BackgroundColor,
-    }
+    const team2Style = R.view(styleForTeamPath(TEAM_2), state)
 
     return ({
       team1Flipped,

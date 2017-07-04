@@ -6,16 +6,12 @@ import {
   hintSubmittedPath,
   hintNumberPath,
   teamPath,
-  backgroundColorPath,
+  styleForTeamPath,
   currentTeamPath,
 } from '../../redux/paths.js'
 import {
   afUpdateHintNumber,
 } from '../../redux/actions.js'
-import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
 
 import s from './number-button.css'
 
@@ -29,17 +25,14 @@ const mapStateToProps = (state, {number}) => {
   const disabled = numberPicked ||
                    (playerTeam !== currentTeam) ||
                    hintSubmitted
-  const bgColor = R.view(backgroundColorPath(cardTeam), state)
   const baseStyle = {
     color: '#000000',
     backgroundColor: '#ffffff',
   }
+  const styleForTeam = R.view(styleForTeamPath(cardTeam), state)
   const style = (numberPicked)
-    ? R.compose(
-      R.assoc('color', fgColorForRGB(hexToRGB(bgColor))),
-      R.assoc('backgroundColor', bgColor)
-    )(baseStyle)
-    : baseStyle
+              ? styleForTeam
+              : baseStyle
   return ({
     disabled,
     style,

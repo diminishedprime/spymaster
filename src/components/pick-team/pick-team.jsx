@@ -8,47 +8,45 @@ import {
 } from 'react-color'
 
 import {
+  AGENT,
+  SPYMASTER,
+} from '../../constants.js'
+import {
   afChangeColor,
   afPickRole,
 } from '../../redux/actions.js'
 import {
-  fgColorForRGB,
-  hexToRGB,
-} from '../../util.js'
-import {
-  backgroundColorPath,
+  styleForTeamPath,
+  backgroundColorForTeamPath,
 } from '../../redux/paths.js'
 
 import s from './pick-team.css'
 
-const StyledButton = ({backgroundColor, text, onClick}) => (
-  <button onClick={onClick}
-    style={{
-      backgroundColor,
-      color: fgColorForRGB(hexToRGB(backgroundColor)),
-    }} >
+const StyledButton = ({style, text, onClick}) => (
+  <button onClick={onClick} style={style} >
     {text}
   </button>
 )
 
 const TeamRow = connect(
   (state, {team}) => ({
-    backgroundColor: R.view(backgroundColorPath(team), state),
+    style: R.view(styleForTeamPath(team), state),
+    backgroundColor: R.view(backgroundColorForTeamPath(team), state),
   }),
   (dispatch, {team}) => ({
     onColorChange: ({hex}) => dispatch(afChangeColor(team, hex)),
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
-)(({onColorChange, backgroundColor, pickRole}) => (
+)(({onColorChange, style, pickRole, backgroundColor}) => (
   <div className={s.teamRow}>
     <div className={s.teamButtons}>
-      <StyledButton text="Spymaster"
-                    backgroundColor={backgroundColor}
-                    onClick={pickRole('spymaster')}
+      <StyledButton text={SPYMASTER}
+                    style={style}
+                    onClick={pickRole(SPYMASTER)}
       />
-      <StyledButton text="Agent"
-                    backgroundColor={backgroundColor}
-                    onClick={pickRole('agent')}
+      <StyledButton text={AGENT}
+                    style={style}
+                    onClick={pickRole(AGENT)}
       />
     </div>
     <CirclePicker onChangeComplete={onColorChange}

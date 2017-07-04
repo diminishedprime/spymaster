@@ -99,10 +99,10 @@ const onDisconnect = function* (wsChan) {
   yield (put(afRemoveUser(userId)))
 }
 
-const onClientAction = function* (wsChan) {
+const onClientAction = function* (userId, wsChan) {
   let action
   while ((action = yield take(wsChan))) {
-    yield put(action)
+    yield put({...action, userId})
     const remoteState = yield select(R.view(remoteStatePath))
     const remoteStateAction = afUpdateRemoteState(remoteState)
     yield put(afBroadcastActionToAll(remoteStateAction))
@@ -130,7 +130,7 @@ const connectWS = function* (ws) {
     userId,
     'thanks for connecting via websockets'))
   yield put(afUserConnected(userId))
-  yield fork(onClientAction, clientActionChan)
+  yield fork(onClientAction, userId, clientActionChan)
   yield onDisconnect(disconnectChan)
 
 }

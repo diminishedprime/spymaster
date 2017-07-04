@@ -1,7 +1,6 @@
 import R from 'ramda'
 
 import {
-  initialState,
   initialHint,
   newCards,
   newScore,
@@ -38,10 +37,15 @@ import {
 } from '../../src/redux/paths.js'
 
 import {
+  initialState,
+} from './initial-state.js'
+import {
+  gameByGameIdPath as gameByGameId,
   usersPath,
   userByUserIdPath,
 } from './paths.js'
 import {
+  NEW_GAME_2_SERVER,
   ADD_USER,
   REMOVE_USER,
 } from './actions.js'
@@ -102,8 +106,13 @@ export const updateHint = (state, {hint}) =>
 export const updateHintNumber = (state, {hintNumber}) =>
   R.set(hintNumberPath, hintNumber, state)
 
+const setNewGame2Server = (state, {gameId, gameState}) =>
+  R.set(gameByGameId(gameId), gameState, state)
+
+
 export const app = (state=initialState, action) => {
   switch(action.type) {
+    case NEW_GAME_2_SERVER: return setNewGame2Server(state, action)
     case SET_CARD_FLIPPED: return setCardFlipped(state, action)
     case ADD_USER: return addUser(state, action)
     case REMOVE_USER: return removeUser(state, action)

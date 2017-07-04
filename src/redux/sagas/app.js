@@ -1,4 +1,10 @@
+import R from 'ramda'
+
 import {
+  userIdPath,
+} from '../paths.js'
+import {
+  NEW_GAME_2,
   NEW_GAME,
   CHANGE_COLOR,
   START_TIMER,
@@ -11,6 +17,7 @@ import {
 } from '../actions.js'
 
 import {
+  select,
   all,
   takeEvery,
   put,
@@ -64,8 +71,17 @@ const nextTurn = function* () {
   })
 }
 
+const newGame2 = function* () {
+  yield takeEvery(NEW_GAME_2, function* (action) {
+    const userId = yield select(R.view(userIdPath))
+    const actionWithUserId = R.assoc('userId', userId, action)
+    yield put(afEmitAction(actionWithUserId))
+  })
+}
+
 export default function* () {
   yield all([
+    newGame2(),
     updateHintNumber(),
     nextTurn(),
     submitHint(),

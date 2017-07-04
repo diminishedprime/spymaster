@@ -166,3 +166,16 @@ export const afFlipCard = (cardId) => ({
   type: FLIP_CARD,
   cardId,
 })
+
+
+// Newish?
+export const NEW_GAME_2 = 'async new game 2'
+export const afNewGame2 = () => ({
+  type: NEW_GAME_2,
+})
+
+export const SET_USER_ID = 'set user id'
+export const afSetUserId = (userId) => ({
+  type: SET_USER_ID,
+  userId,
+})

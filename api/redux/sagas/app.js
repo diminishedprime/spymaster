@@ -1,6 +1,12 @@
 import R from 'ramda'
+import uuid4 from 'uuid/v4'
 
 import {
+  newGame,
+} from '../initial-state.js'
+import {
+  NEW_GAME_2,
+  afSetUserId,
   FLIP_CARD,
   START_TIMER,
   STOP_TIMER,
@@ -13,8 +19,10 @@ import {
   NEXT_TURN,
   afUpdateRemoteState,
   afSetUsername,
+  afSetPage,
 } from '../../../src/redux/actions.js'
 import {
+  GAME_MODE_PICK_TEAM,
   TEAM_1,
   TEAM_2,
   ASSASSIN,
@@ -29,10 +37,16 @@ import {
   remoteStatePath,
 } from '../../../src/redux/paths.js'
 import {
+  afBroadcastActionToUserIds,
   afBroadcastActionToUserId,
   afBroadcastActionToAll,
   USER_CONNECTED,
+  afNewGame2Server,
 } from '../actions.js'
+import {
+  gameUsersPath,
+  gameByGameIdPath as gameByGameId,
+} from '../paths.js'
 
 import {
   put,
@@ -58,7 +72,9 @@ const forceUpdateRemoteState = function* () {
 
 const userConnected = function* () {
   yield takeEvery(USER_CONNECTED, function* ({userId}) {
-    const action = afSetUsername(userId)
+    const action = afSetUsername(userId.substring(0, 8))
+    const action1 = afSetUserId(userId)
+    yield put(afBroadcastActionToUserId(userId, action1))
     yield put(afBroadcastActionToUserId(userId, action))
     yield forceUpdateRemoteState()
   })
@@ -153,8 +169,23 @@ const timer = function* () {
   })
 }
 
+const newGame2 = function* () {
+  yield takeEvery(NEW_GAME_2, function* ({userId}) {
+    const gameId = uuid4()
+    const gameState = newGame(userId)
+    yield put(afNewGame2Server(userId, gameId, gameState))
+
+    const remoteState = yield select(R.view(gameByGameId(gameId)))
+    const remoteStateAction = afUpdateRemoteState(remoteState)
+    const userIds = R.view(gameUsersPath, remoteState)
+    yield put(afBroadcastActionToUserIds(userIds, remoteStateAction))
+    yield put(afBroadcastActionToUserId(userId, afSetPage(GAME_MODE_PICK_TEAM)))
+  })
+}
+
 export default function* () {
   yield all([
+    newGame2(),
     userConnected(),
     nextTurn(),
     timer(),

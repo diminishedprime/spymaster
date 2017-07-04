@@ -17,11 +17,17 @@ const errorText = [...error, 'text']
 const errorSeverity = [...error, 'severity']
 const settings = [...localState, 'settings']
 const showTitle = [...settings, 'showTitle']
-const colors = [...remoteState, 'colors']
-const colorsTeam = (team) => [...colors, team]
-const colorsTeamBackgroundColor = (team) => [...colorsTeam(team), 'backgroundColor']
+const styleA = [...remoteState, 'style']
+const styleForTeamA = (team) => [...styleA, team]
+const foregroundColorForTeamA = (team) =>
+  [...styleForTeamA(team), 'color']
+const backgroundColorForTeamA = (team) =>
+  [...styleForTeamA(team), 'backgroundColor']
+
+
 const currentTeam = [...remoteState, 'currentTeam']
 const ws = [...localState, 'ws']
+const userIdA = [...localState, 'userId']
 const username = [...localState, 'username']
 const editing = [...localState, 'editing']
 const pageA = [...localState, 'page']
@@ -35,6 +41,7 @@ const hintSubmitted = [...hint, 'submitted']
 const winner = [...remoteState, 'winner']
 const score = [...remoteState, 'score']
 
+export const userIdPath = R.lensPath(userIdA)
 export const scorePath = R.lensPath([...score])
 export const winnerPath = R.lensPath([...winner])
 export const hintPath = R.lensPath([...hint])
@@ -52,9 +59,6 @@ export const playerTypePath = R.lensPath([...playerType])
 export const rolePath = R.lensPath([...role])
 export const teamPath = R.lensPath([...team])
 export const cardsPath = R.lensPath([...cards])
-export const colorsPath = R.lensPath([...colors])
-export const colorsTeamPath = (team) => R.lensPath(colorsTeam(team))
-export const backgroundColorPath = (team) => R.lensPath([...colorsTeamBackgroundColor(team)])
 export const currentTeamPath = R.lensPath([...currentTeam])
 export const cardByCardId = (cardId) =>
   R.lensPath(cardByCardIdA(cardId))
@@ -69,3 +73,9 @@ export const usernamePath = R.lensPath([...username])
 export const editingPath = R.lensPath([...editing])
 export const clientUsersPath = R.lensPath(clientUsers)
 export const page = R.lensPath(pageA)
+
+export const styleForTeamPath = (team) => R.lensPath(styleForTeamA(team))
+export const foregroundColorForTeamPath = (team) =>
+  R.lensPath(foregroundColorForTeamA(team))
+export const backgroundColorForTeamPath = (team) =>
+  R.lensPath(backgroundColorForTeamA(team))
