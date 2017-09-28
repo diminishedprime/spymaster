@@ -11,8 +11,6 @@ import {
   cardsPath,
 } from '../../redux/paths.js'
 
-import './game.css'
-
 const mapStateToProps = (state) => ({
   cardIds: R.keys(R.view(cardsPath, state)),
 })
