@@ -11,12 +11,37 @@ import {
   errorPath,
 } from '../../redux/paths.js'
 
-import s from './error-bar.css'
+const errorBarStyle = ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '2em',
+  padding: '5px',
+})
+
+const errorStyle = ({
+  backgroundColor: '#DE0707',
+  color: 'white',
+})
+
+const warnStyle = ({
+  backgroundColor: '#FFDD00',
+  color: 'black',
+})
+
+const dismissStyle = ({
+  cursor: 'pointer',
+  marginLeft: 'auto',
+})
 
 const ErrorBar = ({text, severity, dismiss}) => (
-  <div className={[s.ErrorBar, s[severity]].join(' ')}>
+  <div style={R.merge(errorBarStyle,
+                      R.cond([
+                        [R.equals('error'), R.always(errorStyle)],
+                        [R.equals('warn'), R.always(warnStyle)],
+                      ])(severity))}>
     <div>{text}</div>
-    <div className="dismiss" onClick={dismiss} title="dismiss">&times;</div>
+    <div style={dismissStyle} onClick={dismiss} title="dismiss">&times;</div>
   </div>
 
 )
