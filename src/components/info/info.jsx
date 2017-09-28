@@ -4,10 +4,15 @@ import Hint from '../hint/hint.jsx'
 
 import Teams from './teams.jsx'
 import User from './user.jsx'
-import s from './info.css'
+
+const infoStyle = ({
+  display: 'flex',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
+})
 
 const Info = () => (
-  <div className={s.info}>
+  <div style={infoStyle}>
     <Hint />
     <Teams />
     <User />

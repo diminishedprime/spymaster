@@ -13,8 +13,22 @@ import {
   cardsPath,
 } from '../../redux/paths.js'
 
-import s from './score.css'
+const scoreStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-around',
+  alignItems: 'center',
+  marginLeft: '10px',
+  marginRight: '10px',
+})
 
+const teamStyle = ({
+  width: '100px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexGrow: '1',
+})
 
 const Teams = connect(
   (state) => {
@@ -41,11 +55,11 @@ const Teams = connect(
     })
   }
 )(({team1Flipped, team1Total, team2Flipped, team2Total, team1Style, team2Style}) => (
-  <div className={s.score}>
-    <div className={s.team} style={team1Style}>
+  <div style={scoreStyle}>
+    <div style={R.merge(teamStyle, team1Style)}>
       {team1Flipped} / {team1Total}
     </div>
-    <div className={s.team} style={team2Style}>
+    <div style={R.merge(teamStyle, team2Style)}>
       {team2Flipped} / {team2Total}
     </div>
   </div>

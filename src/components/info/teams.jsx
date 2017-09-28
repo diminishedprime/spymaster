@@ -13,11 +13,31 @@ import {
   currentTeamPath,
   rolePath,
 } from '../../redux/paths.js'
-import font from '../font.css'
+import { largeTextStyle } from '../commonStyles.js'
 
 import Pass from './pass.jsx'
-import s from './teams.css'
-import i from './info.css'
+
+const teamsStyle = ({
+  minWidth: '6.5em',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+})
+
+const teamsRowStyle = ({
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+})
+
+const infoBabyStyle = ({
+  width: '12em',
+  marginLeft: '5px',
+  marginRight: '5px',
+  marginTop: '10px',
+})
 
 const Teams = connect(
   (state) => {
@@ -36,14 +56,14 @@ const Teams = connect(
     })
   }
 )(({currentTeamStyle, yourTeamStyle, yourTeam, currentTeam, role}) => (
-  <div className={s.teams + ' ' + i.infoBaby}>
-    <div className={s.teamsRow} style={currentTeamStyle}>
+  <div style={R.merge(teamsStyle, infoBabyStyle)}>
+    <div style={R.merge(teamsRowStyle, currentTeamStyle)}>
       <div>Current Team</div>
-      <div className={font.largeText}>{currentTeam}</div>
+      <div style={largeTextStyle}>{currentTeam}</div>
     </div>
-    <div className={s.teamsRow} style={yourTeamStyle}>
+    <div style={R.merge(teamsRowStyle, yourTeamStyle)}>
       <div>Your Team</div>
-      <div className={font.largeText}>{yourTeam}</div>
+      <div style={largeTextStyle}>{yourTeam}</div>
       { role !== SPYMASTER && <Pass />}
     </div>
   </div>

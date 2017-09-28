@@ -10,11 +10,37 @@ import {
   styleForTeamPath,
   usernamePath,
 } from '../../redux/paths.js'
-import font from '../font.css'
+import {largeTextStyle} from '../commonStyles.js'
 
 import Score from './score.jsx'
-import s from './user.css'
-import i from './info.css'
+
+const userStyle = ({
+  minWidth: '6.5em',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+})
+
+const userRowStyle = ({
+  width: '100%',
+  paddingBottom: '5px',
+  paddingTop: '5px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+})
+
+const flexStyle = ({
+  display: 'flex',
+})
+
+const infoBabyStyle = ({
+  width: '12em',
+  marginLeft: '5px',
+  marginRight: '5px',
+  marginTop: '10px',
+})
 
 const User = connect(
   (state) => {
@@ -28,15 +54,15 @@ const User = connect(
     })
   }
 )(({role, username, style}) => (
-  <div className={s.thing + ' ' + i.infoBaby}>
-    <div className={s.user} style={style}>
-      <div className={s.userRow}>
+  <div style={R.merge(flexStyle, infoBabyStyle)}>
+    <div style={R.merge(style, userStyle)}>
+      <div style={userRowStyle}>
         <div>Role</div>
-        <div className={font.largeText}>{role}</div>
+        <div style={largeTextStyle}>{role}</div>
       </div>
-      <div className={s.userRow}>
+      <div style={userRowStyle}>
         <div>Username</div>
-        <div className={font.largeText}>{username}</div>
+        <div style={largeTextStyle}>{username}</div>
       </div>
     </div>
     <Score />
