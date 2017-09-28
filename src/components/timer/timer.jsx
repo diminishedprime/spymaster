@@ -12,7 +12,10 @@ import {
   hintSubmittedPath,
 } from '../../redux/paths.js'
 
-import s from './timer.css'
+const timerStyle = ({
+  display: 'flex',
+  justifyContent: 'cente',
+})
 
 const mapStateToProps = (state) => {
   const time = R.view(timePath, state)
@@ -32,7 +35,7 @@ const Timer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({time, start, disabled}) => (
-  <div className={s.timer}>
+  <div style={timerStyle}>
     { time ?
       <div>Time Remaining: {time} </div> :
       <button onClick={start}
