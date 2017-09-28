@@ -18,7 +18,13 @@ import {
   cardTextByCardId,
 } from '../../redux/paths.js'
 
-import cssStyle from './card.css'
+const cardStyle = ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: '5px',
+  minWidth: '10.5em',
+})
 
 const mapStateToProps = (state, {cardId}) => {
   const cardTeam = R.view(cardTeamByCardId(cardId), state)
@@ -62,10 +68,9 @@ const Card = ({
   flip,
   disabled,
 }) => (
-  <button className={cssStyle.card}
-          disabled={disabled}
-          style={style}
-          onClick={flip}>
+  <button disabled={disabled}
+                    style={R.merge(cardStyle, style)}
+                    onClick={flip}>
     {text}
   </button>
 )

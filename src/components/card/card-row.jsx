@@ -1,10 +1,14 @@
 import React from 'react'
 
 import Card from './card.jsx'
-import style from './card-row.css'
+
+const rowStyle = ({
+  display: 'flex',
+  flexWrap: 'wrap',
+})
 
 const CardRow = ({cardIds}) => (
-  <div className={style.cardRow}>
+  <div style={rowStyle}>
     { cardIds.map((cardId) => (<Card key={cardId} cardId={cardId} />)) }
   </div>
 )
