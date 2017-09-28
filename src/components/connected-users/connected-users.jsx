@@ -8,16 +8,29 @@ import {
   clientUsersPath,
 } from '../../redux/paths.js'
 
-import s from './connected-users.css'
+const connectedUsersStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+})
+
+const usersStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+
+})
 
 const ConnectedUsers = connect(
   (state) => ({
     users: R.keys(R.view(clientUsersPath, state)),
   })
 )(({users}) => (
-  <div className={s.connectedUsers}>
+  <div style={connectedUsersStyle}>
     <h3>Connected Users</h3>
-    <div className={s.users}>
+    <div style={usersStyle}>
       {users
         .map((userId) => (
           <div key={userId}>{userId}</div>
