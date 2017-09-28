@@ -25,7 +25,22 @@ import {
   GAME_MODE_PICK_TEAM,
 } from '../../constants.js'
 
-import style from './app.css'
+const appStyle = ({
+  fontFamily: 'Helvetica',
+  margin: 'auto',
+  border: '3px solid #f6f8fa',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+})
+
+const titleStyle = ({
+  paddingTop: '5px',
+  paddingBottom: '5px',
+  textAlign: 'center',
+  fontSize: '2.5em',
+  backgroundColor: '#f6f8fa',
+})
 
 const mapStateToProps = (state) => ({
   winner: R.view(winnerPath, state),
@@ -39,11 +54,11 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const App = ({hasError, showTitle, toggleTitle, page, winner}) => (
-  <div className={style.app}>
+  <div style={appStyle}>
     {hasError && <ErrorBar />}
     {!winner && (
        <div>
-         {showTitle && <div className={style.title} onClick={toggleTitle}>Spymaster</div>}
+         {showTitle && <div style={titleStyle} onClick={toggleTitle}>Spymaster</div>}
          {page === LOBBY && <Lobby />}
          {page === GAME_MODE_GAME && <Game />}
          {page === GAME_MODE_PICK_TEAM && <PickUsername />}
