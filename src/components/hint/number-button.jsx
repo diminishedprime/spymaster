@@ -13,8 +13,6 @@ import {
   afUpdateHintNumber,
 } from '../../redux/actions.js'
 
-import s from './number-button.css'
-
 const mapStateToProps = (state, {number}) => {
   const cardTeam = R.view(teamPath, state)
   const selectedNumber = R.view(hintNumberPath, state)
@@ -26,6 +24,9 @@ const mapStateToProps = (state, {number}) => {
                    (playerTeam !== currentTeam) ||
                    hintSubmitted
   const baseStyle = {
+    // the margin and minWidth should be set no matter what
+    margin: '2px',
+    minWidth: '30px',
     color: '#000000',
     backgroundColor: '#ffffff',
   }
@@ -47,8 +48,7 @@ const NumberButton = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({number, disabled, style, setHintNumber}) => (
-  <button className={s.numberButton}
-          key={number}
+  <button key={number}
           disabled={disabled}
           style={style}
           onClick={setHintNumber}

@@ -18,7 +18,15 @@ import {
 } from '../../redux/actions.js'
 
 import NumberButton from './number-button.jsx'
-import s from './spymaster-hint.css'
+
+const spymasterStyle = ({
+  minWidth: '6.5em',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '10px',
+})
 
 const NumberGroup = ({numberGroup}) => (
   <div>
@@ -30,7 +38,7 @@ const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', 'inf']
 const groupedNumbers = R.splitEvery(5, numbers)
 
 const Numbers = ({groupedNumbers}) => (
-  <div className={s.numbers}>
+  <div>
     { groupedNumbers
       .map((group, idx) => (
         <NumberGroup key={idx} numberGroup={group}/>
@@ -78,10 +86,10 @@ const SpymasterHint = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({text, inputDisabled, onChange, submitDisabled, submitHint, style}) => (
-  <div className={s.spymaster} style={style}>
+  <div style={R.merge(spymasterStyle, style)}>
     <input value={text} onChange={onChange} disabled={inputDisabled} />
     <Numbers groupedNumbers={groupedNumbers} />
-    <button className={s.hintButton} disabled={submitDisabled} onClick={submitHint}>
+    <button disabled={submitDisabled} onClick={submitHint}>
       Submit
     </button>
   </div>

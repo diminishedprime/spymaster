@@ -14,11 +14,22 @@ import {
 } from '../../redux/paths.js'
 import font from '../font.css'
 import Forfeit from '../info/forfeit.jsx'
-import i from '../info/info.css'
 
 import SpymasterHint from './spymaster-hint.jsx'
-import s from './hint.css'
 
+const hintStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+})
+
+const infoBabyStyle = ({
+  width: '12em',
+  marginLeft: '5px',
+  marginRight: '5px',
+  marginTop: '10px',
+})
 
 const mapStateToProps = (state) => {
   const text = R.view(hintTextPath, state)
@@ -42,7 +53,7 @@ const mapStateToProps = (state) => {
 const AgentHint = connect(
   mapStateToProps
 )(({hintSubmitted, text, number, style}) => (
-  <div className={s.hint + ' ' + i.infoBaby} style={style}>
+  <div style={R.merge(infoBabyStyle, R.merge(hintStyle, style))}>
     {!hintSubmitted && <div>Awaiting Hint</div>}
     {hintSubmitted && <div>Hint</div>}
     {hintSubmitted && <div className={font.largeText}>{text}</div>}
