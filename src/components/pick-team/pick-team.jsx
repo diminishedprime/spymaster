@@ -20,7 +20,22 @@ import {
   backgroundColorForTeamPath,
 } from '../../redux/paths.js'
 
-import s from './pick-team.css'
+const teamRowStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+})
+
+const teamButtonsStyle = ({
+  margin: '5px',
+  minWidth: '100px',
+})
+
+const pickTeamStyle = ({
+  display: 'flex',
+  alignItems: 'center',
+  flexDirection: 'column',
+})
 
 const StyledButton = ({style, text, onClick}) => (
   <button onClick={onClick} style={style} >
@@ -38,14 +53,14 @@ const TeamRow = connect(
     pickRole: (role) => () => dispatch(afPickRole(team, role)),
   })
 )(({onColorChange, style, pickRole, backgroundColor}) => (
-  <div className={s.teamRow}>
-    <div className={s.teamButtons}>
+  <div style={teamRowStyle}>
+    <div>
       <StyledButton text={SPYMASTER}
-                    style={style}
+                    style={R.merge(style, teamButtonsStyle)}
                     onClick={pickRole(SPYMASTER)}
       />
       <StyledButton text={AGENT}
-                    style={style}
+                    style={R.merge(style, teamButtonsStyle)}
                     onClick={pickRole(AGENT)}
       />
     </div>
@@ -55,7 +70,7 @@ const TeamRow = connect(
 ))
 
 const PickTeam = () => (
-  <div className={s.pickTeam} >
+  <div style={pickTeamStyle} >
     <TeamRow team="1" />
     <TeamRow team="2" />
   </div>
