@@ -14,7 +14,26 @@ import {
   editingPath,
 } from '../../redux/paths.js'
 
-import s from './pick-username.css'
+const pickUsernameStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+})
+
+const usernameInputStyle = ({
+  minWidth: '200px',
+  textAlign: 'center',
+})
+
+const editUsernameStyle = ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+})
+
+const usernameButtonStyle = ({
+  width: '5em',
+})
 
 const mapStateToProps = (state) => ({
   username: R.view(usernamePath, state),
@@ -44,14 +63,14 @@ const EditUsername = connect(
   mapStateToProps,
   mapDispatchToProps
 )(({username, onChange, onKeyPress, updateUsername, onFocus}) => (
-  <div className={s.editUsername}>
-    <input className={s.usernameInput}
+  <div style={editUsernameStyle}>
+    <input style={usernameInputStyle}
            value={username}
            onChange={onChange}
            onKeyPress={onKeyPress}
            onFocus={onFocus}
     />
-    <button className={s.usernameButton} onClick={updateUsername}>update</button>
+    <button style={usernameButtonStyle} onClick={updateUsername}>update</button>
   </div>
 ))
 
@@ -73,7 +92,7 @@ const Username = connect(
 ))
 
 const PickUsername = () => (
-  <div className={s.pickUsername}>
+  <div style={pickUsernameStyle}>
     <div>Your Name</div>
     <Username />
   </div>
