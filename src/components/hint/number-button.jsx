@@ -24,9 +24,6 @@ const mapStateToProps = (state, {number}) => {
                    (playerTeam !== currentTeam) ||
                    hintSubmitted
   const baseStyle = {
-    // the margin and minWidth should be set no matter what
-    margin: '2px',
-    minWidth: '30px',
     color: '#000000',
     backgroundColor: '#ffffff',
   }
@@ -36,7 +33,10 @@ const mapStateToProps = (state, {number}) => {
               : baseStyle
   return ({
     disabled,
-    style,
+    style: R.merge(style, {
+      margin: '2px',
+      minWidth: '30px',
+    }),
   })
 }
 
