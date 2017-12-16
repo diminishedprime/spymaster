@@ -9,9 +9,6 @@ import registerServiceWorker from './registerServiceWorker'
 import {
   store,
 } from './redux/index.js'
-import {
-  afConnectToWebsocket,
-} from './redux/actions.js'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,4 +17,3 @@ ReactDOM.render(
   document.getElementById('root')
 )
 registerServiceWorker()
-store.dispatch(afConnectToWebsocket())

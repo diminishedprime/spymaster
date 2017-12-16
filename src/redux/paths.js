@@ -42,6 +42,8 @@ const winner = [...remoteState, 'winner']
 const score = [...remoteState, 'score']
 const gameIds = [...localState, 'gameIds']
 const gameIdA = [...localState, 'gameId']
+const serverAddress = [...localState, 'serverAddress']
+const connected = [...localState, 'connected']
 
 export const gameIdPath = R.lensPath(gameIdA)
 export const userIdPath = R.lensPath(userIdA)
@@ -83,3 +85,5 @@ export const foregroundColorForTeamPath = (team) =>
 export const backgroundColorForTeamPath = (team) =>
   R.lensPath(backgroundColorForTeamA(team))
 export const gameIdsPath = R.lensPath(gameIds)
+export const serverAddressPath = R.lensPath(serverAddress)
+export const connectedPath = R.lensPath(connected)

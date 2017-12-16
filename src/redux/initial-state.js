@@ -19,6 +19,8 @@ import {
   usernamePath,
   hintPath,
   timePath,
+  serverAddressPath,
+  connectedPath,
 } from './paths.js'
 
 
@@ -48,7 +50,9 @@ const newState = R.compose(
   R.set(usernamePath, ''),
   R.set(hintPath, initialHint),
   R.set(timePath, undefined),
-  R.set(scorePath, initialScore)
+  R.set(scorePath, initialScore),
+  R.set(serverAddressPath, 'localhost:3000'),
+  R.set(connectedPath, false)
 )
 
 export const newGame = () =>

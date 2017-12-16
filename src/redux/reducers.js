@@ -20,6 +20,8 @@ import {
   errorTextPath,
   hintTextPath,
   hintNumberPath,
+  serverAddressPath,
+  connectedPath,
 } from './paths.js'
 import {
   SET_GAME_ID,
@@ -36,6 +38,8 @@ import {
   SET_USERNAME,
   SET_EDITING,
   UPDATE_REMOTE_STATE,
+  UPDATE_SERVER_ADDRESS,
+  SET_CONNECTED,
 } from './actions.js'
 import {
   initialErrorState,
@@ -74,6 +78,9 @@ const setPage = (state, {page}) =>
 export const updateHint = (state, {hint}) =>
   R.set(hintTextPath, hint, state)
 
+export const updateServerAddress = (state, {serverAddress}) =>
+  R.set(serverAddressPath, serverAddress, state)
+
 export const updateHintNumber = (state, {hintNumber}) =>
   R.set(hintNumberPath, hintNumber, state)
 
@@ -85,6 +92,9 @@ const setGameIds = (state, {gameIds}) =>
 
 const setGameId = (state, {gameId}) =>
   R.set(gameIdPath, gameId, state)
+
+const setConnected = (state, {flag}) =>
+  R.set(connectedPath, flag, state)
 
 export const app = (state=initialState, action) => {
   switch(action.type) {
@@ -102,6 +112,8 @@ export const app = (state=initialState, action) => {
     case SET_USERNAME: return setUsername(state, action)
     case SET_EDITING: return setEditing(state, action)
     case UPDATE_REMOTE_STATE: return updateRemoteState(state, action)
+    case UPDATE_SERVER_ADDRESS: return updateServerAddress(state, action)
+    case SET_CONNECTED: return setConnected(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

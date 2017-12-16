@@ -8,19 +8,16 @@ import R from 'ramda'
 import {
   afSetWs,
   afListenToWebsocket,
-  CONNECT_TO_WEBSOCKET,
+  afSetConnected,
   LISTEN_TO_WEBSOCKET,
   EMIT_ACTION,
+  CONNECT_TO_SERVER,
 } from '../actions.js'
 import {
   gameIdPath,
   userIdPath,
   wsPath,
 } from '../paths.js'
-import {
-  PORT,
-  BASE_URL,
-} from '../../constants.js'
 
 import {
   takeLatest,
@@ -49,19 +46,25 @@ const listenToWebsocket = function* () {
   const wsChan = eventChannel((emitter) => {
     ws.on('message', (message) => emitter({message}))
     ws.on('action', (action) => emitter({action}))
-    ws.on('disconnect', () => emitter(END))
+    ws.on('disconnect', () => emitter({disconnect: true}) && emitter(END))
     return () => ws.disconnect()
   })
 
   try {
     for (;;) {
-      const {message, action} = yield take(wsChan)
+      const {message, action, disconnect} = yield take(wsChan)
       if (action) {
         yield put(action)
       }
       if (message) {
+        // Currently, a message is sent letting the client know they are
+        // connected.
+        yield put(afSetConnected(true))
         // eslint-disable-next-line no-console
         console.log(message)
+      }
+      if (disconnect) {
+        yield put(afSetConnected(false))
       }
     }
   } finally {
@@ -69,15 +72,14 @@ const listenToWebsocket = function* () {
   }
 }
 
-const connectToWebsocket = function* () {
-  const url = BASE_URL + ':' + PORT
-  const ws = yield io.connect(url)
+const connectToServer = function* ({serverAddress}) {
+  const ws = yield io.connect(serverAddress)
   yield put(afSetWs(ws))
   yield put(afListenToWebsocket())
 }
 
 export default function* () {
-  yield takeLatest(CONNECT_TO_WEBSOCKET, connectToWebsocket)
+  yield takeLatest(CONNECT_TO_SERVER, connectToServer)
   yield takeLatest(LISTEN_TO_WEBSOCKET, listenToWebsocket)
   yield takeEvery(EMIT_ACTION, emitAction)
 }

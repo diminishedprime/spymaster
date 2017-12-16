@@ -12,12 +12,16 @@ import PickUsername from '../pick-username/pick-username.jsx'
 import Win from '../win/win.jsx'
 import {
   afToggleTitle,
+  afConnectToServer,
+  afUpdateServerAddress,
 } from '../../redux/actions.js'
 import {
   errorTextPath,
   showTitlePath,
   page,
   winnerPath,
+  serverAddressPath,
+  connectedPath,
 } from '../../redux/paths.js'
 import {
   LOBBY,
@@ -47,16 +51,28 @@ const mapStateToProps = (state) => ({
   hasError: R.view(errorTextPath, state),
   showTitle: R.view(showTitlePath, state),
   page: R.view(page, state),
+  serverAddress: R.view(serverAddressPath, state),
+  connected: R.view(connectedPath, state),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   toggleTitle: () => dispatch(afToggleTitle()),
+  connectToServer: (serverAddress) => () => dispatch(afConnectToServer(serverAddress)),
+  onChange: ({target: {value}}) => dispatch(afUpdateServerAddress(value))
 })
 
-const App = ({hasError, showTitle, toggleTitle, page, winner}) => (
+const App = ({hasError,showTitle, toggleTitle, page, winner, connectToServer, serverAddress, onChange, connected}) => (
   <div style={appStyle}>
     {hasError && <ErrorBar />}
-    {!winner && (
+    { !connected &&
+      <div>
+        Server:<input value={serverAddress}
+                      onChange={onChange}
+        />
+        <button onClick={connectToServer(serverAddress)}>Connect</button>
+      </div>
+    }
+    {connected && !winner && (
        <div>
          {showTitle && <div style={titleStyle} onClick={toggleTitle}>Spymaster</div>}
          {page === LOBBY && <Lobby />}
@@ -65,7 +81,7 @@ const App = ({hasError, showTitle, toggleTitle, page, winner}) => (
          {page === GAME_MODE_PICK_TEAM && <PickTeam />}
        </div>)
     }
-    { winner && <Win />}
+    { connected && winner && <Win />}
   </div>
 )
 

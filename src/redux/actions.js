@@ -139,11 +139,6 @@ export const afSetServerUsername = () => ({
   type: SET_SERVER_USERNAME,
 })
 
-export const CONNECT_TO_WEBSOCKET = 'async connect to websocket'
-export const afConnectToWebsocket = () => ({
-  type: CONNECT_TO_WEBSOCKET,
-})
-
 export const LISTEN_TO_WEBSOCKET = 'async listen to websocket'
 export const afListenToWebsocket = () => ({
   type: LISTEN_TO_WEBSOCKET,
@@ -197,4 +192,22 @@ export const afJoinGame = (gameId, userId) => ({
   type: JOIN_GAME,
   gameId,
   userId,
+})
+
+export const CONNECT_TO_SERVER = 'async connect to server'
+export const afConnectToServer = (serverAddress) => ({
+  type: CONNECT_TO_SERVER,
+  serverAddress,
+})
+
+export const UPDATE_SERVER_ADDRESS = 'update server address'
+export const afUpdateServerAddress = (serverAddress) => ({
+  type: UPDATE_SERVER_ADDRESS,
+  serverAddress,
+})
+
+export const SET_CONNECTED = 'set connected'
+export const afSetConnected = (flag) => ({
+  type: SET_CONNECTED,
+  flag,
 })
