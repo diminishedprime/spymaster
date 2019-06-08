@@ -1,3 +1,4 @@
+import * as t from '../../types'
 import {
   eventChannel,
   END,
@@ -9,9 +10,6 @@ import {
   afSetWs,
   afListenToWebsocket,
   afSetConnected,
-  LISTEN_TO_WEBSOCKET,
-  EMIT_ACTION,
-  CONNECT_TO_SERVER,
 } from '../actions'
 import {
   gameIdPath,
@@ -79,7 +77,7 @@ const connectToServer = function* ({serverAddress}) {
 }
 
 export default function* () {
-  yield takeLatest(CONNECT_TO_SERVER, connectToServer)
-  yield takeLatest(LISTEN_TO_WEBSOCKET, listenToWebsocket)
-  yield takeEvery(EMIT_ACTION, emitAction)
+  yield takeLatest(t.ActionType.CONNECT_TO_SERVER, connectToServer)
+  yield takeLatest(t.ActionType.LISTEN_TO_WEBSOCKET, listenToWebsocket)
+  yield takeEvery(t.ActionType.EMIT_ACTION, emitAction)
 }

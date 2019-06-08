@@ -1,9 +1,9 @@
+import * as t from '../../types'
 import {
   delay,
 } from 'redux-saga'
 
 import {
-  UPDATE_HINT,
   afEmitAction,
 } from '../actions'
 
@@ -18,5 +18,5 @@ const throttleSendHint = function* (action) {
 }
 
 export default function* () {
-  yield takeLatest(UPDATE_HINT, throttleSendHint)
+  yield takeLatest(t.ActionType.UPDATE_HINT, throttleSendHint)
 }
