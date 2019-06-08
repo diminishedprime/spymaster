@@ -2,10 +2,10 @@ import R from 'ramda'
 
 import {
   fgForHex,
-} from '../../src/util'
+} from '../../../src/util'
 import {
   initialHint,
-} from '../../src/redux/initial-state'
+} from '../../../src/redux/initial-state'
 import {
   SET_CARD_FLIPPED,
   UPDATE_HINT,
@@ -14,11 +14,11 @@ import {
   SUBMIT_HINT,
   NEXT_TURN,
   FORFEIT,
-} from '../../src/redux/actions'
+} from '../../../src/redux/actions'
 import {
   TEAM_1,
   TEAM_2,
-} from '../../src/constants'
+} from '../../../src/constants'
 import {
   cardFlippedByCardId,
   winnerPath,
@@ -29,7 +29,7 @@ import {
   clientUsersPath,
   hintTextPath,
   hintNumberPath,
-} from '../../src/redux/paths'
+} from '../../../src/redux/paths'
 
 import {
   initialState,

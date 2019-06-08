@@ -9,7 +9,7 @@ import express = require('express')
 import {
   PORT,
   BASE_URL,
-} from '../src/constants'
+} from '../../src/constants'
 
 import {
   store,
@@ -31,7 +31,7 @@ const server = createServer(app)
 store.dispatch(afConnectWebsocketServer(server))
 
 // Serve static resources
-app.use('/', express.static(path.resolve(__dirname + '/../build/')))
+app.use('/', express.static(path.resolve(__dirname + '/../../build/')))
 
 server.listen(PORT, () => {
   // eslint-disable-next-line no-console

@@ -8,7 +8,7 @@ import {
 import {
   MESSAGE,
   ACTION,
-} from '../../../src/constants'
+} from '../../../../src/constants'
 import {
   wsByUserIdPath,
   usersPath,

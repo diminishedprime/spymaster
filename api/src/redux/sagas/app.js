@@ -25,7 +25,7 @@ import {
   afUpdateRemoteState,
   afSetUsername,
   afSetPage,
-} from '../../../src/redux/actions'
+} from '../../../../src/redux/actions'
 import {
   GAME_MODE_PICK_TEAM,
   TEAM_1,
@@ -33,7 +33,7 @@ import {
   ASSASSIN,
   INF,
   ZERO,
-} from '../../../src/constants'
+} from '../../../../src/constants'
 import {
   cardTeamByCardId,
   cardsPath,

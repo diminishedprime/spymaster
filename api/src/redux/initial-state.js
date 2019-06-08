@@ -2,16 +2,16 @@ import uuid4 from 'uuid/v4'
 import R from 'ramda'
 import shuffle from 'shuffle-array'
 
-import words from '../../src/redux/words'
+import words from '../../../src/redux/words'
 import {
   fgForHex,
-} from '../../src/util'
+} from '../../../src/util'
 import {
   ASSASSIN,
   BYSTANDER,
   TEAM_1,
   TEAM_2,
-} from '../../src/constants'
+} from '../../../src/constants'
 
 import {
   hintTextPath,
