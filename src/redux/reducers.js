@@ -2,7 +2,7 @@ import R from 'ramda'
 
 import {
   GAME_MODE_GAME,
-} from '../constants.js'
+} from '../constants'
 
 import {
   gameIdPath,

@@ -6,7 +6,7 @@ import {
 
 import {
   SPYMASTER,
-} from '../../constants.js'
+} from '../../constants'
 import {
   teamPath,
   styleForTeamPath,

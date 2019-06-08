@@ -28,7 +28,7 @@ import {
   LOBBY,
   GAME_MODE_GAME,
   GAME_MODE_PICK_TEAM,
-} from '../../constants.js'
+} from '../../constants'
 
 const appStyle = ({
   fontFamily: 'Helvetica',

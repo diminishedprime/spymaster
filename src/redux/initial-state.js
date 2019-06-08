@@ -4,7 +4,7 @@ import {
   TEAM_1,
   SPYMASTER,
   LOBBY,
-} from '../constants.js'
+} from '../constants'
 
 import {
   gameIdsPath,

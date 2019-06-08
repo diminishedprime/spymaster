@@ -7,7 +7,7 @@ import {
 import {
   TEAM_1,
   TEAM_2,
-} from '../../constants.js'
+} from '../../constants'
 import {
   styleForTeamPath,
   cardsPath,

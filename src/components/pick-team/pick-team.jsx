@@ -10,7 +10,7 @@ import {
 import {
   AGENT,
   SPYMASTER,
-} from '../../constants.js'
+} from '../../constants'
 import {
   afChangeBackgroundColor,
   afPickRole,
