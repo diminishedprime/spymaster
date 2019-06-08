@@ -2,10 +2,10 @@ import R from 'ramda'
 
 import {
   fgForHex,
-} from '../../src/util.js'
+} from '../../src/util'
 import {
   initialHint,
-} from '../../src/redux/initial-state.js'
+} from '../../src/redux/initial-state'
 import {
   SET_CARD_FLIPPED,
   UPDATE_HINT,
@@ -14,11 +14,11 @@ import {
   SUBMIT_HINT,
   NEXT_TURN,
   FORFEIT,
-} from '../../src/redux/actions.js'
+} from '../../src/redux/actions'
 import {
   TEAM_1,
   TEAM_2,
-} from '../../src/constants.js'
+} from '../../src/constants'
 import {
   cardFlippedByCardId,
   winnerPath,
@@ -29,11 +29,11 @@ import {
   clientUsersPath,
   hintTextPath,
   hintNumberPath,
-} from '../../src/redux/paths.js'
+} from '../../src/redux/paths'
 
 import {
   initialState,
-} from './initial-state.js'
+} from './initial-state'
 import {
   backgroundColorForTeamPath,
   foregroundColorForTeamPath,
@@ -41,7 +41,7 @@ import {
   gameByGameIdPath as gameByGameId,
   usersPath,
   userByUserIdPath,
-} from './paths.js'
+} from './paths'
 import {
   REMOVE_USER_FROM_GAME,
   CHANGE_BACKGROUND_COLOR_SERVER,
@@ -49,7 +49,7 @@ import {
   NEW_GAME_SERVER,
   ADD_USER,
   REMOVE_USER,
-} from './actions.js'
+} from './actions'
 
 const addUser = (state, {userId, ws}) => R.compose(
   R.set(userByUserIdPath(userId), {userId, ws}),

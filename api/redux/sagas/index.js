@@ -1,5 +1,5 @@
-import app from './app.js'
-import websocket from './websocket.js'
+import app from './app'
+import websocket from './websocket'
 
 import {
   all,

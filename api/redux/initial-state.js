@@ -2,16 +2,16 @@ import uuid4 from 'uuid/v4'
 import R from 'ramda'
 import shuffle from 'shuffle-array'
 
-import words from '../../src/redux/words.js'
+import words from '../../src/redux/words'
 import {
   fgForHex,
-} from '../../src/util.js'
+} from '../../src/util'
 import {
   ASSASSIN,
   BYSTANDER,
   TEAM_1,
   TEAM_2,
-} from '../../src/constants.js'
+} from '../../src/constants'
 
 import {
   hintTextPath,
@@ -23,7 +23,7 @@ import {
   cardsPath,
   usersPath as users,
   gamesPath as games,
-} from './paths.js'
+} from './paths'
 
 
 export const newCards = () => {

@@ -8,11 +8,11 @@ import {
 import {
   MESSAGE,
   ACTION,
-} from '../../../src/constants.js'
+} from '../../../src/constants'
 import {
   wsByUserIdPath,
   usersPath,
-} from '../paths.js'
+} from '../paths'
 import {
   CONNECT_WEBSOCKET_SERVER,
   BROADCAST_MESSAGE_TO_USER_IDS,
@@ -25,7 +25,7 @@ import {
   afAddUser,
   afUserDisconnected,
   afUserConnected,
-} from '../actions.js'
+} from '../actions'
 
 import {
   fork,

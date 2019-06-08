@@ -3,7 +3,7 @@ import uuid4 from 'uuid/v4'
 
 import {
   newGame,
-} from '../initial-state.js'
+} from '../initial-state'
 import {
   afJoinGame,
   CHANGE_BACKGROUND_COLOR,
@@ -25,7 +25,7 @@ import {
   afUpdateRemoteState,
   afSetUsername,
   afSetPage,
-} from '../../../src/redux/actions.js'
+} from '../../../src/redux/actions'
 import {
   GAME_MODE_PICK_TEAM,
   TEAM_1,
@@ -33,13 +33,13 @@ import {
   ASSASSIN,
   INF,
   ZERO,
-} from '../../../src/constants.js'
+} from '../../../src/constants'
 import {
   cardTeamByCardId,
   cardsPath,
   currentTeamPath,
   hintNumberPath,
-} from '../../../src/redux/paths.js'
+} from '../../../src/redux/paths'
 import {
   afRemoveUser,
   afChangeBackgroundColorServer,
@@ -51,12 +51,12 @@ import {
   USER_CONNECTED,
   afNewGameServer,
   afRemoveUserFromGame,
-} from '../actions.js'
+} from '../actions'
 import {
   gamesPath,
   gameUsersPath,
   gameByGameIdPath as gameByGameId,
-} from '../paths.js'
+} from '../paths'
 
 import {
   put,

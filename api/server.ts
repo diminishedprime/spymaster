@@ -1,27 +1,27 @@
-import path from 'path'
-import fs from 'fs'
+import * as path from 'path'
+import * as fs from 'fs'
 import {
   createServer,
 } from 'http'
 
-import express from 'express'
+import express = require('express')
 
 import {
   PORT,
   BASE_URL,
-} from '../src/constants.js'
+} from '../src/constants'
 
 import {
   store,
-} from './redux/index.js'
+} from './redux/index'
 import {
   afConnectWebsocketServer,
-} from './redux/actions.js'
+} from './redux/actions'
 
-const options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/spymaster.mjh.io/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/spymaster.mjh.io/cert.pem'),
-}
+// const options = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/spymaster.mjh.io/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/spymaster.mjh.io/cert.pem'),
+// }
 
 const app = express()
 
