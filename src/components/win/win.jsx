@@ -6,9 +6,9 @@ import {
 
 import {
   winnerPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
-import NewGame from './new-game.jsx'
+import NewGame from './new-game'
 
 const mapStateToProps = (state) => ({
   winner: R.view(winnerPath, state),

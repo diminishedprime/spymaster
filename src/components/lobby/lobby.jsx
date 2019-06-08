@@ -4,15 +4,15 @@ import {
   connect,
 } from 'react-redux'
 
-import PickUsername from '../pick-username/pick-username.jsx'
-import ConnectedUsers from '../connected-users/connected-users.jsx'
+import PickUsername from '../pick-username/pick-username'
+import ConnectedUsers from '../connected-users/connected-users'
 import {
   afNewGame2,
   afJoinGame,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   gameIdsPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const mapStateToProps = (state) => ({
   gameIds: R.view(gameIdsPath, state),

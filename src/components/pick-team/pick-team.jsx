@@ -14,11 +14,11 @@ import {
 import {
   afChangeBackgroundColor,
   afPickRole,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   styleForTeamPath,
   backgroundColorForTeamPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const teamRowStyle = ({
   display: 'flex',

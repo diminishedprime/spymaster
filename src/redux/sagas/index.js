@@ -1,6 +1,6 @@
-import watchConnectToWebsocket from './connect-to-websocket.js'
-import throttleSendHint from './throttle-send-hint.js'
-import app from './app.js'
+import watchConnectToWebsocket from './connect-to-websocket'
+import throttleSendHint from './throttle-send-hint'
+import app from './app'
 
 import {
   all,

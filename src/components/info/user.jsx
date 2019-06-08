@@ -9,10 +9,10 @@ import {
   teamPath,
   styleForTeamPath,
   usernamePath,
-} from '../../redux/paths.js'
-import {largeTextStyle} from '../commonStyles.js'
+} from '../../redux/paths'
+import {largeTextStyle} from '../commonStyles'
 
-import Score from './score.jsx'
+import Score from './score'
 
 const userStyle = ({
   minWidth: '6.5em',

@@ -7,10 +7,10 @@ import {
 import {
   currentTeamPath,
   teamPath,
-}from '../../redux/paths.js'
+}from '../../redux/paths'
 import {
   afNextTurn,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 
 const mapStateToProps = (state) => {
   const playerTeam = R.view(teamPath, state)

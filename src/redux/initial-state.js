@@ -21,7 +21,7 @@ import {
   timePath,
   serverAddressPath,
   connectedPath,
-} from './paths.js'
+} from './paths'
 
 
 export const newScore = () => ({

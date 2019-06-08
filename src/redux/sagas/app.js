@@ -12,7 +12,7 @@ import {
   NEXT_TURN,
   UPDATE_HINT_NUMBER,
   afEmitAction,
-} from '../actions.js'
+} from '../actions'
 
 import {
   all,

@@ -4,23 +4,23 @@ import {
   connect,
 } from 'react-redux'
 
-import Lobby from '../lobby/lobby.jsx'
-import ConnectToServer from '../connect-to-server.jsx'
-import ErrorBar from '../error-bar/error-bar.jsx'
-import Game from '../game/game.jsx'
-import PickTeam from '../pick-team/pick-team.jsx'
-import PickUsername from '../pick-username/pick-username.jsx'
-import Win from '../win/win.jsx'
+import Lobby from '../lobby/lobby'
+import ConnectToServer from '../connect-to-server'
+import ErrorBar from '../error-bar/error-bar'
+import Game from '../game/game'
+import PickTeam from '../pick-team/pick-team'
+import PickUsername from '../pick-username/pick-username'
+import Win from '../win/win'
 import {
   afToggleTitle,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   errorTextPath,
   showTitlePath,
   page,
   winnerPath,
   connectedPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 import {
   LOBBY,
   GAME_MODE_GAME,

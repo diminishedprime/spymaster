@@ -6,11 +6,11 @@ import {
 import {
   afConnectToServer,
   afUpdateServerAddress,
-} from './../redux/actions.js'
+} from './../redux/actions'
 import {
   serverAddressPath,
   connectedPath,
-} from './../redux/paths.js'
+} from './../redux/paths'
 
 const mapStateToProps = (state) => ({
   serverAddress: R.view(serverAddressPath, state),

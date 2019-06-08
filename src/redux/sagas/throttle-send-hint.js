@@ -5,7 +5,7 @@ import {
 import {
   UPDATE_HINT,
   afEmitAction,
-} from '../actions.js'
+} from '../actions'
 
 import {
   takeLatest,

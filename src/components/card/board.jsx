@@ -1,7 +1,7 @@
 import React from 'react'
 import R from 'ramda'
 
-import CardRow from './card-row.jsx'
+import CardRow from './card-row'
 
 const boardStyle = ({
   display: 'flex',

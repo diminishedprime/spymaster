@@ -11,7 +11,7 @@ import {
 import {
   styleForTeamPath,
   cardsPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const scoreStyle = ({
   display: 'flex',

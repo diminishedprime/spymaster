@@ -8,11 +8,11 @@ import {
   afSetEditing,
   afSetUsername,
   afSetServerUsername,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   usernamePath,
   editingPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const pickUsernameStyle = ({
   display: 'flex',

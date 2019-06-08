@@ -12,12 +12,12 @@ import {
   LISTEN_TO_WEBSOCKET,
   EMIT_ACTION,
   CONNECT_TO_SERVER,
-} from '../actions.js'
+} from '../actions'
 import {
   gameIdPath,
   userIdPath,
   wsPath,
-} from '../paths.js'
+} from '../paths'
 
 import {
   takeLatest,

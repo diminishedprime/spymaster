@@ -6,10 +6,10 @@ import {
 
 import {
   afForfeit,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   teamPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const Forfeit = connect(
   (state) => ({team: R.view(teamPath, state)}),

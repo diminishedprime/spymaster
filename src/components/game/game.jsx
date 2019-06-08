@@ -4,12 +4,12 @@ import {
   connect,
 } from 'react-redux'
 
-import Board from '../card/board.jsx'
-import Info from '../info/info.jsx'
-import Timer from '../timer/timer.jsx'
+import Board from '../card/board'
+import Info from '../info/info'
+import Timer from '../timer/timer'
 import {
   cardsPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const mapStateToProps = (state) => ({
   cardIds: R.keys(R.view(cardsPath, state)),

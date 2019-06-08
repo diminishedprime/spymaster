@@ -6,7 +6,7 @@ import {
 
 import {
   clientUsersPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const connectedUsersStyle = ({
   display: 'flex',

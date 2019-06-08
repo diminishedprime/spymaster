@@ -6,10 +6,10 @@ import {
 
 import {
   afDismissError,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   errorPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const errorBarStyle = ({
   display: 'flex',

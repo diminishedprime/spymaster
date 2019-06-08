@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Card from './card.jsx'
+import Card from './card'
 
 const rowStyle = ({
   display: 'flex',

@@ -8,10 +8,10 @@ import {
   teamPath,
   styleForTeamPath,
   currentTeamPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 import {
   afUpdateHintNumber,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 
 const mapStateToProps = (state, {number}) => {
   const cardTeam = R.view(teamPath, state)

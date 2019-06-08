@@ -22,7 +22,7 @@ import {
   hintNumberPath,
   serverAddressPath,
   connectedPath,
-} from './paths.js'
+} from './paths'
 import {
   SET_GAME_ID,
   SET_GAME_IDS,
@@ -40,11 +40,11 @@ import {
   UPDATE_REMOTE_STATE,
   UPDATE_SERVER_ADDRESS,
   SET_CONNECTED,
-} from './actions.js'
+} from './actions'
 import {
   initialErrorState,
   initialState,
-} from './initial-state.js'
+} from './initial-state'
 
 const hiError = (state, {text, severity}) =>
   R.set(errorSeverityPath, severity, R.set(errorTextPath, text, state))

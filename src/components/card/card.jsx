@@ -6,7 +6,7 @@ import {
 
 import {
   afFlipCard,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   hintSubmittedPath,
   rolePath,
@@ -16,7 +16,7 @@ import {
   cardFlippedByCardId,
   cardTeamByCardId,
   cardTextByCardId,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const cardStyle = ({
   display: 'flex',

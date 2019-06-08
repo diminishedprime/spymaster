@@ -12,10 +12,10 @@ import {
   styleForTeamPath,
   currentTeamPath,
   rolePath,
-} from '../../redux/paths.js'
-import { largeTextStyle } from '../commonStyles.js'
+} from '../../redux/paths'
+import { largeTextStyle } from '../commonStyles'
 
-import Pass from './pass.jsx'
+import Pass from './pass'
 
 const teamsStyle = ({
   minWidth: '6.5em',

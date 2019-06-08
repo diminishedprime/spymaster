@@ -11,11 +11,11 @@ import {
   hintTextPath,
   hintNumberPath,
   rolePath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 import font from '../font.css'
-import Forfeit from '../info/forfeit.jsx'
+import Forfeit from '../info/forfeit'
 
-import SpymasterHint from './spymaster-hint.jsx'
+import SpymasterHint from './spymaster-hint'
 
 const hintStyle = ({
   display: 'flex',

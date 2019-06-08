@@ -11,13 +11,13 @@ import {
   hintNumberPath,
   teamPath,
   currentTeamPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 import {
   afUpdateHint,
   afSubmitHint,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 
-import NumberButton from './number-button.jsx'
+import NumberButton from './number-button'
 
 const spymasterStyle = ({
   minWidth: '6.5em',

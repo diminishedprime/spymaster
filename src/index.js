@@ -4,11 +4,11 @@ import {
   Provider,
 } from 'react-redux'
 
-import App from './components/app/app.jsx'
+import App from './components/app/app'
 import registerServiceWorker from './registerServiceWorker'
 import {
   store,
-} from './redux/index.js'
+} from './redux/index'
 
 ReactDOM.render(
   <Provider store={store}>

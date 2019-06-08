@@ -6,11 +6,11 @@ import {
 
 import {
   afStartTimer,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 import {
   timePath,
   hintSubmittedPath,
-} from '../../redux/paths.js'
+} from '../../redux/paths'
 
 const timerStyle = ({
   display: 'flex',

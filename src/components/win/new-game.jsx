@@ -5,7 +5,7 @@ import {
 
 import {
   afNewGame,
-} from '../../redux/actions.js'
+} from '../../redux/actions'
 
 const mapDispatchToProps = (dispatch) => ({
   onClick: () => dispatch(afNewGame()),
