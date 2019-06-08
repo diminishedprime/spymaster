@@ -1,25 +1,27 @@
+import * as t from '../types';
+
 // Actions & Action Creators
 export const SET_PAGE = 'set page'
-export const afSetPage = (page) => ({
+export const afSetPage = (page: t.Page) => ({
   type: SET_PAGE,
   page,
 })
 
 export const SET_CARD_FLIPPED = 'flip this card'
-export const afSetCardFlipped = (cardId) => ({
+export const afSetCardFlipped = (cardId: t.CardId) => ({
   type: SET_CARD_FLIPPED,
   cardId,
 })
 
 export const PICK_ROLE = 'change role'
-export const afPickRole = (team, role) => ({
+export const afPickRole = (team: t.Team, role: t.Role) => ({
   type: PICK_ROLE,
   team,
   role,
 })
 
 export const SET_TIME = 'set time'
-export const afSetTime = (seconds) => ({
+export const afSetTime = (seconds: number) => ({
   type: SET_TIME,
   seconds,
 })
@@ -30,7 +32,7 @@ export const afToggleTitle = () => ({
 })
 
 export const ERROR_OCCURED = 'an error has occured'
-export const afError = (text, severity) => ({
+export const afError = (text: string, severity: t.Severity) => ({
   type: ERROR_OCCURED,
   text,
   severity,
@@ -42,13 +44,13 @@ export const afDismissError = () => ({
 })
 
 export const SET_WS = 'set ws'
-export const afSetWs = (ws) => ({
+export const afSetWs = (ws: any) => ({
   type: SET_WS,
   ws,
 })
 
 export const SET_USERNAME = 'set username'
-export const afSetUsername = (username) => ({
+export const afSetUsername = (username: string) => ({
   type: SET_USERNAME,
   username,
 })
@@ -60,38 +62,38 @@ export const afSetEditing = (flag=true) => ({
 })
 
 export const UPDATE_USER_LIST = 'update user list'
-export const afUpdateUserList = (users) => ({
+export const afUpdateUserList = (users: any) => ({
   type: UPDATE_USER_LIST,
   users,
 })
 
 export const UPDATE_REMOTE_STATE = 'update remote state'
-export const afUpdateRemoteState = (remoteState) => ({
+export const afUpdateRemoteState = (remoteState: any) => ({
   type: UPDATE_REMOTE_STATE,
   remoteState,
 })
 
 export const ADD_USER = 'server add user'
-export const afAddUser = (user) => ({
+export const afAddUser = (user: any) => ({
   type: ADD_USER,
   user,
 })
 
 export const REMOVE_USER = 'server remove user'
-export const afRemoveUser = (user) => ({
+export const afRemoveUser = (user: any) => ({
   type: REMOVE_USER,
   user,
 })
 
 export const UPDATE_USERNAME = 'server update username'
-export const afUpdateUsername = (user, username) => ({
+export const afUpdateUsername = (user: any, username: string) => ({
   type: UPDATE_USERNAME,
   user,
   username,
 })
 
 export const UPDATE_HINT = 'update hint'
-export const afUpdateHint = (hint) => ({
+export const afUpdateHint = (hint: string) => ({
   type: UPDATE_HINT,
   hint,
 })
@@ -102,7 +104,7 @@ export const afStartTimer = () => ({
 })
 
 export const UPDATE_HINT_NUMBER = 'update hint number'
-export const afUpdateHintNumber = (hintNumber) => ({
+export const afUpdateHintNumber = (hintNumber: t.HintNumber) => ({
   type: UPDATE_HINT_NUMBER,
   hintNumber,
 })
@@ -113,7 +115,7 @@ export const afNextTurn = () => ({
 })
 
 export const FORFEIT = 'forfeit'
-export const afForfeit = (team) => ({
+export const afForfeit = (team: t.Team) => ({
   type: FORFEIT,
   team,
 })
@@ -129,7 +131,7 @@ export const afNewGame = () => ({
 })
 
 export const EMIT_ACTION = 'async emit'
-export const afEmitAction = (action) => ({
+export const afEmitAction = (action: any) => ({
   type: EMIT_ACTION,
   action,
 })
@@ -145,7 +147,7 @@ export const afListenToWebsocket = () => ({
 })
 
 export const CHANGE_BACKGROUND_COLOR = 'async change backgroundColor'
-export const afChangeBackgroundColor = (team, backgroundColor) => ({
+export const afChangeBackgroundColor = (team: t.Team, backgroundColor: string) => ({
   type: CHANGE_BACKGROUND_COLOR,
   team,
   backgroundColor,
@@ -157,7 +159,7 @@ export const afSubmitHint = () => ({
 })
 
 export const FLIP_CARD = 'async flip card'
-export const afFlipCard = (cardId) => ({
+export const afFlipCard = (cardId: t.CardId) => ({
   type: FLIP_CARD,
   cardId,
 })
@@ -170,44 +172,44 @@ export const afNewGame2 = () => ({
 })
 
 export const SET_USER_ID = 'set user id'
-export const afSetUserId = (userId) => ({
+export const afSetUserId = (userId: t.UserId) => ({
   type: SET_USER_ID,
   userId,
 })
 
 export const SET_GAME_IDS = 'set game ids'
-export const afSetGameIds = (gameIds) => ({
+export const afSetGameIds = (gameIds: Array<t.GameId>) => ({
   type: SET_GAME_IDS,
   gameIds,
 })
 
 export const SET_GAME_ID = 'set game id'
-export const afSetGameId = (gameId) => ({
+export const afSetGameId = (gameId: t.GameId) => ({
   type: SET_GAME_ID,
   gameId,
 })
 
 export const JOIN_GAME = 'async join game'
-export const afJoinGame = (gameId, userId) => ({
+export const afJoinGame = (gameId: t.GameId, userId: t.UserId) => ({
   type: JOIN_GAME,
   gameId,
   userId,
 })
 
 export const CONNECT_TO_SERVER = 'async connect to server'
-export const afConnectToServer = (serverAddress) => ({
+export const afConnectToServer = (serverAddress: string) => ({
   type: CONNECT_TO_SERVER,
   serverAddress,
 })
 
 export const UPDATE_SERVER_ADDRESS = 'update server address'
-export const afUpdateServerAddress = (serverAddress) => ({
+export const afUpdateServerAddress = (serverAddress: string) => ({
   type: UPDATE_SERVER_ADDRESS,
   serverAddress,
 })
 
 export const SET_CONNECTED = 'set connected'
-export const afSetConnected = (flag) => ({
+export const afSetConnected = (flag: boolean) => ({
   type: SET_CONNECTED,
   flag,
 })
