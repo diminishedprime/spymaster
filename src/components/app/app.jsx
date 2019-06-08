@@ -13,15 +13,12 @@ import PickUsername from '../pick-username/pick-username.jsx'
 import Win from '../win/win.jsx'
 import {
   afToggleTitle,
-  afConnectToServer,
-  afUpdateServerAddress,
 } from '../../redux/actions.js'
 import {
   errorTextPath,
   showTitlePath,
   page,
   winnerPath,
-  serverAddressPath,
   connectedPath,
 } from '../../redux/paths.js'
 import {
