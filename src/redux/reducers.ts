@@ -29,7 +29,7 @@ import {
   initialState,
 } from './initial-state'
 
-const hiError = (state: t.ReduxState, {text, severity}: t.ERROR_OCCUREDAction) =>
+const hiError = (state: t.ReduxState, {text, severity}: t.ErrorOccured) =>
   R.set(errorSeverityPath, severity, R.set(errorTextPath, text, state))
 
 const dismissError = (state: t.ReduxState) =>
@@ -38,46 +38,46 @@ const dismissError = (state: t.ReduxState) =>
 const toggleTitle = (state: t.ReduxState) =>
   R.over(showTitlePath, R.not, state)
 
-const pickRole = (state: t.ReduxState, {team, role}: t.PICK_ROLEAction) => {
+const pickRole = (state: t.ReduxState, {team, role}: t.PickRole) => {
   const first = R.set(playerTypePath, ({team, role}), state);
   const second = R.set(pagePath, GAME_MODE_GAME, first);
   return second;
 }
 
-const setWs = (state: t.ReduxState, {ws}: t.SET_WSAction) =>
+const setWs = (state: t.ReduxState, {ws}: t.SetWs) =>
   R.set(wsPath, ws, state)
 
-const setUsername = (state: t.ReduxState, {username}: t.SET_USERNAMEAction) =>
+const setUsername = (state: t.ReduxState, {username}: t.SetUsername) =>
   R.set(usernamePath, username, state)
 
-const setEditing = (state: t.ReduxState, {flag}: t.SET_EDITINGAction) =>
+const setEditing = (state: t.ReduxState, {flag}: t.SetEditing) =>
   R.set(editingPath, flag, state)
 
-const updateRemoteState = (state: t.ReduxState, {remoteState}: t.UPDATE_REMOTE_STATEAction) =>
+const updateRemoteState = (state: t.ReduxState, {remoteState}: t.UpdateRemoteState) =>
   R.set(remoteStatePath, remoteState, state)
 
-const setPage = (state: t.ReduxState, {page}: t.SET_PAGEAction) =>
+const setPage = (state: t.ReduxState, {page}: t.SetPage) =>
   R.set(pagePath, page, state)
 
-export const updateHint = (state: t.ReduxState, {hint}: t.UPDATE_HINTAction) =>
+export const updateHint = (state: t.ReduxState, {hint}: t.UpdateHint) =>
   R.set(hintTextPath, hint, state)
 
-export const updateServerAddress = (state: t.ReduxState, {serverAddress}: t.UPDATE_SERVER_ADDRESSAction) =>
+export const updateServerAddress = (state: t.ReduxState, {serverAddress}: t.UpdateServerAddress) =>
   R.set(serverAddressPath, serverAddress, state)
 
-export const updateHintNumber = (state: t.ReduxState, {hintNumber}: t.UPDATE_HINT_NUMBERAction) =>
+export const updateHintNumber = (state: t.ReduxState, {hintNumber}: t.UpdateHintNumber) =>
   R.set(hintNumberPath, hintNumber, state)
 
-export const setUserId = (state: t.ReduxState, {userId}: t.SET_USER_IDAction) =>
+export const setUserId = (state: t.ReduxState, {userId}: t.SetUserId) =>
   R.set(userIdPath, userId, state)
 
-const setGameIds = (state: t.ReduxState, {gameIds}: t.SET_GAME_IDSAction) =>
+const setGameIds = (state: t.ReduxState, {gameIds}: t.SetGameIds) =>
   R.set(gameIdsPath, gameIds, state)
 
-const setGameId = (state: t.ReduxState, {gameId}: t.SET_GAME_IDAction) =>
+const setGameId = (state: t.ReduxState, {gameId}: t.SetGameId) =>
   R.set(gameIdPath, gameId, state)
 
-const setConnected = (state: t.ReduxState, {flag}: t.SET_CONNECTEDAction) =>
+const setConnected = (state: t.ReduxState, {flag}: t.SetConnected) =>
   R.set(connectedPath, flag, state)
 
 export const app = (state=initialState, action: t.Action) => {
