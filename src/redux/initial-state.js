@@ -51,7 +51,7 @@ const newState = R.compose(
   R.set(hintPath, initialHint),
   R.set(timePath, undefined),
   R.set(scorePath, initialScore),
-  R.set(serverAddressPath, 'spymaster.mjh.io'),
+  R.set(serverAddressPath, 'dev.mjh.io'),
   R.set(connectedPath, false)
 )
 

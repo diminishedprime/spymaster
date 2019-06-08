@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import {
   createServer,
-} from 'https'
+} from 'http'
 
 import express from 'express'
 
@@ -25,7 +25,7 @@ const options = {
 
 const app = express()
 
-const server = createServer(options, app)
+const server = createServer(app)
 
 // Connect websocket server
 store.dispatch(afConnectWebsocketServer(server))
@@ -33,7 +33,7 @@ store.dispatch(afConnectWebsocketServer(server))
 // Serve static resources
 app.use('/', express.static(path.resolve(__dirname + '/../build/')))
 
-server.listen(3003, () => {
+server.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`App is now running at ${BASE_URL}:${PORT}`)
 })
