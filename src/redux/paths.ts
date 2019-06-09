@@ -1,3 +1,4 @@
+import * as t from '../types';
 import R from 'ramda'
 
 // Paths & Initial State
@@ -7,10 +8,10 @@ const playerType = [...localState, 'playerType']
 const role = [...playerType, 'role']
 const team = [...playerType, 'team']
 const cards = [...remoteState, 'cards']
-const cardByCardIdA = (cardId) => [...cards, cardId]
-const cardFlippedByCardIdA = (cardId) => [...cardByCardIdA(cardId), 'flipped']
-const cardTeamByCardIdA = (cardId) => [...cardByCardIdA(cardId), 'team']
-const cardTextByCardIdA = (cardId) => [...cardByCardIdA(cardId), 'text']
+const cardByCardIdA = (cardId: t.CardId) => [...cards, cardId]
+const cardFlippedByCardIdA = (cardId: t.CardId) => [...cardByCardIdA(cardId), 'flipped']
+const cardTeamByCardIdA = (cardId: t.CardId) => [...cardByCardIdA(cardId), 'team']
+const cardTextByCardIdA = (cardId: t.CardId) => [...cardByCardIdA(cardId), 'text']
 const time = [...remoteState, 'time']
 const error = [...localState, 'error']
 const errorText = [...error, 'text']
@@ -18,10 +19,10 @@ const errorSeverity = [...error, 'severity']
 const settings = [...localState, 'settings']
 const showTitle = [...settings, 'showTitle']
 const styleA = [...remoteState, 'style']
-const styleForTeamA = (team) => [...styleA, team]
-const foregroundColorForTeamA = (team) =>
+const styleForTeamA = (team: t.Team) => [...styleA, team]
+const foregroundColorForTeamA = (team: t.Team) =>
   [...styleForTeamA(team), 'color']
-const backgroundColorForTeamA = (team) =>
+const backgroundColorForTeamA = (team: t.Team) =>
   [...styleForTeamA(team), 'backgroundColor']
 
 
@@ -65,13 +66,13 @@ export const rolePath = R.lensPath([...role])
 export const teamPath = R.lensPath([...team])
 export const cardsPath = R.lensPath([...cards])
 export const currentTeamPath = R.lensPath([...currentTeam])
-export const cardByCardId = (cardId) =>
+export const cardByCardId = (cardId: t.CardId) =>
   R.lensPath(cardByCardIdA(cardId))
-export const cardTeamByCardId = (cardId) =>
+export const cardTeamByCardId = (cardId: t.CardId) =>
   R.lensPath(cardTeamByCardIdA(cardId))
-export const cardFlippedByCardId = (cardId) =>
+export const cardFlippedByCardId = (cardId: t.CardId) =>
   R.lensPath(cardFlippedByCardIdA(cardId))
-export const cardTextByCardId = (cardId) =>
+export const cardTextByCardId = (cardId: t.CardId) =>
   R.lensPath(cardTextByCardIdA(cardId))
 export const wsPath = R.lensPath([...ws])
 export const usernamePath = R.lensPath([...username])
@@ -79,10 +80,10 @@ export const editingPath = R.lensPath([...editing])
 export const clientUsersPath = R.lensPath(clientUsers)
 export const page = R.lensPath(pageA)
 
-export const styleForTeamPath = (team) => R.lensPath(styleForTeamA(team))
-export const foregroundColorForTeamPath = (team) =>
+export const styleForTeamPath = (team: t.Team) => R.lensPath(styleForTeamA(team))
+export const foregroundColorForTeamPath = (team: t.Team) =>
   R.lensPath(foregroundColorForTeamA(team))
-export const backgroundColorForTeamPath = (team) =>
+export const backgroundColorForTeamPath = (team: t.Team) =>
   R.lensPath(backgroundColorForTeamA(team))
 export const gameIdsPath = R.lensPath(gameIds)
 export const serverAddressPath = R.lensPath(serverAddress)
