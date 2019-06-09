@@ -12,7 +12,7 @@ import {
   put,
 } from 'redux-saga/effects'
 
-const throttleSendHint = function* (action) {
+const throttleSendHint = function* (action: t.UpdateHint) {
   yield delay(500)
   yield put(afEmitAction(action))
 }
