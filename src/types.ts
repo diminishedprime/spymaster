@@ -1,3 +1,7 @@
+import {Dispatch as ReduxDispatch} from 'redux';
+
+export type Dispatch = ReduxDispatch<Action>;
+
 export type CardId = string;
 export type GameId = string;
 export type UserId = string;
@@ -152,31 +156,31 @@ export interface SetConnected {
 };
 
 export type Action =
-SetPage |
-SetCardFlipped |
-PickRole |
-SetTime |
-ToggleTitle |
-ErrorOccured |
-DimissError |
-SetWs |
-SetUsername |
-SetEditing |
-UpdateUserList |
-UpdateRemoteState |
-AddUser |
-RemoveUser |
-UpdateUsername |
-UpdateHint |
-StartTimer |
-UpdateHintNumber |
-NextTurn |
-Forfeit |
-StopTimer |
-NewGame |
-EmitAction |
-SetServerUsername |
-ListenToWebsocket |
+  SetPage |
+  SetCardFlipped |
+  PickRole |
+  SetTime |
+  ToggleTitle |
+  ErrorOccured |
+  DimissError |
+  SetWs |
+  SetUsername |
+  SetEditing |
+  UpdateUserList |
+  UpdateRemoteState |
+  AddUser |
+  RemoveUser |
+  UpdateUsername |
+  UpdateHint |
+  StartTimer |
+  UpdateHintNumber |
+  NextTurn |
+  Forfeit |
+  StopTimer |
+  NewGame |
+  EmitAction |
+  SetServerUsername |
+  ListenToWebsocket |
   ChangeBackgroundColor |
   SubmitHint |
   FlipCard |
@@ -241,8 +245,9 @@ export enum Team {
 }
 
 export interface Card {
+  text: string,
   flipped: boolean,
-  id: CardId,
+  cardId: CardId,
   team: Team,
 }
 

@@ -1,20 +1,25 @@
 import React from 'react'
 import R from 'ramda'
+import * as t from '../../types'
 
 import CardRow from './card-row'
 
-const boardStyle = ({
+const boardStyle: React.CSSProperties = ({
   display: 'flex',
   alignItems: 'center',
   flexDirection: 'column',
 })
 
-const Board = ({cardIds}) => (
+interface BoardProps {
+  cardIds: t.CardId[]
+}
+
+const Board: React.FC<BoardProps> = ({cardIds}) => (
   <div style={boardStyle}>
     { R
       .splitEvery(5, cardIds)
       .map((cardIds) => (
-        <CardRow key={cardIds} cardIds={cardIds} />
+        <CardRow key={cardIds.join('-')} cardIds={cardIds} />
       ))
     }
   </div>

@@ -131,7 +131,7 @@ export const afSubmitHint = () => ({
   type: t.ActionType.SUBMIT_HINT,
 })
 
-export const afFlipCard = (cardId: t.CardId) => ({
+export const afFlipCard = (cardId: t.CardId): t.FlipCard => ({
   type: t.ActionType.FLIP_CARD,
   cardId,
 })
