@@ -3,19 +3,20 @@ import R from 'ramda'
 import {
   connect,
 } from 'react-redux'
+import * as t from '../../types'
 
 import {
   clientUsersPath,
 } from '../../redux/paths'
 
-const connectedUsersStyle = ({
+const connectedUsersStyle: React.CSSProperties = ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   textAlign: 'center',
 })
 
-const usersStyle = ({
+const usersStyle: React.CSSProperties = ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -23,11 +24,19 @@ const usersStyle = ({
 
 })
 
-const ConnectedUsers = connect(
-  (state) => ({
-    users: R.keys(R.view(clientUsersPath, state)),
-  })
-)(({users}) => (
+interface StateProps {
+  users: t.UserId[]
+}
+
+type AllProps = StateProps;
+
+const mapStateToProps = (state: t.ReduxState)  : StateProps=> {
+  const users = R.keys(R.view(clientUsersPath, state));
+  return {
+    users,
+  }
+}
+const ConnectedUsers: React.FC<AllProps> = ({users}) => (
   <div style={connectedUsersStyle}>
     <h3>Connected Users</h3>
     <div style={usersStyle}>
@@ -37,6 +46,6 @@ const ConnectedUsers = connect(
         ))}
     </div>
   </div>
-))
+  )
 
-export default ConnectedUsers
+export default connect(mapStateToProps)(ConnectedUsers)
