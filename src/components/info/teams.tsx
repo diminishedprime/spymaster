@@ -1,4 +1,5 @@
 import React from "react";
+import * as t from "../../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -35,12 +36,27 @@ const infoBabyStyle = {
   marginTop: "10px"
 };
 
-const Teams = connect(state => {
-  const role = R.view(rolePath, state);
-  const currentTeam = R.view(currentTeamPath, state);
-  const yourTeam = R.view(teamPath, state);
-  const yourTeamStyle = R.view(styleForTeamPath(yourTeam), state);
-  const currentTeamStyle = R.view(styleForTeamPath(currentTeam), state);
+interface StateProps {
+  yourTeam: t.Team;
+  currentTeam: t.Team;
+  currentTeamStyle: React.CSSProperties;
+  yourTeamStyle: React.CSSProperties;
+  role: t.Role;
+}
+type AllProps = StateProps;
+
+const mapStateToProps = (state: t.ReduxState): StateProps => {
+  const role: t.Role = R.view(rolePath, state);
+  const currentTeam: t.Team = R.view(currentTeamPath, state);
+  const yourTeam: t.Team = R.view(teamPath, state);
+  const yourTeamStyle: React.CSSProperties = R.view(
+    styleForTeamPath(yourTeam),
+    state
+  );
+  const currentTeamStyle: React.CSSProperties = R.view(
+    styleForTeamPath(currentTeam),
+    state
+  );
 
   return {
     yourTeam,
@@ -49,7 +65,14 @@ const Teams = connect(state => {
     yourTeamStyle,
     role
   };
-})(({ currentTeamStyle, yourTeamStyle, yourTeam, currentTeam, role }) => (
+};
+const Teams: React.FC<AllProps> = ({
+  currentTeamStyle,
+  yourTeamStyle,
+  yourTeam,
+  currentTeam,
+  role
+}) => (
   <div style={R.merge(teamsStyle, infoBabyStyle)}>
     <div style={R.merge(teamsRowStyle, currentTeamStyle)}>
       <div>Current Team</div>
@@ -61,6 +84,6 @@ const Teams = connect(state => {
       {role !== SPYMASTER && <Pass />}
     </div>
   </div>
-));
+);
 
-export default Teams;
+export default connect(mapStateToProps)(Teams);

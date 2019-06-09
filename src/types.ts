@@ -132,7 +132,7 @@ export interface SetGameId {
 }
 export interface JoinGame {
   type: ActionType.JOIN_GAME;
-  userId: UserId;
+  userId?: UserId;
   gameId: GameId;
 }
 export interface ConnectToServer {

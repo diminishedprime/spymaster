@@ -1,4 +1,5 @@
 import React from "react";
+import * as t from "../../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -9,48 +10,63 @@ import {
 } from "../../redux/actions";
 import { usernamePath, editingPath } from "../../redux/paths";
 
-const pickUsernameStyle = {
+const pickUsernameStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center"
 };
 
-const usernameInputStyle = {
+const usernameInputStyle: React.CSSProperties = {
   minWidth: "200px",
   textAlign: "center"
 };
 
-const editUsernameStyle = {
+const editUsernameStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center"
 };
 
-const usernameButtonStyle = {
+const usernameButtonStyle: React.CSSProperties = {
   width: "5em"
 };
 
-const mapStateToProps = state => ({
+interface StateProps {
+  username: string;
+  editing: boolean;
+}
+
+interface DispatchProps {
+  setEditing: () => void;
+  changeUsername: (username: string) => void;
+  onChange: ({ target: { value } }: { target: { value: string } }) => void;
+  updateUsername: () => void;
+  // TODO - fix this to actual type
+  onKeyPress: ({ key }: React.KeyboardEvent<any>) => void;
+  // TODO - fix this to actual type
+  onFocus: (e: any) => void;
+}
+
+type AllProps = DispatchProps & StateProps;
+
+const mapStateToProps = (state: t.ReduxState): StateProps => ({
   username: R.view(usernamePath, state),
   editing: R.view(editingPath, state)
 });
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
   const setEditing = () => dispatch(afSetEditing());
-  const changeUsername = username => dispatch(afSetUsername(username));
+  const changeUsername = (username: string) =>
+    dispatch(afSetUsername(username));
   const updateUsername = () => dispatch(afSetServerUsername());
-
-  const onKeyPress = ({ key }) => (key === "Enter" ? updateUsername() : null);
-  const onChange = ({ target: { value } }) => changeUsername(value);
-  const onFocus = event => event.target.select();
 
   return {
     setEditing,
     changeUsername,
-    onChange,
     updateUsername,
-    onKeyPress,
-    onFocus
+    onKeyPress: ({ key }) => (key === "Enter" ? updateUsername() : null),
+    onChange: ({ target: { value } }) => changeUsername(value),
+    onFocus: event => event.target.select()
   };
 };
 

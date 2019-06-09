@@ -1,4 +1,5 @@
 import React from "react";
+import * as t from "../../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -10,8 +11,19 @@ const timerStyle = {
   justifyContent: "cente"
 };
 
-const mapStateToProps = state => {
-  const time = R.view(timePath, state);
+interface StateProps {
+  time: number;
+  disabled: boolean;
+}
+
+interface DispatchProps {
+  start: () => void;
+}
+
+type AllProps = DispatchProps & StateProps;
+
+const mapStateToProps = (state: t.ReduxState): StateProps => {
+  const time: number = R.view(timePath, state);
   const hintSubmitted = R.view(hintSubmittedPath, state);
   const disabled = !hintSubmitted;
   return {
@@ -20,14 +32,11 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
   start: () => dispatch(afStartTimer())
 });
 
-const Timer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(({ time, start, disabled }) => (
+const Timer: React.FC<AllProps> = ({ time, start, disabled }) => (
   <div style={timerStyle}>
     {time ? (
       <div>Time Remaining: {time} </div>
@@ -37,6 +46,9 @@ const Timer = connect(
       </button>
     )}
   </div>
-));
+);
 
-export default Timer;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Timer);

@@ -5,7 +5,7 @@ import Hint from "../hint/hint";
 import Teams from "./teams";
 import User from "./user";
 
-const infoStyle = {
+const infoStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "center",
   flexWrap: "wrap"

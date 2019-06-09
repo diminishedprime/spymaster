@@ -1,4 +1,5 @@
 import React from "react";
+import * as t from "../../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -11,14 +12,30 @@ import {
 } from "../../redux/paths";
 import { afUpdateHintNumber } from "../../redux/actions";
 
-const mapStateToProps = (state, { number }) => {
-  const cardTeam = R.view(teamPath, state);
+interface OwnProps {
+  number: t.HintNumber;
+}
+
+interface StateProps {
+  disabled: boolean;
+  style: React.CSSProperties;
+}
+
+interface DispatchProps {
+  setHintNumber: () => void;
+}
+
+type AllProps = StateProps & DispatchProps & OwnProps;
+
+const mapStateToProps = (state: t.ReduxState, { number }: OwnProps) => {
+  const cardTeam: t.Team = R.view(teamPath, state);
   const selectedNumber = R.view(hintNumberPath, state);
   const numberPicked = selectedNumber === number;
   const playerTeam = R.view(teamPath, state);
   const currentTeam = R.view(currentTeamPath, state);
-  const hintSubmitted = R.view(hintSubmittedPath, state);
-  const disabled = numberPicked || playerTeam !== currentTeam || hintSubmitted;
+  const hintSubmitted: boolean = R.view(hintSubmittedPath, state);
+  const disabled: boolean =
+    numberPicked || playerTeam !== currentTeam || hintSubmitted;
   const baseStyle = {
     color: "#000000",
     backgroundColor: "#ffffff"
@@ -34,14 +51,19 @@ const mapStateToProps = (state, { number }) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, { number }) => ({
+const mapDispatchToProps = (
+  dispatch: t.Dispatch,
+  { number }: OwnProps
+): DispatchProps => ({
   setHintNumber: () => dispatch(afUpdateHintNumber(number))
 });
 
-const NumberButton = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(({ number, disabled, style, setHintNumber }) => (
+const NumberButton: React.FC<AllProps> = ({
+  number,
+  disabled,
+  style,
+  setHintNumber
+}) => (
   <button
     key={number}
     disabled={disabled}
@@ -50,6 +72,9 @@ const NumberButton = connect(
   >
     {number}
   </button>
-));
+);
 
-export default NumberButton;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NumberButton);
