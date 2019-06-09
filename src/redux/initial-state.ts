@@ -39,21 +39,22 @@ export const initialHint = {
   submitted: false,
 }
 
-const newState = R.compose(
-  R.set(gameIdsPath, []),
-  R.set(clientUsersPath, {}),
-  R.set(rolePath, SPYMASTER),
-  R.set(teamPath, TEAM_1),
-  R.set(page, LOBBY),
-  R.set(errorPath, initialErrorState),
-  R.set(showTitlePath, true),
-  R.set(usernamePath, ''),
-  R.set(hintPath, initialHint),
-  R.set(timePath, undefined),
-  R.set(scorePath, initialScore),
-  R.set(serverAddressPath, 'dev.mjh.io'),
-  R.set(connectedPath, false)
-)
+const newState = (s = {}) => {
+  s = R.set(connectedPath, false, s);
+  s = R.set(serverAddressPath, 'dev.mjh.io', s);
+  s = R.set(scorePath, initialScore, s);
+  s = R.set(timePath, undefined, s);
+  s = R.set(hintPath, initialHint, s);
+  s = R.set(usernamePath, '', s);
+  s = R.set(showTitlePath, true, s);
+  s = R.set(errorPath, initialErrorState, s);
+  s = R.set(page, LOBBY, s);
+  s = R.set(teamPath, TEAM_1, s);
+  s = R.set(rolePath, SPYMASTER, s);
+  s = R.set(clientUsersPath, {}, s);
+  s = R.set(gameIdsPath, [], s);
+  return s;
+}
 
 export const newGame = () =>
   R.view(remoteStatePath, newState())
