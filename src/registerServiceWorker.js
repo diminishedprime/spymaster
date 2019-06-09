@@ -9,17 +9,16 @@
 // This link also includes instructions on opting out of this behavior.
 
 export default function register() {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker`
-      navigator
-        .serviceWorker
+  if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      const swUrl = `${process.env.PUBLIC_URL}/service-worker`;
+      navigator.serviceWorker
         .register(swUrl)
-        .then((registration) => {
+        .then(registration => {
           registration.onupdatefound = () => {
-            const installingWorker = registration.installing
+            const installingWorker = registration.installing;
             installingWorker.onstatechange = () => {
-              if (installingWorker.state === 'installed') {
+              if (installingWorker.state === "installed") {
                 if (navigator.serviceWorker.controller) {
                   // At this point, the old content will have been purged and
                   // the fresh content will have been added to the cache.
@@ -27,31 +26,31 @@ export default function register() {
                   // available; please refresh." message in your web app.
 
                   // eslint-disable-next-line no-console
-                  console.log('New content is available; please refresh.')
+                  console.log("New content is available; please refresh.");
                 } else {
                   // At this point, everything has been precached.
                   // It's the perfect time to display a
                   // "Content is cached for offline use." message.
 
                   // eslint-disable-next-line no-console
-                  console.log('Content is cached for offline use.')
+                  console.log("Content is cached for offline use.");
                 }
               }
-            }
-          }
+            };
+          };
         })
-        .catch((error) => {
+        .catch(error => {
           // eslint-disable-next-line no-console
-          console.error('Error during service worker registration:', error)
-        })
-    })
+          console.error("Error during service worker registration:", error);
+        });
+    });
   }
 }
 
 export const unregister = () => {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.unregister()
-    })
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.ready.then(registration => {
+      registration.unregister();
+    });
   }
-}
+};

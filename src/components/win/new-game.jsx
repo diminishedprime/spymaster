@@ -1,21 +1,15 @@
-import React from 'react'
-import {
-  connect,
-} from 'react-redux'
+import React from "react";
+import { connect } from "react-redux";
 
-import {
-  afNewGame,
-} from '../../redux/actions'
+import { afNewGame } from "../../redux/actions";
 
-const mapDispatchToProps = (dispatch) => ({
-  onClick: () => dispatch(afNewGame()),
-})
+const mapDispatchToProps = dispatch => ({
+  onClick: () => dispatch(afNewGame())
+});
 
-const NewGame = ({onClick}) => (
-  <button onClick={onClick}>New Game</button>
-)
+const NewGame = ({ onClick }) => <button onClick={onClick}>New Game</button>;
 
 export default connect(
   undefined,
   mapDispatchToProps
-)(NewGame)
+)(NewGame);

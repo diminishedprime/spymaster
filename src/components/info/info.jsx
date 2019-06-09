@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 
-import Hint from '../hint/hint'
+import Hint from "../hint/hint";
 
-import Teams from './teams'
-import User from './user'
+import Teams from "./teams";
+import User from "./user";
 
-const infoStyle = ({
-  display: 'flex',
-  justifyContent: 'center',
-  flexWrap: 'wrap',
-})
+const infoStyle = {
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "wrap"
+};
 
 const Info = () => (
   <div style={infoStyle}>
@@ -17,6 +17,6 @@ const Info = () => (
     <Teams />
     <User />
   </div>
-)
+);
 
-export default Info
+export default Info;

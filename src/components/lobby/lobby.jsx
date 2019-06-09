@@ -1,55 +1,49 @@
-import React from 'react'
-import R from 'ramda'
-import {
-  connect,
-} from 'react-redux'
+import React from "react";
+import R from "ramda";
+import { connect } from "react-redux";
 
-import PickUsername from '../pick-username/pick-username'
-import ConnectedUsers from '../connected-users/connected-users'
-import {
-  afNewGame2,
-  afJoinGame,
-} from '../../redux/actions'
-import {
-  gameIdsPath,
-} from '../../redux/paths'
+import PickUsername from "../pick-username/pick-username";
+import ConnectedUsers from "../connected-users/connected-users";
+import { afNewGame2, afJoinGame } from "../../redux/actions";
+import { gameIdsPath } from "../../redux/paths";
 
-const mapStateToProps = (state) => ({
-  gameIds: R.view(gameIdsPath, state),
-})
+const mapStateToProps = state => ({
+  gameIds: R.view(gameIdsPath, state)
+});
 
-const mapDispatchToProps = (dispatch) => ({
-  newGame: () => dispatch(afNewGame2()),
-})
+const mapDispatchToProps = dispatch => ({
+  newGame: () => dispatch(afNewGame2())
+});
 
 const JoinGame = connect(
   () => ({}),
-  (dispatch, {gameId}) => ({
-    joinGame: () => dispatch(afJoinGame(gameId)),
+  (dispatch, { gameId }) => ({
+    joinGame: () => dispatch(afJoinGame(gameId))
   })
-)(({gameId, joinGame}) => (
+)(({ gameId, joinGame }) => (
   <button onClick={joinGame}>{gameId.substring(0, 8)}</button>
-))
+));
 
-const Lobby = ({newGame, gameIds}) => (
+const Lobby = ({ newGame, gameIds }) => (
   <div>
     <button onClick={newGame}>New Game</button>
     <div>
       Join Existing Game
       <div>
-        {R.map((gameId) => (
-           <JoinGame key={gameId} gameId={gameId} />
-         ),gameIds)
-
-        }
+        {R.map(
+          gameId => (
+            <JoinGame key={gameId} gameId={gameId} />
+          ),
+          gameIds
+        )}
       </div>
     </div>
     <PickUsername />
     <ConnectedUsers />
   </div>
-)
+);
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Lobby)
+)(Lobby);
