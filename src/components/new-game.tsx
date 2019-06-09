@@ -1,8 +1,8 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import { connect } from "react-redux";
 
-import { afNewGame } from "../../redux/actions";
+import { afNewGame } from "./../redux/actions";
 
 interface DispatchProps {
   onClick: () => void;

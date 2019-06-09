@@ -1,10 +1,10 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { afStartTimer } from "../../redux/actions";
-import { timePath, hintSubmittedPath } from "../../redux/paths";
+import { afStartTimer } from "./../redux/actions";
+import { timePath, hintSubmittedPath } from "./../redux/paths";
 
 const timerStyle = {
   display: "flex",

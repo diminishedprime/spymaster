@@ -1,9 +1,9 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { winnerPath } from "../../redux/paths";
+import { winnerPath } from "./../redux/paths";
 
 import NewGame from "./new-game";
 

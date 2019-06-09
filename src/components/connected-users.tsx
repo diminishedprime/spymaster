@@ -1,9 +1,9 @@
 import React from "react";
 import R from "ramda";
 import { connect } from "react-redux";
-import * as t from "../../types";
+import * as t from "./../types";
 
-import { clientUsersPath } from "../../redux/paths";
+import { clientUsersPath } from "./../redux/paths";
 
 const connectedUsersStyle: React.CSSProperties = {
   display: "flex",

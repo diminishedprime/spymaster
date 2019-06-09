@@ -1,15 +1,12 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 import { CirclePicker } from "react-color";
 
-import { AGENT, SPYMASTER } from "../../constants";
-import { afChangeBackgroundColor, afPickRole } from "../../redux/actions";
-import {
-  styleForTeamPath,
-  backgroundColorForTeamPath
-} from "../../redux/paths";
+import { AGENT, SPYMASTER } from "./../constants";
+import { afChangeBackgroundColor, afPickRole } from "./../redux/actions";
+import { styleForTeamPath, backgroundColorForTeamPath } from "./../redux/paths";
 
 const teamRowStyle: React.CSSProperties = {
   display: "flex",

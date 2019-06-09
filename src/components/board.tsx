@@ -1,6 +1,6 @@
 import React from "react";
 import R from "ramda";
-import * as t from "../../types";
+import * as t from "./../types";
 
 import CardRow from "./card-row";
 

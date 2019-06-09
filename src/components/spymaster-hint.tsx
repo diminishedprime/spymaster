@@ -1,5 +1,5 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -10,8 +10,8 @@ import {
   hintNumberPath,
   teamPath,
   currentTeamPath
-} from "../../redux/paths";
-import { afUpdateHint, afSubmitHint } from "../../redux/actions";
+} from "./../redux/paths";
+import { afUpdateHint, afSubmitHint } from "./../redux/actions";
 
 import NumberButton from "./number-button";
 

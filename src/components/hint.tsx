@@ -1,5 +1,5 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -10,9 +10,9 @@ import {
   hintTextPath,
   hintNumberPath,
   rolePath
-} from "../../redux/paths";
-/* import font from "../font.css"; */
-import Forfeit from "../info/forfeit";
+} from "./../redux/paths";
+/* import font from "./font.css"; */
+import Forfeit from "./forfeit";
 
 import SpymasterHint from "./spymaster-hint";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -9,8 +9,8 @@ import {
   teamPath,
   styleForTeamPath,
   currentTeamPath
-} from "../../redux/paths";
-import { afUpdateHintNumber } from "../../redux/actions";
+} from "./../redux/paths";
+import { afUpdateHintNumber } from "./../redux/actions";
 
 interface OwnProps {
   number: t.HintNumber;

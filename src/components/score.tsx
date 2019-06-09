@@ -1,9 +1,9 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { styleForTeamPath, cardsPath } from "../../redux/paths";
+import { styleForTeamPath, cardsPath } from "./../redux/paths";
 
 const scoreStyle: React.CSSProperties = {
   display: "flex",

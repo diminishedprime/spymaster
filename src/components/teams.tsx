@@ -1,16 +1,16 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { SPYMASTER } from "../../constants";
+import { SPYMASTER } from "./../constants";
 import {
   teamPath,
   styleForTeamPath,
   currentTeamPath,
   rolePath
-} from "../../redux/paths";
-import { largeTextStyle } from "../commonStyles";
+} from "./../redux/paths";
+import { largeTextStyle } from "./commonStyles";
 
 import Pass from "./pass";
 

@@ -1,10 +1,10 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { currentTeamPath, teamPath } from "../../redux/paths";
-import { afNextTurn } from "../../redux/actions";
+import { currentTeamPath, teamPath } from "./../redux/paths";
+import { afNextTurn } from "./../redux/actions";
 
 interface StateProps {
   disabled: boolean;

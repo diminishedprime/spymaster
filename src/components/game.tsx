@@ -1,12 +1,12 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import Board from "../card/board";
-import Info from "../info/info";
-import Timer from "../timer/timer";
-import { cardsPath } from "../../redux/paths";
+import Board from "./board";
+import Info from "./info";
+import Timer from "./timer";
+import { cardsPath } from "../redux/paths";
 
 interface StateProps {
   cardIds: t.CardId[];

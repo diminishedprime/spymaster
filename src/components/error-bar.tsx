@@ -1,10 +1,10 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { afDismissError } from "../../redux/actions";
-import { errorPath } from "../../redux/paths";
+import { afDismissError } from "./../redux/actions";
+import { errorPath } from "./../redux/paths";
 
 const errorBarStyle: React.CSSProperties = {
   display: "flex",

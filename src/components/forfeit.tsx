@@ -1,10 +1,10 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { afForfeit } from "../../redux/actions";
-import { teamPath } from "../../redux/paths";
+import { afForfeit } from "./../redux/actions";
+import { teamPath } from "./../redux/paths";
 
 interface StateProps {
   team: t.Team;

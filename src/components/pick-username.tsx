@@ -1,5 +1,5 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -7,8 +7,8 @@ import {
   afSetEditing,
   afSetUsername,
   afSetServerUsername
-} from "../../redux/actions";
-import { usernamePath, editingPath } from "../../redux/paths";
+} from "./../redux/actions";
+import { usernamePath, editingPath } from "./../redux/paths";
 
 const pickUsernameStyle: React.CSSProperties = {
   display: "flex",

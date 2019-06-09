@@ -1,9 +1,9 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import { afFlipCard } from "../../redux/actions";
+import { afFlipCard } from "./../redux/actions";
 import {
   hintSubmittedPath,
   rolePath,
@@ -13,7 +13,7 @@ import {
   cardFlippedByCardId,
   cardTeamByCardId,
   cardTextByCardId
-} from "../../redux/paths";
+} from "./../redux/paths";
 
 interface StateProps {
   text: string;

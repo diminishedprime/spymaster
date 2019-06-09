@@ -1,12 +1,12 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
-import PickUsername from "../pick-username/pick-username";
-import ConnectedUsers from "../connected-users/connected-users";
-import { afNewGame2, afJoinGame } from "../../redux/actions";
-import { gameIdsPath } from "../../redux/paths";
+import PickUsername from "./pick-username";
+import ConnectedUsers from "./connected-users";
+import { afNewGame2, afJoinGame } from "./../redux/actions";
+import { gameIdsPath } from "./../redux/paths";
 
 interface StateProps {
   gameIds: t.GameId[];

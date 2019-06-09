@@ -1,5 +1,5 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 
 import Card from "./card";
 

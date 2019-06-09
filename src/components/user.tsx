@@ -1,5 +1,5 @@
 import React from "react";
-import * as t from "../../types";
+import * as t from "./../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -8,8 +8,8 @@ import {
   teamPath,
   styleForTeamPath,
   usernamePath
-} from "../../redux/paths";
-import { largeTextStyle } from "../commonStyles";
+} from "./../redux/paths";
+import { largeTextStyle } from "./commonStyles";
 
 import Score from "./score";
 

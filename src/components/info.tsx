@@ -1,6 +1,6 @@
 import React from "react";
 
-import Hint from "../hint/hint";
+import Hint from "./hint";
 
 import Teams from "./teams";
 import User from "./user";
