@@ -5,80 +5,188 @@ export type HintNumber = number | 'Zero' | 'Infinity';
 
 export type ReduxState = any;
 
-export interface SetPage {page: Page};
-export interface SetCardFlipped {cardId: CardId};
-export interface PickRole {team: Team, role: Role};
-export interface SetTime {seconds: number};
-export interface ToggleTitle {};
-export interface ErrorOccured {text: string, severity: Severity};
-export interface DimissError {};
-export interface SetWs {ws: any};
-export interface SetUsername {username: string};
-export interface SetEditing {flag: boolean};
-export interface UpdateUserList {};
-export interface UpdateRemoteState {remoteState: any};
-export interface AddUser {userId: UserId, ws: any};
-export interface RemoveUser {userId: UserId};
-export interface UpdateUsername {};
-export interface UpdateHint {hint: string};
-export interface StartTimer {};
-export interface UpdateHintNumber {hintNumber: HintNumber};
-export interface NextTurn {};
-export interface Forfeit {team: Team};
-export interface StopTimer {};
-export interface NewGame {};
-export interface EmitAction {};
-export interface SetServerUsername {};
-export interface ListenToWebsocket {};
-export interface ChangeBackgroundColor {gameId: GameId, team: Team, backgroundColor: string};
-export interface SubmitHint {};
-export interface FlipCard {cardId: CardId};
-export interface NewGame2 {userId: UserId};
-export interface SetUserId {userId: UserId};
-export interface SetGameIds {gameIds: GameId[]};
-export interface SetGameId {gameId: GameId};
-export interface JoinGame {userId: UserId, gameId: GameId};
-export interface ConnectToServer {};
-export interface UpdateServerAddress {serverAddress: string};
-export interface SetConnected {flag: boolean};
+export interface SetPage {
+  type: ActionType.SET_PAGE;
+  page: Page
+};
+export interface SetCardFlipped {
+  type: ActionType.SET_CARD_FLIPPED;
+  cardId: CardId
+};
+export interface PickRole {
+  type: ActionType.PICK_ROLE;
+  team: Team, role: Role
+};
+export interface SetTime {
+  type: ActionType.SET_TIME;
+  seconds: number
+};
+export interface ToggleTitle {
+  type: ActionType.TOGGLE_TITLE;
+
+};
+export interface ErrorOccured {
+  type: ActionType.ERROR_OCCURED;
+  text: string, severity: Severity
+};
+export interface DimissError {
+  type: ActionType.DISMISS_ERROR;
+
+};
+export interface SetWs {
+  type: ActionType.SET_WS;
+  ws: any
+};
+export interface SetUsername {
+  type: ActionType.SET_USERNAME;
+  username: string
+};
+export interface SetEditing {
+  type: ActionType.SET_EDITING;
+  flag: boolean
+};
+export interface UpdateUserList {
+  type: ActionType.UPDATE_USER_LIST;
+
+};
+export interface UpdateRemoteState {
+  type: ActionType.UPDATE_REMOTE_STATE;
+  remoteState: any
+};
+export interface AddUser {
+  type: ActionType.ADD_USER;
+  userId: UserId, ws: any
+};
+export interface RemoveUser {
+  type: ActionType.REMOVE_USER;
+  userId: UserId
+};
+export interface UpdateUsername {
+  type: ActionType.UPDATE_USERNAME;
+
+};
+export interface UpdateHint {
+  type: ActionType.UPDATE_HINT;
+  hint: string
+};
+export interface StartTimer {
+  type: ActionType.START_TIMER;
+
+};
+export interface UpdateHintNumber {
+  type: ActionType.UPDATE_HINT_NUMBER;
+  hintNumber: HintNumber
+};
+export interface NextTurn {
+  type: ActionType.NEXT_TURN;
+
+};
+export interface Forfeit {
+  type: ActionType.FORFEIT;
+  team: Team
+};
+export interface StopTimer {
+  type: ActionType.STOP_TIMER;
+
+};
+export interface NewGame {
+  type: ActionType.NEW_GAME;
+
+};
+export interface EmitAction {
+  type: ActionType.EMIT_ACTION;
+
+};
+export interface SetServerUsername {
+  type: ActionType.SET_SERVER_USERNAME;
+
+};
+export interface ListenToWebsocket {
+  type: ActionType.LISTEN_TO_WEBSOCKET;
+
+};
+export interface ChangeBackgroundColor {
+  type: ActionType.CHANGE_BACKGROUND_COLOR;
+  gameId: GameId, team: Team, backgroundColor: string
+};
+export interface SubmitHint {
+  type: ActionType.SUBMIT_HINT;
+
+};
+export interface FlipCard {
+  type: ActionType.FLIP_CARD;
+  cardId: CardId
+};
+export interface NewGame2 {
+  type: ActionType.NEW_GAME_2;
+  userId: UserId
+};
+export interface SetUserId {
+  type: ActionType.SET_USER_ID;
+  userId: UserId
+};
+export interface SetGameIds {
+  type: ActionType.SET_GAME_IDS;
+  gameIds: GameId[]
+};
+export interface SetGameId {
+  type: ActionType.SET_GAME_ID;
+  gameId: GameId
+};
+export interface JoinGame {
+  type: ActionType.JOIN_GAME;
+  userId: UserId, gameId: GameId
+};
+export interface ConnectToServer {
+  type: ActionType.CONNECT_TO_SERVER;
+
+};
+export interface UpdateServerAddress {
+  type: ActionType.UPDATE_SERVER_ADDRESS;
+  serverAddress: string
+};
+export interface SetConnected {
+  type: ActionType.SET_CONNECTED;
+  flag: boolean
+};
 
 export type Action =
-  {type: ActionType.SET_PAGE, action: SetPage} |
-  {type: ActionType.SET_CARD_FLIPPED, action: SetCardFlipped} |
-  {type: ActionType.PICK_ROLE, action: PickRole} |
-  {type: ActionType.SET_TIME, action: SetTime} |
-  {type: ActionType.TOGGLE_TITLE, action: ToggleTitle} |
-  {type: ActionType.ERROR_OCCURED, action: ErrorOccured} |
-  {type: ActionType.DISMISS_ERROR, action: DimissError} |
-  {type: ActionType.SET_WS, action: SetWs} |
-  {type: ActionType.SET_USERNAME, action: SetUsername} |
-  {type: ActionType.SET_EDITING, action: SetEditing} |
-  {type: ActionType.UPDATE_USER_LIST, action: UpdateUserList} |
-  {type: ActionType.UPDATE_REMOTE_STATE, action: UpdateRemoteState} |
-  {type: ActionType.ADD_USER, action: AddUser} |
-  {type: ActionType.REMOVE_USER, action: RemoveUser} |
-  {type: ActionType.UPDATE_USERNAME, action: UpdateUsername} |
-  {type: ActionType.UPDATE_HINT, action: UpdateHint} |
-  {type: ActionType.START_TIMER, action: StartTimer} |
-  {type: ActionType.UPDATE_HINT_NUMBER, action: UpdateHintNumber} |
-  {type: ActionType.NEXT_TURN, action: NextTurn} |
-  {type: ActionType.FORFEIT, action: Forfeit} |
-  {type: ActionType.STOP_TIMER, action: StopTimer} |
-  {type: ActionType.NEW_GAME, action: NewGame} |
-  {type: ActionType.EMIT_ACTION, action: EmitAction} |
-  {type: ActionType.SET_SERVER_USERNAME, action: SetServerUsername} |
-  {type: ActionType.LISTEN_TO_WEBSOCKET, action: ListenToWebsocket} |
-  {type: ActionType.CHANGE_BACKGROUND_COLOR, action: ChangeBackgroundColor} |
-  {type: ActionType.SUBMIT_HINT, action: SubmitHint} |
-  {type: ActionType.FLIP_CARD, action: FlipCard} |
-  {type: ActionType.NEW_GAME_2, action: NewGame2} |
-  {type: ActionType.SET_USER_ID, action: SetUserId} |
-  {type: ActionType.SET_GAME_IDS, action: SetGameIds} |
-  {type: ActionType.SET_GAME_ID, action: SetGameId} |
-  {type: ActionType.JOIN_GAME, action: JoinGame} |
-  {type: ActionType.CONNECT_TO_SERVER, action: ConnectToServer} |
-  {type: ActionType.UPDATE_SERVER_ADDRESS, action: UpdateServerAddress} |
-  {type: ActionType.SET_CONNECTED, action: SetConnected}
+SetPage |
+SetCardFlipped |
+PickRole |
+SetTime |
+ToggleTitle |
+ErrorOccured |
+DimissError |
+SetWs |
+SetUsername |
+SetEditing |
+UpdateUserList |
+UpdateRemoteState |
+AddUser |
+RemoveUser |
+UpdateUsername |
+UpdateHint |
+StartTimer |
+UpdateHintNumber |
+NextTurn |
+Forfeit |
+StopTimer |
+NewGame |
+EmitAction |
+SetServerUsername |
+ListenToWebsocket |
+  ChangeBackgroundColor |
+  SubmitHint |
+  FlipCard |
+  NewGame2 |
+  SetUserId |
+  SetGameIds |
+  SetGameId |
+  JoinGame |
+  ConnectToServer |
+  UpdateServerAddress |
+  SetConnected
 
 export enum ActionType {
   SET_PAGE = 'set page',
@@ -122,7 +230,6 @@ export enum ActionType {
 
 export enum Page {
   GAME_MODE_PICK_TEAM = 'pick team'
-  
 }
 
 export enum Team {

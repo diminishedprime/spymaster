@@ -82,22 +82,22 @@ const setConnected = (state: t.ReduxState, {flag}: t.SetConnected) =>
 
 export const app = (state=initialState, action: t.Action) => {
   switch(action.type) {
-    case t.ActionType.SET_GAME_ID: return setGameId(state, action.action)
-    case t.ActionType.SET_GAME_IDS: return setGameIds(state, action.action)
-    case t.ActionType.SET_USER_ID: return setUserId(state, action.action)
-    case t.ActionType.UPDATE_HINT_NUMBER: return updateHintNumber(state, action.action)
-    case t.ActionType.UPDATE_HINT: return updateHint(state, action.action)
-    case t.ActionType.SET_PAGE: return setPage(state, action.action)
+    case t.ActionType.SET_GAME_ID: return setGameId(state, action)
+    case t.ActionType.SET_GAME_IDS: return setGameIds(state, action)
+    case t.ActionType.SET_USER_ID: return setUserId(state, action)
+    case t.ActionType.UPDATE_HINT_NUMBER: return updateHintNumber(state, action)
+    case t.ActionType.UPDATE_HINT: return updateHint(state, action)
+    case t.ActionType.SET_PAGE: return setPage(state, action)
     case t.ActionType.DISMISS_ERROR: return dismissError(state)
-    case t.ActionType.ERROR_OCCURED: return hiError(state, action.action)
+    case t.ActionType.ERROR_OCCURED: return hiError(state, action)
     case t.ActionType.TOGGLE_TITLE: return toggleTitle(state)
-    case t.ActionType.PICK_ROLE: return pickRole(state, action.action)
-    case t.ActionType.SET_WS: return setWs(state, action.action)
-    case t.ActionType.SET_USERNAME: return setUsername(state, action.action)
-    case t.ActionType.SET_EDITING: return setEditing(state, action.action)
-    case t.ActionType.UPDATE_REMOTE_STATE: return updateRemoteState(state, action.action)
-    case t.ActionType.UPDATE_SERVER_ADDRESS: return updateServerAddress(state, action.action)
-    case t.ActionType.SET_CONNECTED: return setConnected(state, action.action)
+    case t.ActionType.PICK_ROLE: return pickRole(state, action)
+    case t.ActionType.SET_WS: return setWs(state, action)
+    case t.ActionType.SET_USERNAME: return setUsername(state, action)
+    case t.ActionType.SET_EDITING: return setEditing(state, action)
+    case t.ActionType.UPDATE_REMOTE_STATE: return updateRemoteState(state, action)
+    case t.ActionType.UPDATE_SERVER_ADDRESS: return updateServerAddress(state, action)
+    case t.ActionType.SET_CONNECTED: return setConnected(state, action)
     default:
       if (!(
         action.type.startsWith('async') ||

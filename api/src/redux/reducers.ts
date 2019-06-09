@@ -31,10 +31,7 @@ const addUser = (state: t.ServerReduxState, { userId, ws }: t.AddUser) => {
   return s;
 };
 
-const removeUser = (
-  state: t.ServerReduxState,
-  { userId }: t.REMOVE_USERAction
-) => {
+const removeUser = (state: t.ServerReduxState, { userId }: t.RemoveUser) => {
   let s = R.over(usersPath, R.dissoc(userId), state);
   s = R.over(clientUsersPath, R.dissoc(userId), s);
   return s;
@@ -122,28 +119,28 @@ export const app = (
     case t.ServerActionType.REMOVE_USER_FROM_GAME:
     case t.ServerActionType.CHANGE_BACKGROUND_COLOR_SERVER:
     case t.ServerActionType.JOIN_GAME_SERVER:
-      return R.over(gameByGameId(action.action.gameId), gameApp(action), state);
+      return R.over(gameByGameId(action.gameId), gameApp(action), state);
 
     case t.ServerActionType.NEW_GAME_SERVER:
-      return setNewGame2Server(state, action.action);
+      return setNewGame2Server(state, action);
     case t.ActionType.SET_CARD_FLIPPED:
-      return setCardFlipped(state, action.action);
+      return setCardFlipped(state, action);
     case t.ActionType.ADD_USER:
-      return addUser(state, action.action);
+      return addUser(state, action);
     case t.ActionType.REMOVE_USER:
-      return removeUser(state, action.action);
+      return removeUser(state, action);
     case t.ActionType.UPDATE_HINT:
-      return updateHint(state, action.action);
+      return updateHint(state, action);
     case t.ActionType.SET_TIME:
-      return setTime(state, action.action);
+      return setTime(state, action);
     case t.ActionType.UPDATE_HINT_NUMBER:
-      return updateHintNumber(state, action.action);
+      return updateHintNumber(state, action);
     case t.ActionType.SUBMIT_HINT:
       return submitHint(state);
     case t.ActionType.NEXT_TURN:
       return nextTurn(state);
     case t.ActionType.FORFEIT:
-      return loseGame(state, action.action);
+      return loseGame(state, action);
     default:
       if (
         !(action.type.startsWith("async") || action.type.startsWith("@@redux"))
