@@ -11,15 +11,15 @@ export enum ServerActionType {
 }
 
 export enum ServerAsyncActionType {
-  CONNECT_WEBSOCKET_SERVER = "connect websocket server",
-  BROADCAST_MESSAGE_TO_USER_ID = "message user id",
-  BROADCAST_MESSAGE_TO_USER_IDS = "message user ids",
-  BROADCAST_MESSAGE_TO_ALL = "message all",
-  BROADCAST_ACTION_TO_USER_ID = "action user id",
-  BROADCAST_ACTION_TO_USER_IDS = "action user ids",
-  BROADCAST_ACTION_TO_ALL = "action all",
-  USER_CONNECTED = "user connected",
-  USER_DISCONNECTED = "user disconnected"
+  CONNECT_WEBSOCKET_SERVER = "async connect websocket server",
+  BROADCAST_MESSAGE_TO_USER_ID = "async message user id",
+  BROADCAST_MESSAGE_TO_USER_IDS = "async message user ids",
+  BROADCAST_MESSAGE_TO_ALL = "async message all",
+  BROADCAST_ACTION_TO_USER_ID = "async action user id",
+  BROADCAST_ACTION_TO_USER_IDS = "async action user ids",
+  BROADCAST_ACTION_TO_ALL = "async action all",
+  USER_CONNECTED = "async user connected",
+  USER_DISCONNECTED = "async user disconnected"
 }
 
 export interface CONNECT_WEBSOCKET_SERVERAction {

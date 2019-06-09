@@ -141,10 +141,10 @@ export const app = (
       return nextTurn(state);
     case t.ActionType.FORFEIT:
       return loseGame(state, action);
+    case t.ServerAsyncActionType.CONNECT_WEBSOCKET_SERVER:
+      return state;
     default:
-      if (
-        !(action.type.startsWith("async") || action.type.startsWith("@@redux"))
-      ) {
+      if (!action.type.startsWith("@@redux")) {
         // eslint-disable-next-line no-console
         console.log(`${action.type} not handled`);
       }
