@@ -1,14 +1,14 @@
 export type CardId = string;
 export type GameId = string;
 export type UserId = string;
-export type HintNumber = number;
+export type HintNumber = number | 'Zero' | 'Infinity';
 
 export type ReduxState = any;
 
 export interface SetPage {page: Page};
-export interface SetCardFlipped {};
+export interface SetCardFlipped {cardId: CardId};
 export interface PickRole {team: Team, role: Role};
-export interface SetTime {};
+export interface SetTime {seconds: number};
 export interface ToggleTitle {};
 export interface ErrorOccured {text: string, severity: Severity};
 export interface DimissError {};
@@ -17,27 +17,27 @@ export interface SetUsername {username: string};
 export interface SetEditing {flag: boolean};
 export interface UpdateUserList {};
 export interface UpdateRemoteState {remoteState: any};
-export interface AddUser {};
-export interface RemoveUser {};
+export interface AddUser {userId: UserId, ws: any};
+export interface RemoveUser {userId: UserId};
 export interface UpdateUsername {};
 export interface UpdateHint {hint: string};
 export interface StartTimer {};
 export interface UpdateHintNumber {hintNumber: HintNumber};
 export interface NextTurn {};
-export interface Forfeit {};
+export interface Forfeit {team: Team};
 export interface StopTimer {};
 export interface NewGame {};
 export interface EmitAction {};
 export interface SetServerUsername {};
 export interface ListenToWebsocket {};
-export interface ChangeBackgroundColor {};
+export interface ChangeBackgroundColor {gameId: GameId, team: Team, backgroundColor: string};
 export interface SubmitHint {};
-export interface FlipCard {};
-export interface NewGame2 {};
-export interface SetUserId {userId: string};
-export interface SetGameIds {gameIds: string[]};
-export interface SetGameId {gameId: string};
-export interface JoinGame {};
+export interface FlipCard {cardId: CardId};
+export interface NewGame2 {userId: UserId};
+export interface SetUserId {userId: UserId};
+export interface SetGameIds {gameIds: GameId[]};
+export interface SetGameId {gameId: GameId};
+export interface JoinGame {userId: UserId, gameId: GameId};
 export interface ConnectToServer {};
 export interface UpdateServerAddress {serverAddress: string};
 export interface SetConnected {flag: boolean};
@@ -121,12 +121,21 @@ export enum ActionType {
 }
 
 export enum Page {
+  GAME_MODE_PICK_TEAM = 'pick team'
   
 }
 
 export enum Team {
   TEAM_1 = 'team1',
   TEAM_2 = 'team2',
+  ASSASSIN = 'assassin',
+  BYSTANDER = 'bystander',
+}
+
+export interface Card {
+  flipped: boolean,
+  id: CardId,
+  team: Team,
 }
 
 export enum Role {

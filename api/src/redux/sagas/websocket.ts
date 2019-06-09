@@ -1,4 +1,5 @@
 import uuid4 from 'uuid/v4'
+import * as t from '../../types';
 import R from 'ramda'
 import io from 'socket.io'
 import {
@@ -14,13 +15,6 @@ import {
   usersPath,
 } from '../paths'
 import {
-  CONNECT_WEBSOCKET_SERVER,
-  BROADCAST_MESSAGE_TO_USER_IDS,
-  BROADCAST_MESSAGE_TO_USER_ID,
-  BROADCAST_MESSAGE_TO_ALL,
-  BROADCAST_ACTION_TO_USER_IDS,
-  BROADCAST_ACTION_TO_USER_ID,
-  BROADCAST_ACTION_TO_ALL,
   afBroadcastMessageToUserId,
   afAddUser,
   afUserDisconnected,
@@ -37,13 +31,13 @@ import {
 } from 'redux-saga/effects'
 
 const broadcastMessageToUserId = function* () {
-  yield takeEvery(BROADCAST_MESSAGE_TO_USER_ID, function* ({userId, message}) {
+  yield takeEvery<any>(t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_USER_ID, function* ({userId, message}: t.BROADCAST_MESSAGE_TO_USER_IDAction) {
     const ws = yield select(R.view(wsByUserIdPath(userId)))
     ws.emit(MESSAGE, message)
   })
 }
 const broadcastMessageToUserIds = function* () {
-  yield takeEvery(BROADCAST_MESSAGE_TO_USER_IDS, function* ({userIds, message}) {
+  yield takeEvery<any>(t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_USER_IDS, function* ({userIds, message}: t.BROADCAST_MESSAGE_TO_USER_IDSAction) {
     for (let i = 0; i < userIds.length; i++) {
       const userId = userIds[i]
       const ws = yield select(R.view(wsByUserIdPath(userId)))
@@ -52,7 +46,7 @@ const broadcastMessageToUserIds = function* () {
   })
 }
 const broadcastMessageToAll = function* () {
-  yield takeEvery(BROADCAST_MESSAGE_TO_ALL, function* ({message}) {
+  yield takeEvery<any>(t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_ALL, function* ({message}: t.BROADCAST_MESSAGE_TO_ALLAction) {
     const userIds = yield select(R.compose(R.keys, R.view(usersPath)))
     for (let i = 0; i < userIds.length; i++) {
       const userId = userIds[i]
@@ -62,13 +56,13 @@ const broadcastMessageToAll = function* () {
   })
 }
 const broadcastActionToUserId = function* () {
-  yield takeEvery(BROADCAST_ACTION_TO_USER_ID, function* ({userId, action}) {
+  yield takeEvery<any>(t.ServerAsyncActionType.BROADCAST_ACTION_TO_USER_ID, function* ({userId, action}: t.BROADCAST_ACTION_TO_USER_IDAction) {
     const ws = yield select(R.view(wsByUserIdPath(userId)))
     ws.emit(ACTION, action)
   })
 }
 const broadcastActionToUserIds = function* () {
-  yield takeEvery(BROADCAST_ACTION_TO_USER_IDS, function* ({userIds, action}) {
+  yield takeEvery<any>(t.ServerAsyncActionType.BROADCAST_ACTION_TO_USER_IDS, function* ({userIds, action}:t.BROADCAST_ACTION_TO_USER_IDSAction) {
     for (let i = 0; i < userIds.length; i++) {
       const userId = userIds[i]
       const ws = yield select(R.view(wsByUserIdPath(userId)))
@@ -77,7 +71,7 @@ const broadcastActionToUserIds = function* () {
   })
 }
 const broadcastActionToAll = function* () {
-  yield takeEvery(BROADCAST_ACTION_TO_ALL, function* ({action}) {
+  yield takeEvery<any>(t.ServerAsyncActionType.BROADCAST_ACTION_TO_ALL, function* ({action}: t.BROADCAST_ACTION_TO_ALLAction) {
     const userIds = yield select(R.compose(R.keys, R.view(usersPath)))
     for (let i = 0; i < userIds.length; i++) {
       const userId = userIds[i]
@@ -87,19 +81,19 @@ const broadcastActionToAll = function* () {
   })
 }
 
-const onDisconnect = function* (wsChan) {
+const onDisconnect = function* (wsChan: any) {
   const userId = yield take(wsChan)
   yield put(afUserDisconnected(userId))
 }
 
-const onClientAction = function* (wsChan) {
+const onClientAction = function* (wsChan: any) {
   let action
   while ((action = yield take(wsChan))) {
     yield put(action)
   }
 }
 
-const connectWS = function* (ws) {
+const connectWS = function* (ws: any) {
   // eslint-disable-next-line
   const userId = uuid4()
 
@@ -126,7 +120,7 @@ const connectWS = function* (ws) {
 }
 
 const connectWSS = function* () {
-  const { httpServer } = yield take(CONNECT_WEBSOCKET_SERVER)
+  const { httpServer } = yield take(t.ServerAsyncActionType.CONNECT_WEBSOCKET_SERVER)
   const wss = io(httpServer)
   const wssConnectionChan = eventChannel((emitter) => {
     wss.on('connection', (ws) => emitter(ws))
