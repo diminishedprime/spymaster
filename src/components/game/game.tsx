@@ -1,4 +1,5 @@
 import React from "react";
+import * as t from "../../types";
 import R from "ramda";
 import { connect } from "react-redux";
 
@@ -7,11 +8,20 @@ import Info from "../info/info";
 import Timer from "../timer/timer";
 import { cardsPath } from "../../redux/paths";
 
-const mapStateToProps = state => ({
-  cardIds: R.keys(R.view(cardsPath, state))
-});
+interface StateProps {
+  cardIds: t.CardId[];
+}
 
-const Game = ({ cardIds }) => (
+type AllProps = StateProps;
+
+const mapStateToProps = (state: t.ReduxState): StateProps => {
+  const cardIds = R.keys(R.view(cardsPath, state));
+  return {
+    cardIds
+  };
+};
+
+const Game: React.FC<AllProps> = ({ cardIds }) => (
   <div>
     <Timer />
     <Board cardIds={cardIds} />
