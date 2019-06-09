@@ -11,18 +11,31 @@ import {
   serverAddressPath,
   connectedPath,
 } from './../redux/paths'
+import * as t from '../types'
 
-const mapStateToProps = (state) => ({
+interface StateProps {
+  serverAddress: string,
+  connected: boolean,
+}
+
+interface DispatchProps {
+  connectToServer: (serverAddress: string) => () => void,
+  onChange: ({target: {value}}: {target: {value: string}}) => void
+}
+
+type AllProps = StateProps & DispatchProps;
+
+const mapStateToProps = (state: t.ReduxState): StateProps => ({
   serverAddress: R.view(serverAddressPath, state),
   connected: R.view(connectedPath, state),
 })
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
   connectToServer: (serverAddress) => () => dispatch(afConnectToServer(serverAddress)),
   onChange: ({target: {value}}) => dispatch(afUpdateServerAddress(value))
 })
 
-const ConnectToServer = ({connectToServer, serverAddress, onChange}) => (
+const ConnectToServer = ({connectToServer, serverAddress, onChange}: AllProps) => (
   <div>
     Server:<input value={serverAddress}
                   onChange={onChange}
