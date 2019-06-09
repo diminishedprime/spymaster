@@ -25,7 +25,7 @@ import {
   takeEvery,
 } from 'redux-saga/effects'
 
-const emitAction = function* ({action}) {
+const emitAction = function* ({action}: any) {
   const ws = yield select((state) => R.view(wsPath, state))
   const gameId = yield select(R.view(gameIdPath))
   const userId = yield select(R.view(userIdPath))
@@ -41,9 +41,9 @@ const emitAction = function* ({action}) {
 const listenToWebsocket = function* () {
   const ws = yield select((state) => R.view(wsPath, state))
 
-  const wsChan = eventChannel((emitter) => {
-    ws.on('message', (message) => emitter({message}))
-    ws.on('action', (action) => emitter({action}))
+  const wsChan = eventChannel((emitter: any) => {
+    ws.on('message', (message: any) => emitter({message}))
+    ws.on('action', (action: any) => emitter({action}))
     ws.on('disconnect', () => emitter({disconnect: true}) && emitter(END))
     return () => ws.disconnect()
   })
@@ -70,14 +70,14 @@ const listenToWebsocket = function* () {
   }
 }
 
-const connectToServer = function* ({serverAddress}) {
+const connectToServer = function* ({serverAddress}: t.ConnectToServer) {
   const ws = yield io.connect(serverAddress)
   yield put(afSetWs(ws))
   yield put(afListenToWebsocket())
 }
 
 export default function* () {
-  yield takeLatest(t.ActionType.CONNECT_TO_SERVER, connectToServer)
-  yield takeLatest(t.ActionType.LISTEN_TO_WEBSOCKET, listenToWebsocket)
-  yield takeEvery(t.ActionType.EMIT_ACTION, emitAction)
+  yield takeLatest<any>(t.ActionType.CONNECT_TO_SERVER, connectToServer)
+  yield takeLatest<any>(t.ActionType.LISTEN_TO_WEBSOCKET, listenToWebsocket)
+  yield takeEvery<any>(t.ActionType.EMIT_ACTION, emitAction)
 }

@@ -25,13 +25,19 @@ import {
   userByUserIdPath
 } from "./paths";
 
-const addUser = (state: t.ServerReduxState, { userId, ws }: t.AddUser) => {
+const addUser = (
+  state: t.ServerReduxState,
+  { userId, ws }: t.ADD_USERAction
+) => {
   let s = R.set(userByUserIdPath(userId), { userId, ws }, state);
   s = R.over(clientUsersPath, R.assoc(userId, { userId }), s);
   return s;
 };
 
-const removeUser = (state: t.ServerReduxState, { userId }: t.RemoveUser) => {
+const removeUser = (
+  state: t.ServerReduxState,
+  { userId }: t.REMOVE_USERAction
+) => {
   let s = R.over(usersPath, R.dissoc(userId), state);
   s = R.over(clientUsersPath, R.dissoc(userId), s);
   return s;
@@ -125,9 +131,9 @@ export const app = (
       return setNewGame2Server(state, action);
     case t.ActionType.SET_CARD_FLIPPED:
       return setCardFlipped(state, action);
-    case t.ActionType.ADD_USER:
+    case t.ServerActionType.ADD_USER:
       return addUser(state, action);
-    case t.ActionType.REMOVE_USER:
+    case t.ServerActionType.REMOVE_USER:
       return removeUser(state, action);
     case t.ActionType.UPDATE_HINT:
       return updateHint(state, action);
@@ -141,7 +147,15 @@ export const app = (
       return nextTurn(state);
     case t.ActionType.FORFEIT:
       return loseGame(state, action);
+
     case t.ServerAsyncActionType.CONNECT_WEBSOCKET_SERVER:
+    case t.ServerAsyncActionType.USER_CONNECTED:
+    case t.ServerAsyncActionType.BROADCAST_ACTION_TO_ALL:
+    case t.ServerAsyncActionType.BROADCAST_ACTION_TO_USER_ID:
+    case t.ServerAsyncActionType.BROADCAST_ACTION_TO_USER_IDS:
+    case t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_ALL:
+    case t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_USER_ID:
+    case t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_USER_IDS:
       return state;
     default:
       if (!action.type.startsWith("@@redux")) {

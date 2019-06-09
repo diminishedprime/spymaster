@@ -139,6 +139,7 @@ export interface JoinGame {
 };
 export interface ConnectToServer {
   type: ActionType.CONNECT_TO_SERVER;
+  serverAddress: string;
 
 };
 export interface UpdateServerAddress {
