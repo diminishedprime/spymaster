@@ -307,4 +307,5 @@ export interface ReduxState {
 
 export interface Api {
   connectToServer: (serverAddress: string) => void;
+  newGame: () => void;
 }

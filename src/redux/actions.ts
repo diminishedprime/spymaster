@@ -211,7 +211,12 @@ export const useApi = (): t.Api => {
     [dispatch]
   );
 
+  const newGame = React.useCallback(() => {
+    dispatch(afToServer(afNewGame2()));
+  }, [dispatch]);
+
   return {
-    connectToServer
+    connectToServer,
+    newGame
   };
 };
