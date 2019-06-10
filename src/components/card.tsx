@@ -93,7 +93,7 @@ const Card: React.FC<AllProps> = ({ text, style, flip, disabled }) => (
   </button>
 );
 
-export default connect<StateProps, DispatchProps, CardProps>(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Card);

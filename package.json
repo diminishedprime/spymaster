@@ -1,5 +1,4 @@
 {
-  "proxy": "http://localhost:3003",
   "name": "spymaster",
   "version": "0.1.0",
   "private": true,
@@ -19,7 +18,7 @@
     "uuid": "^3.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=9999 HOST=0.0.0.0 react-scripts start",
     "start:server": "ts-node ./api/server.ts",
     "build": "react-scripts build",
     "test": "react-scripts test --envdom",

@@ -81,7 +81,7 @@ const setGameId = (state: t.ReduxState, { gameId }: t.SetGameId) =>
 const setConnected = (state: t.ReduxState, { flag }: t.SetConnected) =>
   R.set(connectedPath, flag, state);
 
-export const app = (state = initialState, action: t.Action) => {
+export const app = (state: t.ReduxState = initialState, action: t.Action) => {
   switch (action.type) {
     case t.ActionType.SET_GAME_ID:
       return setGameId(state, action);

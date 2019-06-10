@@ -63,6 +63,12 @@ const newGame2 = function*() {
   });
 };
 
+const changeRole = function*() {
+  yield takeEvery(t.ActionType.PICK_ROLE, function*(action) {
+    yield put(afEmitAction(action));
+  });
+};
+
 const setServerUsername = function*() {
   yield takeEvery(t.ActionType.SET_SERVER_USERNAME, function*(action) {
     /* const username = yield select((state) => R.view(usernamePath, state))*/
@@ -73,6 +79,7 @@ const setServerUsername = function*() {
 
 export default function*() {
   yield all([
+    changeRole(),
     setServerUsername(),
     joinGame(),
     newGame2(),

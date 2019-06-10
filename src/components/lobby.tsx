@@ -10,22 +10,25 @@ import { gameIdsPath } from "./../redux/paths";
 
 interface StateProps {
   gameIds: t.GameId[];
+  userId: t.UserId;
 }
 
 interface DispatchProps {
   newGame: () => void;
-  joinGame: (gameId: string) => () => void;
+  joinGame: (gameId: string, userid: t.UserId) => () => void;
 }
 
 type AllProps = StateProps & DispatchProps;
 
 const mapStateToProps = (state: t.ReduxState): StateProps => ({
-  gameIds: R.view(gameIdsPath, state)
+  gameIds: R.view(gameIdsPath, state),
+  userId: state.localState.username
 });
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
   newGame: () => dispatch(afNewGame2()),
-  joinGame: (gameId: t.GameId) => () => dispatch(afJoinGame(gameId, undefined))
+  joinGame: (gameId: t.GameId, userId: t.UserId) => () =>
+    dispatch(afJoinGame(gameId, userId))
 });
 
 interface JoinGameProps {
@@ -37,7 +40,7 @@ const JoinGame: React.FC<JoinGameProps> = ({ gameId, joinGame }) => (
   <button onClick={joinGame}>{gameId.substring(0, 8)}</button>
 );
 
-const Lobby: React.FC<AllProps> = ({ newGame, gameIds, joinGame }) => (
+const Lobby: React.FC<AllProps> = ({ newGame, gameIds, joinGame, userId }) => (
   <div>
     <button onClick={newGame}>New Game</button>
     <div>
@@ -48,7 +51,7 @@ const Lobby: React.FC<AllProps> = ({ newGame, gameIds, joinGame }) => (
             <JoinGame
               key={gameId}
               gameId={gameId}
-              joinGame={joinGame(gameId)}
+              joinGame={joinGame(gameId, userId)}
             />
           ),
           gameIds

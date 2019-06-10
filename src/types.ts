@@ -7,8 +7,6 @@ export type GameId = string;
 export type UserId = string;
 export type HintNumber = number | "Zero" | "Infinity";
 
-export type ReduxState = any;
-
 export interface SetPage {
   type: ActionType.SET_PAGE;
   page: Page;
@@ -132,7 +130,7 @@ export interface SetGameId {
 }
 export interface JoinGame {
   type: ActionType.JOIN_GAME;
-  userId?: UserId;
+  userId: UserId;
   gameId: GameId;
 }
 export interface ConnectToServer {
@@ -242,7 +240,7 @@ export enum Team {
 export interface Card {
   text: string;
   flipped: boolean;
-  cardId: CardId;
+  id: CardId;
   team: Team;
 }
 
@@ -254,4 +252,48 @@ export enum Role {
 export enum Severity {
   ERROR = "error",
   WARN = "warn"
+}
+
+interface Settings {
+  showTitle: boolean;
+}
+
+interface ErrorData {}
+
+interface PlayerType {
+  team: Team;
+  role: Role;
+}
+
+interface LocalState {
+  connected: boolean;
+  serverAddress: string;
+  username: string;
+  settings: Settings;
+  error?: ErrorData;
+  page: Page;
+  playerType: PlayerType;
+  gameIds: GameId[];
+}
+
+interface Score {
+  [Team.TEAM_1]: number;
+  [Team.TEAM_2]: number;
+}
+
+interface Hint {
+  text: string;
+  number: HintNumber;
+  submitted: boolean;
+}
+
+interface RemoteState {
+  score: Score;
+  hint: Hint;
+  clientUsers: {};
+}
+
+export interface ReduxState {
+  localState: LocalState;
+  remoteState: RemoteState | "Not Connected";
 }

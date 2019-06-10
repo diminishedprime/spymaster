@@ -159,10 +159,7 @@ export const afSetGameId = (gameId: t.GameId) => ({
   gameId
 });
 
-export const afJoinGame = (
-  gameId: t.GameId,
-  userId?: t.UserId
-): t.JoinGame => ({
+export const afJoinGame = (gameId: t.GameId, userId: t.UserId): t.JoinGame => ({
   type: t.ActionType.JOIN_GAME,
   gameId,
   userId

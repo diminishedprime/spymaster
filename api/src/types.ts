@@ -80,6 +80,7 @@ export interface NEW_GAME_SERVERAction {
 export interface JOIN_GAME_SERVERAction {
   type: ServerActionType.JOIN_GAME_SERVER;
   gameId: GameId;
+  userId: UserId;
 }
 export interface CHANGE_BACKGROUND_COLOR_SERVERAction {
   type: ServerActionType.CHANGE_BACKGROUND_COLOR_SERVER;
