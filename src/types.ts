@@ -191,7 +191,7 @@ export type Action =
   | SetConnected;
 
 export enum ActionType {
-  TO_SERVER = "server action",
+  TO_SERVER = "async server action",
   SET_PAGE = "set page",
 
   SET_CARD_FLIPPED = "flip this card",

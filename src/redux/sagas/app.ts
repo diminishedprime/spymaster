@@ -50,6 +50,7 @@ const joinGame = function*() {
     yield put(afEmitAction(action));
   });
 };
+
 const toServer = function*() {
   yield takeEvery(t.ActionType.TO_SERVER, function*(action: t.ToServer) {
     yield put(afEmitAction(action.action));
