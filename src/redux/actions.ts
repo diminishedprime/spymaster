@@ -212,7 +212,6 @@ export const useApi = (): t.Api => {
   );
 
   const newGame = React.useCallback(() => {
-    console.log("this was called");
     dispatch(afToServer(afNewGame2()));
   }, [dispatch]);
 
@@ -230,7 +229,15 @@ export const useApi = (): t.Api => {
     [dispatch]
   );
 
+  const joinGame = React.useCallback(
+    (gameId, userId) => {
+      dispatch(afToServer(afJoinGame(gameId, userId)));
+    },
+    [dispatch]
+  );
+
   const api: t.Api = {
+    joinGame,
     pickRole,
     setBackgroundColor,
     connectToServer,

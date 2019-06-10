@@ -306,6 +306,7 @@ export interface ReduxState {
 }
 
 export interface Api {
+  joinGame: (gameId: GameId, userId: UserId) => void;
   pickRole: (team: Team, role: Role) => void;
   setBackgroundColor: (team: Team, color: string) => void;
   connectToServer: (serverAddress: string) => void;

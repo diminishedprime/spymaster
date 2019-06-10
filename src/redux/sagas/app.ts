@@ -45,12 +45,6 @@ const nextTurn = function*() {
   });
 };
 
-const joinGame = function*() {
-  yield takeEvery(t.ActionType.JOIN_GAME, function*(action) {
-    yield put(afEmitAction(action));
-  });
-};
-
 const toServer = function*() {
   yield takeEvery(t.ActionType.TO_SERVER, function*(action: t.ToServer) {
     yield put(afEmitAction(action.action));
@@ -69,7 +63,6 @@ export default function*() {
   yield all([
     toServer(),
     setServerUsername(),
-    joinGame(),
     updateHintNumber(),
     nextTurn(),
     submitHint(),
