@@ -49,7 +49,7 @@ const mapStateToProps = (state: t.ReduxState): StateProps => {
 };
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
-  dismiss: () => dispatch(afDismissError())
+  dismiss: () => dispatch<t.DimissError>(afDismissError())
 });
 
 const ErrorBar: React.FC<AllProps> = ({ text, severity, dismiss }) => {

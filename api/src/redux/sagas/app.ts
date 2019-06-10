@@ -221,7 +221,8 @@ const changeBackgroundColor = function*() {
     gameId,
     team,
     backgroundColor
-  }: t.ChangeBackgroundColor) {
+  }: // TODO figure out a better way to type this. I add gameId and userId to all outgoing actions, but since these are the client types it doesn't include that information.
+  t.ChangeBackgroundColor & { gameId: t.GameId }) {
     yield put(afChangeBackgroundColorServer(gameId, team, backgroundColor));
     yield pushGameState(gameId);
   });
@@ -230,7 +231,7 @@ const changeBackgroundColor = function*() {
 const newGameSaga = function*() {
   yield takeEvery<any>(t.ActionType.NEW_GAME_2, function*({
     userId
-  }: t.NewGame2) {
+  }: t.NewGame2 & { userId: t.UserId }) {
     const gameId = uuid4();
     const gameState = newGame();
     yield put(afNewGameServer(gameId, gameState));

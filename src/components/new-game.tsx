@@ -11,7 +11,7 @@ interface DispatchProps {
 type AllProps = DispatchProps;
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
-  onClick: () => dispatch(afNewGame())
+  onClick: () => dispatch<t.NewGame>(afNewGame())
 });
 
 const NewGame: React.FC<AllProps> = ({ onClick }) => (

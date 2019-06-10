@@ -59,7 +59,7 @@ const mapStateToProps = (state: t.ReduxState): StateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
-  toggleTitle: () => dispatch(afToggleTitle())
+  toggleTitle: () => dispatch<t.ToggleTitle>(afToggleTitle())
 });
 
 const App: React.FC<AllProps> = ({

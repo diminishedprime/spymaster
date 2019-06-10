@@ -23,6 +23,6 @@ const Forfeit: React.FC<AllProps> = ({ team, forfeit }) => (
 export default connect(
   (state: t.ReduxState): StateProps => ({ team: R.view(teamPath, state) }),
   (dispatch: t.Dispatch): DispatchProps => ({
-    forfeit: team => () => dispatch(afForfeit(team))
+    forfeit: team => () => dispatch<t.Forfeit>(afForfeit(team))
   })
 )(Forfeit);

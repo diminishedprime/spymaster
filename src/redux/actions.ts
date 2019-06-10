@@ -1,4 +1,6 @@
+import React from "react";
 import * as t from "../types";
+import * as reactRedux from "react-redux";
 
 // Actions & Action Creators
 export const afSetPage = (page: t.Page) => ({
@@ -11,7 +13,7 @@ export const afSetCardFlipped = (cardId: t.CardId) => ({
   cardId
 });
 
-export const afPickRole = (team: t.Team, role: t.Role) => ({
+export const afPickRole = (team: t.Team, role: t.Role): t.PickRole => ({
   type: t.ActionType.PICK_ROLE,
   team,
   role
@@ -22,7 +24,7 @@ export const afSetTime = (seconds: number) => ({
   seconds
 });
 
-export const afToggleTitle = () => ({
+export const afToggleTitle = (): t.ToggleTitle => ({
   type: t.ActionType.TOGGLE_TITLE
 });
 
@@ -32,7 +34,7 @@ export const afError = (text: string, severity: t.Severity) => ({
   severity
 });
 
-export const afDismissError = () => ({
+export const afDismissError = (): t.DimissError => ({
   type: t.ActionType.DISMISS_ERROR
 });
 
@@ -41,12 +43,12 @@ export const afSetWs = (ws: any) => ({
   ws
 });
 
-export const afSetUsername = (username: string) => ({
+export const afSetUsername = (username: string): t.SetUsername => ({
   type: t.ActionType.SET_USERNAME,
   username
 });
 
-export const afSetEditing = (flag = true) => ({
+export const afSetEditing = (flag = true): t.SetEditing => ({
   type: t.ActionType.SET_EDITING,
   flag
 });
@@ -77,25 +79,27 @@ export const afUpdateUsername = (user: any, username: string) => ({
   username
 });
 
-export const afUpdateHint = (hint: string) => ({
+export const afUpdateHint = (hint: string): t.UpdateHint => ({
   type: t.ActionType.UPDATE_HINT,
   hint
 });
 
-export const afStartTimer = () => ({
+export const afStartTimer = (): t.StartTimer => ({
   type: t.ActionType.START_TIMER
 });
 
-export const afUpdateHintNumber = (hintNumber: t.HintNumber) => ({
+export const afUpdateHintNumber = (
+  hintNumber: t.HintNumber
+): t.UpdateHintNumber => ({
   type: t.ActionType.UPDATE_HINT_NUMBER,
   hintNumber
 });
 
-export const afNextTurn = () => ({
+export const afNextTurn = (): t.NextTurn => ({
   type: t.ActionType.NEXT_TURN
 });
 
-export const afForfeit = (team: t.Team) => ({
+export const afForfeit = (team: t.Team): t.Forfeit => ({
   type: t.ActionType.FORFEIT,
   team
 });
@@ -104,7 +108,7 @@ export const afStopTimer = () => ({
   type: t.ActionType.STOP_TIMER
 });
 
-export const afNewGame = () => ({
+export const afNewGame = (): t.NewGame => ({
   type: t.ActionType.NEW_GAME
 });
 
@@ -113,7 +117,7 @@ export const afEmitAction = (action: any) => ({
   action
 });
 
-export const afSetServerUsername = () => ({
+export const afSetServerUsername = (): t.SetServerUsername => ({
   type: t.ActionType.SET_SERVER_USERNAME
 });
 
@@ -124,13 +128,13 @@ export const afListenToWebsocket = () => ({
 export const afChangeBackgroundColor = (
   team: t.Team,
   backgroundColor: string
-) => ({
+): t.ChangeBackgroundColor => ({
   type: t.ActionType.CHANGE_BACKGROUND_COLOR,
   team,
   backgroundColor
 });
 
-export const afSubmitHint = () => ({
+export const afSubmitHint = (): t.SubmitHint => ({
   type: t.ActionType.SUBMIT_HINT
 });
 
@@ -140,7 +144,7 @@ export const afFlipCard = (cardId: t.CardId): t.FlipCard => ({
 });
 
 // Newish?
-export const afNewGame2 = () => ({
+export const afNewGame2 = (): t.NewGame2 => ({
   type: t.ActionType.NEW_GAME_2
 });
 
@@ -165,7 +169,9 @@ export const afJoinGame = (gameId: t.GameId, userId: t.UserId): t.JoinGame => ({
   userId
 });
 
-export const afConnectToServer = (serverAddress: string) => ({
+export const afConnectToServer = (
+  serverAddress: string
+): t.ConnectToServer => ({
   type: t.ActionType.CONNECT_TO_SERVER,
   serverAddress
 });
@@ -179,3 +185,33 @@ export const afSetConnected = (flag: boolean) => ({
   type: t.ActionType.SET_CONNECTED,
   flag
 });
+
+const afToServer = (action: t.ServerAction): t.ToServer => ({
+  type: t.ActionType.TO_SERVER,
+  action
+});
+
+// TODO: - once this hook is standardized, update to use it directly.
+export const useSelector = <T>(
+  selector: (state: t.ReduxState) => T,
+  comparisonFn?: (t1: T, t2: T) => boolean
+): T => {
+  return (reactRedux as any).useSelector(selector, comparisonFn);
+};
+
+const useDispatch: () => t.Dispatch = (reactRedux as any).useDispatch;
+
+export const useApi = (): t.Api => {
+  const dispatch = useDispatch();
+
+  const connectToServer = React.useCallback(
+    (serverAddress: string) => {
+      dispatch(afConnectToServer(serverAddress));
+    },
+    [dispatch]
+  );
+
+  return {
+    connectToServer
+  };
+};

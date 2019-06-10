@@ -26,7 +26,7 @@ const mapStateToProps = (state: t.ReduxState): StateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
-  newGame: () => dispatch(afNewGame2()),
+  newGame: () => dispatch<t.NewGame2>(afNewGame2()),
   joinGame: (gameId: t.GameId, userId: t.UserId) => () =>
     dispatch(afJoinGame(gameId, userId))
 });

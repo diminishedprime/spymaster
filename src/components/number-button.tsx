@@ -55,7 +55,7 @@ const mapDispatchToProps = (
   dispatch: t.Dispatch,
   { number }: OwnProps
 ): DispatchProps => ({
-  setHintNumber: () => dispatch(afUpdateHintNumber(number))
+  setHintNumber: () => dispatch<t.UpdateHintNumber>(afUpdateHintNumber(number))
 });
 
 const NumberButton: React.FC<AllProps> = ({

@@ -101,7 +101,6 @@ export interface ListenToWebsocket {
 }
 export interface ChangeBackgroundColor {
   type: ActionType.CHANGE_BACKGROUND_COLOR;
-  gameId: GameId;
   team: Team;
   backgroundColor: string;
 }
@@ -114,7 +113,6 @@ export interface FlipCard {
 }
 export interface NewGame2 {
   type: ActionType.NEW_GAME_2;
-  userId: UserId;
 }
 export interface SetUserId {
   type: ActionType.SET_USER_ID;
@@ -146,7 +144,15 @@ export interface SetConnected {
   flag: boolean;
 }
 
+export interface ToServer {
+  type: ActionType.TO_SERVER;
+  action: ServerAction;
+}
+
+export type ServerAction = any;
+
 export type Action =
+  | ToServer
   | SetPage
   | SetCardFlipped
   | PickRole
@@ -185,6 +191,7 @@ export type Action =
   | SetConnected;
 
 export enum ActionType {
+  TO_SERVER = "server action",
   SET_PAGE = "set page",
 
   SET_CARD_FLIPPED = "flip this card",
@@ -296,4 +303,8 @@ interface RemoteState {
 export interface ReduxState {
   localState: LocalState;
   remoteState: RemoteState | "Not Connected";
+}
+
+export interface Api {
+  connectToServer: (serverAddress: string) => void;
 }
