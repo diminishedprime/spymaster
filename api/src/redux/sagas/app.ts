@@ -3,6 +3,7 @@ import uuid4 from "uuid/v4";
 import * as t from "../../types";
 
 import { newGame } from "../initial-state";
+import * as actions from "../../../../src/redux/actions";
 import {
   afJoinGame,
   afSetGameId,
@@ -25,6 +26,7 @@ import {
   currentTeamPath,
   hintNumberPath
 } from "../../../src/redux/paths";
+import * as serverActions from "../actions";
 import {
   afRemoveUser,
   afChangeBackgroundColorServer,
@@ -248,9 +250,19 @@ const newGameSaga = function*() {
   });
 };
 
+const setRole = function*() {
+  yield takeEvery(t.ActionType.PICK_ROLE, function*({
+    userId,
+    ...action
+  }: t.PickRole & { userId: t.UserId }) {
+    yield put(serverActions.afBroadcastActionToUserId(userId, action));
+  });
+};
+
 export default function*() {
   yield all([
     changeBackgroundColor(),
+    setRole(),
     joinGame(),
     newGameSaga(),
     userConnected(),

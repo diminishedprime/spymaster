@@ -63,15 +63,9 @@ const newGame2 = function*() {
   });
 };
 
-const changeRole = function*() {
-  yield takeEvery(t.ActionType.PICK_ROLE, function*(action) {
-    yield put(afEmitAction(action));
-  });
-};
-
 const toServer = function*() {
-  yield takeEvery(t.ActionType.TO_SERVER, function*(action) {
-    yield put(afEmitAction(action));
+  yield takeEvery(t.ActionType.TO_SERVER, function*(action: t.ToServer) {
+    yield put(afEmitAction(action.action));
   });
 };
 
@@ -86,7 +80,6 @@ const setServerUsername = function*() {
 export default function*() {
   yield all([
     toServer(),
-    changeRole(),
     setServerUsername(),
     joinGame(),
     newGame2(),

@@ -13,7 +13,7 @@ export const afSetCardFlipped = (cardId: t.CardId) => ({
   cardId
 });
 
-export const afPickRole = (team: t.Team, role: t.Role): t.PickRole => ({
+const afPickRole = (team: t.Team, role: t.Role): t.PickRole => ({
   type: t.ActionType.PICK_ROLE,
   team,
   role
@@ -215,8 +215,25 @@ export const useApi = (): t.Api => {
     dispatch(afToServer(afNewGame2()));
   }, [dispatch]);
 
-  return {
+  const setBackgroundColor = React.useCallback(
+    (team, color) => {
+      dispatch(afToServer(afChangeBackgroundColor(team, color)));
+    },
+    [dispatch]
+  );
+
+  const pickRole = React.useCallback(
+    (team, role) => {
+      dispatch(afToServer(afPickRole(team, role)));
+    },
+    [dispatch]
+  );
+
+  const api: t.Api = {
+    pickRole,
+    setBackgroundColor,
     connectToServer,
     newGame
   };
+  return api;
 };

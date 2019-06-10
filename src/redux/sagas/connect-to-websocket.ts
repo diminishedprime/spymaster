@@ -18,6 +18,7 @@ const emitAction = function*({ action }: any) {
   if (userId) {
     action = R.assoc("userId", userId, action);
   }
+  console.log("emitting action:", { action });
   ws.emit("client action", action);
 };
 
