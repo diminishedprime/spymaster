@@ -256,6 +256,12 @@ const setRole = function*() {
     ...action
   }: t.PickRole & { userId: t.UserId }) {
     yield put(serverActions.afBroadcastActionToUserId(userId, action));
+    yield put(
+      serverActions.afBroadcastActionToUserId(
+        userId,
+        actions.afSetPage(t.Page.GAME_MODE_GAME)
+      )
+    );
   });
 };
 
