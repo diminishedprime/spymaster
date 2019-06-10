@@ -212,6 +212,7 @@ export const useApi = (): t.Api => {
   );
 
   const newGame = React.useCallback(() => {
+    console.log("this was called");
     dispatch(afToServer(afNewGame2()));
   }, [dispatch]);
 

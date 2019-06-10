@@ -9,12 +9,6 @@ const updateHintNumber = function*() {
   });
 };
 
-const newGame = function*() {
-  yield takeEvery(t.ActionType.NEW_GAME, function*(action) {
-    yield put(afEmitAction(action));
-  });
-};
-
 const changeBackgroundColor = function*() {
   yield takeEvery(t.ActionType.CHANGE_BACKGROUND_COLOR, function*(action) {
     yield put(afEmitAction(action));
@@ -56,13 +50,6 @@ const joinGame = function*() {
     yield put(afEmitAction(action));
   });
 };
-
-const newGame2 = function*() {
-  yield takeEvery(t.ActionType.NEW_GAME_2, function*(action) {
-    yield put(afEmitAction(action));
-  });
-};
-
 const toServer = function*() {
   yield takeEvery(t.ActionType.TO_SERVER, function*(action: t.ToServer) {
     yield put(afEmitAction(action.action));
@@ -82,13 +69,11 @@ export default function*() {
     toServer(),
     setServerUsername(),
     joinGame(),
-    newGame2(),
     updateHintNumber(),
     nextTurn(),
     submitHint(),
     forfeit(),
     flipCard(),
-    newGame(),
     changeBackgroundColor(),
     startTimer()
   ]);
