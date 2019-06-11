@@ -12,7 +12,7 @@ export const ZERO = "0";
 export const MESSAGE = "message";
 export const ACTION = "action";
 
-export const PORT = 9999;
+export const PORT = 3003;
 export const BASE_URL = "http://localhost";
 // export const PORT = 9999
 // export const BASE_URL = 'http://mjh.io'

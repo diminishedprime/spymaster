@@ -1,14 +1,5 @@
 import React from "react";
-import * as t from "./../types";
-import R from "ramda";
-import { connect } from "react-redux";
-
-import {
-  afSetEditing,
-  afSetUsername,
-  afSetServerUsername
-} from "./../redux/actions";
-import { usernamePath, editingPath } from "./../redux/paths";
+import * as actions from "../redux/actions";
 
 const pickUsernameStyle: React.CSSProperties = {
   display: "flex",
@@ -31,71 +22,57 @@ const usernameButtonStyle: React.CSSProperties = {
   width: "5em"
 };
 
-interface StateProps {
-  username: string;
-  editing: boolean;
-}
+const Username = () => {
+  const { changeUsername } = actions.useApi();
+  const [editing, setEditing] = React.useState(false);
+  const [username, setUsername] = React.useState("abcd");
 
-interface DispatchProps {
-  setEditing: () => void;
-  changeUsername: (username: string) => void;
-  onChange: ({ target: { value } }: { target: { value: string } }) => void;
-  updateUsername: () => void;
-  // TODO - fix this to actual type
-  onKeyPress: ({ key }: React.KeyboardEvent<any>) => void;
-  // TODO - fix this to actual type
-  onFocus: (e: any) => void;
-}
+  // TODO - We want to add an effect that if the remote state username changes, we update the local one as well.
 
-type AllProps = DispatchProps & StateProps;
+  const onChange = React.useCallback(({ target: { value } }) => {
+    console.log({ value });
+    setUsername(value);
+  }, []);
 
-const mapStateToProps = (state: t.ReduxState): StateProps => ({
-  username: R.view(usernamePath, state),
-  editing: R.view(editingPath, state)
-});
+  const updateUsername = React.useCallback(() => {
+    setEditing(false);
+    changeUsername(username);
+  }, [username, changeUsername]);
 
-const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
-  const setEditing = () => dispatch(afSetEditing());
-  const changeUsername = (username: string) =>
-    dispatch(afSetUsername(username));
-  const updateUsername = () => dispatch(afSetServerUsername());
+  const onFocus = React.useCallback(event => {
+    event.target.select();
+  }, []);
 
-  return {
-    setEditing,
-    changeUsername,
-    updateUsername,
-    onKeyPress: ({ key }) => (key === "Enter" ? updateUsername() : null),
-    onChange: ({ target: { value } }) => changeUsername(value),
-    onFocus: event => event.target.select()
-  };
+  const onKeyPress = React.useCallback(
+    ({ key }) => {
+      if (key === "Enter") {
+        updateUsername();
+      }
+    },
+    [updateUsername]
+  );
+
+  const editUsername = React.useMemo(() => {
+    return (
+      <div style={editUsernameStyle}>
+        <input
+          style={usernameInputStyle}
+          value={username}
+          onChange={onChange}
+          onKeyPress={onKeyPress}
+          onFocus={onFocus}
+        />
+        <button style={usernameButtonStyle} onClick={updateUsername}>
+          update
+        </button>
+      </div>
+    );
+  }, [username, onChange, onFocus, onKeyPress, updateUsername]);
+  const showUsername = React.useMemo(() => {
+    return <div onClick={() => setEditing(true)}>{username}</div>;
+  }, [username]);
+  return <div>{editing ? editUsername : showUsername}</div>;
 };
-
-const EditUsername = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(({ username, onChange, onKeyPress, updateUsername, onFocus }) => (
-  <div style={editUsernameStyle}>
-    <input
-      style={usernameInputStyle}
-      value={username}
-      onChange={onChange}
-      onKeyPress={onKeyPress}
-      onFocus={onFocus}
-    />
-    <button style={usernameButtonStyle} onClick={updateUsername}>
-      update
-    </button>
-  </div>
-));
-
-const ShowUsername = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(({ setEditing, username }) => <div onClick={setEditing}>{username}</div>);
-
-const Username = connect(mapStateToProps)(({ editing }) => (
-  <div>{editing ? <EditUsername /> : <ShowUsername />}</div>
-));
 
 const PickUsername = () => (
   <div style={pickUsernameStyle}>

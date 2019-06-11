@@ -117,8 +117,9 @@ export const afEmitAction = (action: any) => ({
   action
 });
 
-export const afSetServerUsername = (): t.SetServerUsername => ({
-  type: t.ActionType.SET_SERVER_USERNAME
+export const afSetServerUsername = (username: string): t.SetServerUsername => ({
+  type: t.ActionType.SET_SERVER_USERNAME,
+  username
 });
 
 export const afListenToWebsocket = () => ({
@@ -236,7 +237,15 @@ export const useApi = (): t.Api => {
     [dispatch]
   );
 
+  const changeUsername = React.useCallback(
+    username => {
+      dispatch(afToServer(afSetServerUsername(username)));
+    },
+    [dispatch]
+  );
+
   const api: t.Api = {
+    changeUsername,
     joinGame,
     pickRole,
     setBackgroundColor,

@@ -95,6 +95,7 @@ export interface EmitAction {
 }
 export interface SetServerUsername {
   type: ActionType.SET_SERVER_USERNAME;
+  username: string;
 }
 export interface ListenToWebsocket {
   type: ActionType.LISTEN_TO_WEBSOCKET;
@@ -306,6 +307,7 @@ export interface ReduxState {
 }
 
 export interface Api {
+  changeUsername: (username: string) => void;
   joinGame: (gameId: GameId, userId: UserId) => void;
   pickRole: (team: Team, role: Role) => void;
   setBackgroundColor: (team: Team, color: string) => void;
