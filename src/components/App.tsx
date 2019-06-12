@@ -3,7 +3,7 @@ import * as t from "../types";
 import R from "ramda";
 import styled from "styled-components";
 import Lobby from "./lobby";
-import ConnectToServer from "./connect-to-server";
+import ConnectToServer from "./ConnectToServer";
 import ErrorBar from "./ErrorBar";
 import Game from "./game";
 import PickTeam from "./pick-team";
