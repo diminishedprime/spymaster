@@ -240,7 +240,12 @@ export const useApi = (): t.Api => {
     [dispatch]
   );
 
+  const dismissError = React.useCallback(() => {
+    dispatch(afToServer(afDismissError()));
+  }, [dispatch]);
+
   const api: t.Api = {
+    dismissError,
     changeUsername,
     joinGame,
     pickRole,

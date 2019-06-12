@@ -4,7 +4,7 @@ import R from "ramda";
 import styled from "styled-components";
 import Lobby from "./lobby";
 import ConnectToServer from "./connect-to-server";
-import ErrorBar from "./error-bar";
+import ErrorBar from "./ErrorBar";
 import Game from "./game";
 import PickTeam from "./pick-team";
 import PickUsername from "./pick-username";

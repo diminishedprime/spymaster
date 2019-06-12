@@ -307,6 +307,7 @@ export interface ReduxState {
 }
 
 export interface Api {
+  dismissError: () => void;
   changeUsername: (username: string) => void;
   joinGame: (gameId: GameId, userId: UserId) => void;
   pickRole: (team: Team, role: Role) => void;
