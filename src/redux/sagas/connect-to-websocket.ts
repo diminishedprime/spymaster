@@ -4,13 +4,12 @@ import io from "socket.io-client";
 import R from "ramda";
 
 import { afSetWs, afListenToWebsocket, afSetConnected } from "../actions";
-import { wsPath } from "../paths";
 import * as lens from "../lenses";
 
 import { takeLatest, take, put, select, takeEvery } from "redux-saga/effects";
 
 const emitAction = function*({ action }: any) {
-  const ws = yield select(state => R.view(wsPath, state));
+  const ws = yield select(lens.ws.get());
   const gameId = yield select(lens.gameId.get());
   const userId = yield select(lens.userId.get());
   if (gameId) {
@@ -24,7 +23,7 @@ const emitAction = function*({ action }: any) {
 };
 
 const listenToWebsocket = function*() {
-  const ws = yield select(state => R.view(wsPath, state));
+  const ws = yield select(lens.ws.get());
 
   const wsChan = eventChannel((emitter: any) => {
     ws.on("message", (message: any) => emitter({ message }));

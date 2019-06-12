@@ -1,6 +1,5 @@
 import React from "react";
 import * as t from "../types";
-import R from "ramda";
 import styled from "styled-components";
 import Lobby from "./lobby";
 import ConnectToServer from "./ConnectToServer";
@@ -10,7 +9,6 @@ import PickTeam from "./pick-team";
 import PickUsername from "./pick-username";
 import Win from "./win";
 import * as actions from "../redux/actions";
-import * as paths from "../redux/paths";
 import * as lens from "../redux/lenses";
 
 const Wrapper = styled.div`
@@ -43,10 +41,10 @@ const Title: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const page = actions.useSelector(R.view(paths.page));
-  const hasError = actions.useSelector(R.view(paths.errorTextPath));
+  const page = actions.useLensSelector(lens.page);
+  const hasError = actions.useLensSelector(lens.errorText);
   const connected = actions.useLensSelector(lens.connected);
-  const winner = actions.useSelector(R.view(paths.winnerPath));
+  const winner = actions.useLensSelector(lens.winner!);
   return (
     <Wrapper>
       <Title />
