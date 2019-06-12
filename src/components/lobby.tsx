@@ -13,7 +13,7 @@ interface JoinGameProps {
 }
 
 const JoinGame: React.FC<JoinGameProps> = ({ gameId, userId }) => {
-  const joinGame = actions.useApi().joinGame;
+  const { joinGame } = actions.useApi();
   return (
     <button onClick={() => joinGame(gameId, userId)}>
       {gameId.substring(0, 8)}
@@ -23,6 +23,7 @@ const JoinGame: React.FC<JoinGameProps> = ({ gameId, userId }) => {
 
 const Lobby: React.FC = () => {
   const gameIds = actions.useLensSelector(lens.gameIds);
+  console.log({ gameIds });
   const userId = actions.useLensSelector(lens.userId);
   return (
     <div>

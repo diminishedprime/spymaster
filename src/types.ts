@@ -298,11 +298,20 @@ interface Hint {
 
 export type Cards = { [cardId: string]: Card };
 
+export interface Style {
+  [Team.TEAM_1]: React.CSSProperties;
+  [Team.TEAM_2]: React.CSSProperties;
+  [Team.ASSASSIN]: React.CSSProperties;
+  [Team.BYSTANDER]: React.CSSProperties;
+}
+
 export interface RemoteState {
   score: Score;
   hint: Hint;
   cards: Cards;
+  style: Style;
   clientUsers: {};
+  currentTeam: Team;
 }
 
 export interface ReduxState {

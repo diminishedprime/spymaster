@@ -8,31 +8,31 @@ import * as paths from "../paths";
 import * as actions from "../actions";
 import * as effects from "redux-saga/effects";
 
-const broadcastMessageToUserId = function* () {
+const broadcastMessageToUserId = function*() {
   yield effects.takeEvery<any>(
     t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_USER_ID,
-    function* ({ userId, message }: t.BROADCAST_MESSAGE_TO_USER_IDAction) {
-      const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId)));
+    function*({ userId, message }: t.BROADCAST_MESSAGE_TO_USER_IDAction) {
+      const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId!)));
       ws.emit(constants.MESSAGE, message);
     }
   );
 };
-const broadcastMessageToUserIds = function* () {
+const broadcastMessageToUserIds = function*() {
   yield effects.takeEvery<any>(
     t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_USER_IDS,
-    function* ({ userIds, message }: t.BROADCAST_MESSAGE_TO_USER_IDSAction) {
+    function*({ userIds, message }: t.BROADCAST_MESSAGE_TO_USER_IDSAction) {
       for (let i = 0; i < userIds.length; i++) {
         const userId = userIds[i];
-        const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId)));
+        const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId!)));
         ws.emit(constants.MESSAGE, message);
       }
     }
   );
 };
-const broadcastMessageToAll = function* () {
+const broadcastMessageToAll = function*() {
   yield effects.takeEvery<any>(
     t.ServerAsyncActionType.BROADCAST_MESSAGE_TO_ALL,
-    function* ({ message }: t.BROADCAST_MESSAGE_TO_ALLAction) {
+    function*({ message }: t.BROADCAST_MESSAGE_TO_ALLAction) {
       const userIds = yield effects.select(
         R.compose(
           R.keys,
@@ -47,31 +47,31 @@ const broadcastMessageToAll = function* () {
     }
   );
 };
-const broadcastActionToUserId = function* () {
+const broadcastActionToUserId = function*() {
   yield effects.takeEvery<any>(
     t.ServerAsyncActionType.BROADCAST_ACTION_TO_USER_ID,
-    function* ({ userId, action }: t.BROADCAST_ACTION_TO_USER_IDAction) {
-      const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId)));
+    function*({ userId, action }: t.BROADCAST_ACTION_TO_USER_IDAction) {
+      const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId!)));
       ws.emit(constants.ACTION, action);
     }
   );
 };
-const broadcastActionToUserIds = function* () {
+const broadcastActionToUserIds = function*() {
   yield effects.takeEvery<any>(
     t.ServerAsyncActionType.BROADCAST_ACTION_TO_USER_IDS,
-    function* ({ userIds, action }: t.BROADCAST_ACTION_TO_USER_IDSAction) {
+    function*({ userIds, action }: t.BROADCAST_ACTION_TO_USER_IDSAction) {
       for (let i = 0; i < userIds.length; i++) {
         const userId = userIds[i];
-        const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId)));
+        const ws = yield effects.select(R.view(paths.wsByUserIdPath(userId!)));
         ws.emit(constants.ACTION, action);
       }
     }
   );
 };
-const broadcastActionToAll = function* () {
+const broadcastActionToAll = function*() {
   yield effects.takeEvery<any>(
     t.ServerAsyncActionType.BROADCAST_ACTION_TO_ALL,
-    function* ({ action }: t.BROADCAST_ACTION_TO_ALLAction) {
+    function*({ action }: t.BROADCAST_ACTION_TO_ALLAction) {
       const userIds = yield effects.select(
         R.compose(
           R.keys,
@@ -87,19 +87,19 @@ const broadcastActionToAll = function* () {
   );
 };
 
-const onDisconnect = function* (wsChan: any) {
+const onDisconnect = function*(wsChan: any) {
   const userId = yield effects.take(wsChan);
   yield effects.put(actions.afUserDisconnected(userId));
 };
 
-const onClientAction = function* (wsChan: any) {
+const onClientAction = function*(wsChan: any) {
   let action;
   while ((action = yield effects.take(wsChan))) {
     yield effects.put(action);
   }
 };
 
-const connectWS = function* (ws: any) {
+const connectWS = function*(ws: any) {
   // eslint-disable-next-line
   const userId = uuid4();
 
@@ -117,14 +117,17 @@ const connectWS = function* (ws: any) {
 
   yield effects.put(actions.afAddUser(userId, ws));
   yield effects.put(
-    actions.afBroadcastMessageToUserId(userId, "thanks for connecting via websockets")
+    actions.afBroadcastMessageToUserId(
+      userId,
+      "thanks for connecting via websockets"
+    )
   );
   yield effects.put(actions.afUserConnected(userId));
   yield effects.fork(onClientAction, clientActionChan);
   yield onDisconnect(disconnectChan);
 };
 
-const connectWSS = function* () {
+const connectWSS = function*() {
   const { httpServer } = yield effects.take(
     t.ServerAsyncActionType.CONNECT_WEBSOCKET_SERVER
   );
@@ -140,7 +143,7 @@ const connectWSS = function* () {
   }
 };
 
-const websocket = function* () {
+const websocket = function*() {
   yield effects.all([
     broadcastMessageToUserIds(),
     broadcastMessageToUserId(),

@@ -12,6 +12,8 @@ export const role = playerType.role;
 export const team = playerType.team;
 
 export const remoteState = reduxState.remoteState;
+export const currentTeam = remoteState && remoteState.currentTeam;
+export const hintSubmitted = remoteState && remoteState.hint.submitted;
 export const cards = remoteState && remoteState.cards;
 export const card = (cardId: t.CardId) => {
   if (!cards) {
@@ -28,14 +30,29 @@ export const cardFlipped = (cardId: t.CardId) => {
   return lens === undefined ? lens : lens.flipped;
 };
 
-// const cardTeamByCardIdA = (cardId: t.CardId) => [
-//   ...cardByCardIdA(cardId),
-//   "team"
-// ];
-// const cardTextByCardIdA = (cardId: t.CardId) => [
-//   ...cardByCardIdA(cardId),
-//   "text"
-// ];
+export const cardText = (cardId: t.CardId) => {
+  const lens = card(cardId);
+  return lens === undefined ? lens : lens.text;
+};
+
+export const cardTeam = (cardId: t.CardId) => {
+  const lens = card(cardId);
+  return lens === undefined ? lens : lens.team;
+};
+
+export const style = remoteState && remoteState.style;
+
+export const teamStyle = (team: t.Team) => {
+  const lens = style;
+  if (!lens) {
+    return undefined;
+  }
+  const getter = (s: t.ReduxState) => lens.get()(s)[team];
+  const setter = (style: React.CSSProperties) =>
+    lens.set((old: t.Style) => ({ ...old, [team]: style }));
+  return l.lens<t.ReduxState, React.CSSProperties>(getter, setter);
+};
+
 // const time = [...remoteState, "time"];
 // const error = [...localState, "error"];
 // const errorText = [...error, "text"];

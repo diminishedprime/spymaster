@@ -29,8 +29,8 @@ const addUser = (
   state: t.ServerReduxState,
   { userId, ws }: t.ADD_USERAction
 ) => {
-  let s = R.set(userByUserIdPath(userId), { userId, ws }, state);
-  s = R.over(clientUsersPath, R.assoc(userId, { userId }), s);
+  let s = R.set(userByUserIdPath(userId!), { userId, ws }, state);
+  s = R.over(clientUsersPath, R.assoc(userId!, { userId }), s);
   return s;
 };
 
@@ -38,8 +38,8 @@ const removeUser = (
   state: t.ServerReduxState,
   { userId }: t.REMOVE_USERAction
 ) => {
-  let s = R.over(usersPath, R.dissoc(userId), state);
-  s = R.over(clientUsersPath, R.dissoc(userId), s);
+  let s = R.over(usersPath, R.dissoc(userId!), state);
+  s = R.over(clientUsersPath, R.dissoc(userId!), s);
   return s;
 };
 

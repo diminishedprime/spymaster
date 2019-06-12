@@ -7,13 +7,17 @@ import * as constants from "../../../../src/constants";
 import * as paths from "../../../src/redux/paths";
 import * as serverActions from "../actions";
 import * as serverPaths from "../paths";
-import * as effects from 'redux-saga/effects';
+import * as effects from "redux-saga/effects";
 
-const pushGameState = function* (gameId: t.GameId) {
-  const remoteState = yield effects.select(R.view(serverPaths.gameByGameIdPath(gameId)));
+const pushGameState = function*(gameId: t.GameId) {
+  const remoteState = yield effects.select(
+    R.view(serverPaths.gameByGameIdPath(gameId))
+  );
   const remoteStateAction = actions.afUpdateRemoteState(remoteState);
   const userIds: t.UserId[] = R.view(serverPaths.gameUsersPath, remoteState);
-  yield effects.put(serverActions.afBroadcastActionToUserIds(userIds, remoteStateAction));
+  yield effects.put(
+    serverActions.afBroadcastActionToUserIds(userIds, remoteStateAction)
+  );
 };
 
 const wait = (millis: number) =>
@@ -21,8 +25,10 @@ const wait = (millis: number) =>
     setTimeout(() => resolve(), millis);
   });
 
-const removeUserFromGame = function* (gameId: t.GameId, userId: t.UserId) {
-  const game = yield effects.select(R.view(serverPaths.gameByGameIdPath(gameId)));
+const removeUserFromGame = function*(gameId: t.GameId, userId: t.UserId) {
+  const game = yield effects.select(
+    R.view(serverPaths.gameByGameIdPath(gameId))
+  );
   const gameUserIds: t.UserId[] = R.view(serverPaths.gameUsersPath, game);
   if (gameUserIds.indexOf(userId) > -1) {
     yield effects.put(serverActions.afRemoveUserFromGame(gameId, userId));
@@ -30,45 +36,53 @@ const removeUserFromGame = function* (gameId: t.GameId, userId: t.UserId) {
   }
 };
 
-const userDisconnected = function* () {
-  yield effects.takeEvery<any>(t.ServerAsyncActionType.USER_DISCONNECTED, function* ({
-    userId
-  }: t.USER_DISCONNECTEDAction) {
-    yield effects.put(serverActions.afRemoveUser(userId));
-    const gameIds = yield effects.select(
-      R.compose(
-        R.keys,
-        R.view(serverPaths.gamesPath)
-      )
-    );
-    for (let i = 0; i < gameIds.length; i++) {
-      const gameId = gameIds[i];
-      yield removeUserFromGame(gameId, userId);
+const userDisconnected = function*() {
+  yield effects.takeEvery<any>(
+    t.ServerAsyncActionType.USER_DISCONNECTED,
+    function*({ userId }: t.USER_DISCONNECTEDAction) {
+      yield effects.put(serverActions.afRemoveUser(userId));
+      const gameIds = yield effects.select(
+        R.compose(
+          R.keys,
+          R.view(serverPaths.gamesPath)
+        )
+      );
+      for (let i = 0; i < gameIds.length; i++) {
+        const gameId = gameIds[i];
+        yield removeUserFromGame(gameId, userId);
+      }
     }
-  });
+  );
 };
 
-const userConnected = function* () {
-  yield effects.takeEvery<any>(t.ServerAsyncActionType.USER_CONNECTED, function* ({
-    userId
-  }: t.USER_CONNECTEDAction) {
-    const setUsername = actions.afSetUsername(userId.substring(0, 8));
-    const setUserId = actions.afSetUserId(userId);
-    const gameIds = yield effects.select(
-      R.compose(
-        R.keys,
-        R.view(serverPaths.gamesPath)
-      )
-    );
-    const setGameIds = actions.afSetGameIds(gameIds);
-    yield effects.put(serverActions.afBroadcastActionToUserId(userId, setGameIds));
-    yield effects.put(serverActions.afBroadcastActionToUserId(userId, setUsername));
-    yield effects.put(serverActions.afBroadcastActionToUserId(userId, setUserId));
-    /* yield forceUpdateRemoteState()*/
-  });
+const userConnected = function*() {
+  yield effects.takeEvery<any>(
+    t.ServerAsyncActionType.USER_CONNECTED,
+    function*({ userId }: t.USER_CONNECTEDAction) {
+      const setUsername = actions.afSetUsername(userId!.substring(0, 8));
+      const setUserId = actions.afSetUserId(userId);
+      const gameIds = yield effects.select(
+        R.compose(
+          R.keys,
+          R.view(serverPaths.gamesPath)
+        )
+      );
+      const setGameIds = actions.afSetGameIds(gameIds);
+      yield effects.put(
+        serverActions.afBroadcastActionToUserId(userId, setGameIds)
+      );
+      yield effects.put(
+        serverActions.afBroadcastActionToUserId(userId, setUsername)
+      );
+      yield effects.put(
+        serverActions.afBroadcastActionToUserId(userId, setUserId)
+      );
+      /* yield forceUpdateRemoteState()*/
+    }
+  );
 };
 
-const loseGame = function* (teamThatLost: t.Team) {
+const loseGame = function*(teamThatLost: t.Team) {
   yield effects.put(actions.afForfeit(teamThatLost));
   yield effects.put(actions.afStopTimer());
   /*yield forceUpdateRemoteState()*/
@@ -81,8 +95,8 @@ const zeroRemainingCards = (team: t.Team, cards: t.Card[]) => {
   return cardsForTeam.length === 0;
 };
 
-const flipCard = function* () {
-  yield effects.takeEvery<any>(t.ActionType.FLIP_CARD, function* ({
+const flipCard = function*() {
+  yield effects.takeEvery<any>(t.ActionType.FLIP_CARD, function*({
     cardId
   }: t.FlipCard) {
     // Always flip the card, because that's a safe thing to do
@@ -127,14 +141,14 @@ const flipCard = function* () {
   });
 };
 
-const nextTurn = function* () {
-  yield effects.takeEvery<any>(t.ActionType.NEXT_TURN, function* () {
+const nextTurn = function*() {
+  yield effects.takeEvery<any>(t.ActionType.NEXT_TURN, function*() {
     yield effects.put(actions.afStopTimer());
   });
 };
 
-const timer = function* () {
-  yield effects.takeEvery<any>(t.ActionType.START_TIMER, function* () {
+const timer = function*() {
+  yield effects.takeEvery<any>(t.ActionType.START_TIMER, function*() {
     let wasStopped = false;
     let seconds = 60;
     yield effects.put(actions.afSetTime(seconds));
@@ -158,35 +172,45 @@ const timer = function* () {
   });
 };
 
-const joinGame = function* () {
-  yield effects.takeEvery<any>(t.ActionType.JOIN_GAME, function* ({
+const joinGame = function*() {
+  yield effects.takeEvery<any>(t.ActionType.JOIN_GAME, function*({
     userId,
     gameId
   }: t.JoinGame) {
     yield effects.put(serverActions.afJoinGameServer(userId, gameId));
 
-    yield effects.put(serverActions.afBroadcastActionToUserId(userId, actions.afSetGameId(gameId)));
     yield effects.put(
-      serverActions.afBroadcastActionToUserId(userId, actions.afSetPage(t.Page.GAME_MODE_PICK_TEAM))
+      serverActions.afBroadcastActionToUserId(
+        userId,
+        actions.afSetGameId(gameId)
+      )
+    );
+    yield effects.put(
+      serverActions.afBroadcastActionToUserId(
+        userId,
+        actions.afSetPage(t.Page.GAME_MODE_PICK_TEAM)
+      )
     );
     yield pushGameState(gameId);
   });
 };
 
-const changeBackgroundColor = function* () {
-  yield effects.takeEvery<any>(t.ActionType.CHANGE_BACKGROUND_COLOR, function* ({
+const changeBackgroundColor = function*() {
+  yield effects.takeEvery<any>(t.ActionType.CHANGE_BACKGROUND_COLOR, function*({
     gameId,
     team,
     backgroundColor
   }: // TODO figure out a better way to type this. I add gameId and userId to all outgoing actions, but since these are the client types it doesn't include that information.
-    t.ChangeBackgroundColor & { gameId: t.GameId }) {
-    yield effects.put(serverActions.afChangeBackgroundColorServer(gameId, team, backgroundColor));
+  t.ChangeBackgroundColor & { gameId: t.GameId }) {
+    yield effects.put(
+      serverActions.afChangeBackgroundColorServer(gameId, team, backgroundColor)
+    );
     yield pushGameState(gameId);
   });
 };
 
-const newGameSaga = function* () {
-  yield effects.takeEvery<any>(t.ActionType.NEW_GAME_2, function* ({
+const newGameSaga = function*() {
+  yield effects.takeEvery<any>(t.ActionType.NEW_GAME_2, function*({
     userId
   }: t.NewGame2 & { userId: t.UserId }) {
     const gameId = uuid4();
@@ -199,14 +223,16 @@ const newGameSaga = function* () {
         R.view(serverPaths.gamesPath)
       )
     );
-    yield effects.put(serverActions.afBroadcastActionToAll(actions.afSetGameIds(gameIds)));
+    yield effects.put(
+      serverActions.afBroadcastActionToAll(actions.afSetGameIds(gameIds))
+    );
 
     yield effects.put(actions.afJoinGame(gameId, userId));
   });
 };
 
-const setRole = function* () {
-  yield effects.takeEvery(t.ActionType.PICK_ROLE, function* ({
+const setRole = function*() {
+  yield effects.takeEvery(t.ActionType.PICK_ROLE, function*({
     userId,
     ...action
   }: t.PickRole & { userId: t.UserId }) {
@@ -220,7 +246,7 @@ const setRole = function* () {
   });
 };
 
-export default function* () {
+export default function*() {
   yield effects.all([
     changeBackgroundColor(),
     setRole(),

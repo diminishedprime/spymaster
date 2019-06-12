@@ -5,8 +5,8 @@ const localStateA = ["localState"];
 const usersA = [...localStateA, "users"];
 const gamesA = [...localStateA, "games"];
 const gameByGameIdA = (gameId: t.GameId) => [...gamesA, gameId];
-const userByUserIdA = (userId: t.UserId) => [...usersA, userId];
-const wsByUserIdA = (userId: t.UserId) => [...userByUserIdA(userId), "ws"];
+const userByUserIdA = (userId: string) => [...usersA, userId];
+const wsByUserIdA = (userId: string) => [...userByUserIdA(userId), "ws"];
 const cardsA = ["cards"];
 const cardByIdA = (cardId: t.CardId) => [...cardsA, cardId];
 const cardTeamByCardIdA = (cardId: t.CardId) => [...cardByIdA(cardId), "team"];
@@ -31,9 +31,9 @@ export const usersPath = R.lensPath(usersA);
 export const gamesPath = R.lensPath(gamesA);
 export const gameByGameIdPath = (gameId: t.GameId) =>
   R.lensPath(gameByGameIdA(gameId));
-export const userByUserIdPath = (userId: t.UserId) =>
+export const userByUserIdPath = (userId: string) =>
   R.lensPath(userByUserIdA(userId));
-export const wsByUserIdPath = (userId: t.UserId) =>
+export const wsByUserIdPath = (userId: string) =>
   R.lensPath(wsByUserIdA(userId));
 export const cardsPath = R.lensPath(cardsA);
 export const cardTeamByCardId = (cardId: t.CardId) =>
