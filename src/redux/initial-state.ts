@@ -16,6 +16,7 @@ export const initialHint = {
 const newState = (s = {}): t.ReduxState => {
   const s2: t.ReduxState = {
     localState: {
+      ws: undefined,
       userId: undefined,
       connected: false,
       username: "",

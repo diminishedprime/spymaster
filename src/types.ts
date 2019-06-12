@@ -266,7 +266,10 @@ interface Settings {
   showTitle: boolean;
 }
 
-interface ErrorData {}
+interface ErrorData {
+  text: string;
+  severity: Severity;
+}
 
 interface PlayerType {
   team: Team;
@@ -274,6 +277,7 @@ interface PlayerType {
 }
 
 export interface LocalState {
+  ws?: any;
   userId: UserId;
   connected: boolean;
   serverAddress: string;
@@ -307,6 +311,8 @@ export interface Style {
 }
 
 export interface RemoteState {
+  winner?: Team;
+  time: number;
   score: Score;
   hint: Hint;
   cards: Cards;
