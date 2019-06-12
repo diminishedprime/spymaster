@@ -53,7 +53,6 @@ const hintNumber = [...hint, "number"];
 const hintSubmitted = [...hint, "submitted"];
 const winner = [...remoteState, "winner"];
 const score = [...remoteState, "score"];
-const gameIds = [...localState, "gameIds"];
 const gameIdA = [...localState, "gameId"];
 const serverAddress = [...localState, "serverAddress"];
 const connected = [...localState, "connected"];
@@ -98,6 +97,5 @@ export const foregroundColorForTeamPath = (team: t.Team) =>
   R.lensPath(foregroundColorForTeamA(team));
 export const backgroundColorForTeamPath = (team: t.Team) =>
   R.lensPath(backgroundColorForTeamA(team));
-export const gameIdsPath = R.lensPath(gameIds);
 export const serverAddressPath = R.lensPath(serverAddress);
 export const connectedPath = R.lensPath(connected);

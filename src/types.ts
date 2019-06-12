@@ -4,7 +4,7 @@ export type Dispatch = ReduxDispatch<Action>;
 
 export type CardId = string;
 export type GameId = string;
-export type UserId = string;
+export type UserId = string | undefined;
 export type HintNumber = number | "Zero" | "Infinity";
 
 export interface SetPage {
@@ -273,7 +273,8 @@ interface PlayerType {
   role: Role;
 }
 
-interface LocalState {
+export interface LocalState {
+  userId: UserId;
   connected: boolean;
   serverAddress: string;
   username: string;

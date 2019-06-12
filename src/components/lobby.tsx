@@ -1,12 +1,11 @@
 import React from "react";
 import * as t from "./../types";
 import * as actions from "../redux/actions";
-import R from "ramda";
+import * as lens from "../redux/lenses";
 
 import PickUsername from "./pick-username";
 import NewGame from "./new-game";
 import ConnectedUsers from "./connected-users";
-import { gameIdsPath, userIdPath } from "./../redux/paths";
 
 interface JoinGameProps {
   gameId: t.GameId;
@@ -23,24 +22,17 @@ const JoinGame: React.FC<JoinGameProps> = ({ gameId, userId }) => {
 };
 
 const Lobby: React.FC = () => {
-  const gameIds = actions.useSelector<t.GameId[]>(state =>
-    R.view(gameIdsPath, state)
-  );
-  const userId = actions.useSelector<t.UserId>(state =>
-    R.view(userIdPath, state)
-  );
+  const gameIds = actions.useLensSelector(lens.gameIds);
+  const userId = actions.useLensSelector(lens.userId);
   return (
     <div>
       <NewGame />
       <div>
         Join Existing Game
         <div>
-          {R.map(
-            gameId => (
-              <JoinGame key={gameId} gameId={gameId} userId={userId} />
-            ),
-            gameIds
-          )}
+          {gameIds.map(gameId => (
+            <JoinGame key={gameId} gameId={gameId} userId={userId} />
+          ))}
         </div>
       </div>
       <PickUsername />

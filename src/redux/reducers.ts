@@ -1,11 +1,11 @@
 import * as R from "ramda";
 import * as t from "../types";
+import * as lens from "./lenses";
 
 import { GAME_MODE_GAME } from "../constants";
 
 import {
   gameIdPath,
-  gameIdsPath,
   userIdPath,
   remoteStatePath,
   errorSeverityPath,
@@ -73,7 +73,7 @@ export const setUserId = (state: t.ReduxState, { userId }: t.SetUserId) =>
   R.set(userIdPath, userId, state);
 
 const setGameIds = (state: t.ReduxState, { gameIds }: t.SetGameIds) =>
-  R.set(gameIdsPath, gameIds, state);
+  lens.gameIds.set(gameIds)(state);
 
 const setGameId = (state: t.ReduxState, { gameId }: t.SetGameId) =>
   R.set(gameIdPath, gameId, state);

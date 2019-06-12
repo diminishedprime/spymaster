@@ -1,4 +1,5 @@
 import React from "react";
+import * as l from "lens.ts";
 import * as t from "../types";
 import * as reactRedux from "react-redux";
 
@@ -194,6 +195,10 @@ export const useSelector = <T>(
   comparisonFn?: (t1: T, t2: T) => boolean
 ): T => {
   return (reactRedux as any).useSelector(selector, comparisonFn);
+};
+
+export const useLensSelector = <T>(lens: l.LensImpl<t.ReduxState, T>) => {
+  return useSelector(lens.get());
 };
 
 const useDispatch: () => t.Dispatch = (reactRedux as any).useDispatch;

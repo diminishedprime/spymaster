@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "lens.ts": "^0.5.1",
     "ramda": "^0.24.1",
     "react": "^16.8.6",
     "react-color": "^2.13.8",
