@@ -19,8 +19,7 @@ import {
   errorTextPath,
   hintTextPath,
   hintNumberPath,
-  serverAddressPath,
-  connectedPath
+  serverAddressPath
 } from "./paths";
 import { initialErrorState, initialState } from "./initial-state";
 
@@ -79,7 +78,7 @@ const setGameId = (state: t.ReduxState, { gameId }: t.SetGameId) =>
   R.set(gameIdPath, gameId, state);
 
 const setConnected = (state: t.ReduxState, { flag }: t.SetConnected) =>
-  R.set(connectedPath, flag, state);
+  lens.connected.set(flag)(state);
 
 export const app = (state: t.ReduxState = initialState, action: t.Action) => {
   switch (action.type) {

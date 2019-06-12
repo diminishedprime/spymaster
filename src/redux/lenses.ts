@@ -6,3 +6,4 @@ const localState = reduxState.k("localState");
 
 export const userId = localState.k("userId");
 export const gameIds = localState.k("gameIds");
+export const connected = localState.k("connected");

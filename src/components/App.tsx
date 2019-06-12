@@ -11,6 +11,7 @@ import PickUsername from "./pick-username";
 import Win from "./win";
 import * as actions from "../redux/actions";
 import * as paths from "../redux/paths";
+import * as lens from "../redux/lenses";
 
 const Wrapper = styled.div`
   font-family: Helvetica;
@@ -44,7 +45,7 @@ const Title: React.FC = () => {
 const App: React.FC = () => {
   const page = actions.useSelector(R.view(paths.page));
   const hasError = actions.useSelector(R.view(paths.errorTextPath));
-  const connected = actions.useSelector(R.view(paths.connectedPath));
+  const connected = actions.useLensSelector(lens.connected);
   const winner = actions.useSelector(R.view(paths.winnerPath));
   return (
     <Wrapper>
