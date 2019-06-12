@@ -11,7 +11,7 @@ import { takeLatest, take, put, select, takeEvery } from "redux-saga/effects";
 
 const emitAction = function*({ action }: any) {
   const ws = yield select(state => R.view(wsPath, state));
-  const gameId = yield select(lens.gameIds.get());
+  const gameId = yield select(lens.gameId.get());
   const userId = yield select(lens.userId.get());
   if (gameId) {
     action = R.assoc("gameId", gameId, action);

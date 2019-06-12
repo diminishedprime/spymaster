@@ -283,6 +283,7 @@ export interface LocalState {
   page: Page;
   playerType: PlayerType;
   gameIds: GameId[];
+  gameId?: GameId;
 }
 
 interface Score {

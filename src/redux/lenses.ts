@@ -6,47 +6,30 @@ const reduxState = l.lens<t.ReduxState>();
 const localState = reduxState.localState;
 export const userId = localState.userId;
 export const gameIds = localState.gameIds;
+export const gameId = localState.gameId!;
 export const connected = localState.connected;
 export const playerType = localState.playerType;
 export const role = playerType.role;
 export const team = playerType.team;
 
-export const remoteState = reduxState.remoteState;
-export const currentTeam = remoteState && remoteState.currentTeam;
-export const hintSubmitted = remoteState && remoteState.hint.submitted;
-export const cards = remoteState && remoteState.cards;
+export const remoteState = reduxState.remoteState!;
+export const currentTeam = remoteState.currentTeam;
+export const hintSubmitted = remoteState.hint.submitted;
+export const cards = remoteState.cards;
 export const card = (cardId: t.CardId) => {
-  if (!cards) {
-    return undefined;
-  }
   const getter = (s: t.ReduxState) => cards.get()(s)[cardId];
   const setter = (card: t.Card) =>
     cards.set((old: t.Cards) => ({ ...old, [card.id]: card }));
   return l.lens<t.ReduxState, t.Card>(getter, setter);
 };
 
-export const cardFlipped = (cardId: t.CardId) => {
-  const lens = card(cardId);
-  return lens === undefined ? lens : lens.flipped;
-};
-
-export const cardText = (cardId: t.CardId) => {
-  const lens = card(cardId);
-  return lens === undefined ? lens : lens.text;
-};
-
-export const cardTeam = (cardId: t.CardId) => {
-  const lens = card(cardId);
-  return lens === undefined ? lens : lens.team;
-};
-
-export const style = remoteState && remoteState.style;
+export const cardFlipped = (cardId: t.CardId) => card(cardId).flipped;
+export const cardText = (cardId: t.CardId) => card(cardId).text;
+export const cardTeam = (cardId: t.CardId) => card(cardId).team;
+export const style = remoteState.style;
 
 export const teamStyle = (team: t.Team) => {
   const lens = style;
-  if (!lens) {
-    return undefined;
-  }
   const getter = (s: t.ReduxState) => lens.get()(s)[team];
   const setter = (style: React.CSSProperties) =>
     lens.set((old: t.Style) => ({ ...old, [team]: style }));

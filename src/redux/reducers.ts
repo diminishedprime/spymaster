@@ -59,7 +59,7 @@ const setGameIds = (state: t.ReduxState, { gameIds }: t.SetGameIds) =>
   lens.gameIds.set(gameIds)(state);
 
 const setGameId = (state: t.ReduxState, { gameId }: t.SetGameId) =>
-  lens.gameIds.set(a => a.concat([gameId]))(state);
+  lens.gameId.set(gameId)(state);
 
 const setConnected = (state: t.ReduxState, { flag }: t.SetConnected) =>
   lens.connected.set(flag)(state);
