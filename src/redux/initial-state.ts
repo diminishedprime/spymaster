@@ -30,7 +30,7 @@ const newState = (s = {}): t.ReduxState => {
         role: t.Role.SPYMASTER
       }
     },
-    remoteState: "Not Connected"
+    remoteState: undefined
   };
   return s2;
 };

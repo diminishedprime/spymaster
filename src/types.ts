@@ -296,15 +296,18 @@ interface Hint {
   submitted: boolean;
 }
 
-interface RemoteState {
+export type Cards = { [cardId: string]: Card };
+
+export interface RemoteState {
   score: Score;
   hint: Hint;
+  cards: Cards;
   clientUsers: {};
 }
 
 export interface ReduxState {
   localState: LocalState;
-  remoteState: RemoteState | "Not Connected";
+  remoteState?: RemoteState;
 }
 
 export interface Api {
