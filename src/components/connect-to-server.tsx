@@ -2,9 +2,7 @@ import React from "react";
 import * as actions from "../redux/actions";
 
 const ConnectToServer = () => {
-  const [serverAddress, setServerAddress] = React.useState(
-    "penguin.linux.test:3003"
-  );
+  const [serverAddress, setServerAddress] = React.useState("10.0.0.5:3003");
   const onChange = React.useCallback(
     ({ target: { value } }: { target: { value: string } }) => {
       setServerAddress(value);

@@ -24,10 +24,6 @@ export const afSetTime = (seconds: number) => ({
   seconds
 });
 
-export const afToggleTitle = (): t.ToggleTitle => ({
-  type: t.ActionType.TOGGLE_TITLE
-});
-
 export const afError = (text: string, severity: t.Severity) => ({
   type: t.ActionType.ERROR_OCCURED,
   text,
