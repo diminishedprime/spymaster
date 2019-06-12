@@ -40,7 +40,6 @@ const backgroundColorForTeamA = (team: t.Team) => [
 
 const currentTeam = [...remoteState, "currentTeam"];
 const ws = [...localState, "ws"];
-const userIdA = [...localState, "userId"];
 const username = [...localState, "username"];
 const editing = [...localState, "editing"];
 const pageA = [...localState, "page"];
@@ -53,11 +52,8 @@ const hintNumber = [...hint, "number"];
 const hintSubmitted = [...hint, "submitted"];
 const winner = [...remoteState, "winner"];
 const score = [...remoteState, "score"];
-const gameIdA = [...localState, "gameId"];
 const serverAddress = [...localState, "serverAddress"];
 
-export const gameIdPath = R.lensPath(gameIdA);
-export const userIdPath = R.lensPath(userIdA);
 export const scorePath = R.lensPath([...score]);
 export const winnerPath = R.lensPath([...winner]);
 export const hintPath = R.lensPath([...hint]);

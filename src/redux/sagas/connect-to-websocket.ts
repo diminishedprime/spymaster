@@ -4,14 +4,15 @@ import io from "socket.io-client";
 import R from "ramda";
 
 import { afSetWs, afListenToWebsocket, afSetConnected } from "../actions";
-import { gameIdPath, userIdPath, wsPath } from "../paths";
+import { wsPath } from "../paths";
+import * as lens from "../lenses";
 
 import { takeLatest, take, put, select, takeEvery } from "redux-saga/effects";
 
 const emitAction = function*({ action }: any) {
   const ws = yield select(state => R.view(wsPath, state));
-  const gameId = yield select(R.view(gameIdPath));
-  const userId = yield select(R.view(userIdPath));
+  const gameId = yield select(lens.gameIds.get());
+  const userId = yield select(lens.userId.get());
   if (gameId) {
     action = R.assoc("gameId", gameId, action);
   }
