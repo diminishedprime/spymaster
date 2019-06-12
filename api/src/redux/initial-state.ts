@@ -5,7 +5,6 @@ import shuffle from "shuffle-array";
 
 import words from "../../../src/redux/words";
 import { fgForHex } from "../../../src/util";
-import { ASSASSIN, BYSTANDER, TEAM_1, TEAM_2 } from "../../../src/constants";
 
 import {
   hintTextPath,
@@ -31,16 +30,16 @@ export const newCards = () => {
   const nextTeam = () => {
     if (numAssassins > 0) {
       numAssassins--;
-      return ASSASSIN;
+      return t.Team.ASSASSIN;
     } else if (numBystanders > 0) {
       numBystanders--;
-      return BYSTANDER;
+      return t.Team.BYSTANDER;
     } else if (numTeam1 > 0) {
       numTeam1--;
-      return TEAM_1;
+      return t.Team.TEAM_1;
     } else if (numTeam2 > 0) {
       numTeam2--;
-      return TEAM_2;
+      return t.Team.TEAM_2;
     } else {
       throw 'There weren\'t enough team thingys';
     }
@@ -113,10 +112,10 @@ export const newGame = () => {
   baseGame = R.set(gameUsersPath, [], baseGame);
   baseGame = R.set(cardsPath, newCards(), baseGame);
   const currentTeam = R.compose(
-    R.ifElse(R.equals(9), R.always(TEAM_1), R.always(TEAM_2)),
+    R.ifElse(R.equals(9), R.always(t.Team.TEAM_1), R.always(t.Team.TEAM_2)),
     R.length,
     R.keys,
-    R.filter(({ team: cardTeam }) => cardTeam === TEAM_1)
+    R.filter(({ team: cardTeam }) => cardTeam === t.Team.TEAM_1)
   )(R.view(cardsPath, baseGame));
   return R.compose(R.set(currentTeamPath, currentTeam))(baseGame);
 };

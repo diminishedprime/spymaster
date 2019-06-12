@@ -93,6 +93,8 @@ const Card: React.FC<AllProps> = ({ flip, cardId }) => {
     !hintSubmitted;
   const text = actions.useLensSelector(lens.cardText(cardId)!);
   const style = actions.useLensSelector(lens.teamStyle(cardTeam)!);
+  const state = actions.useSelector(a => a);
+  console.log({ style, text, cardTeam, state });
   return (
     <CardWrapper style={style} disabled={disabled} onClick={flip}>
       {text}

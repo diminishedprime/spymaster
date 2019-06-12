@@ -3,7 +3,6 @@ import uuid4 from "uuid/v4";
 import * as t from "../../types";
 import * as initialState from "../initial-state";
 import * as actions from "../../../../src/redux/actions";
-import * as constants from "../../../../src/constants";
 import * as paths from "../../../src/redux/paths";
 import * as serverActions from "../actions";
 import * as serverPaths from "../paths";
@@ -109,7 +108,7 @@ const flipCard = function*() {
     const currentTeam: t.Team = R.view(paths.currentTeamPath, state);
 
     const correctCard = currentTeam === teamForCard;
-    const pickedAssassin = teamForCard === constants.ASSASSIN;
+    const pickedAssassin = teamForCard === t.Team.ASSASSIN;
     const team1done = zeroRemainingCards(t.Team.TEAM_1, cards);
     const team2done = zeroRemainingCards(t.Team.TEAM_2, cards);
 
