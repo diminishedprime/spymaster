@@ -1,9 +1,8 @@
 import React from "react";
 import * as t from "./../types";
-import R from "ramda";
 import styled from "styled-components";
 import * as actions from "../redux/actions";
-import * as paths from "./../redux/paths";
+import * as lens from "../redux/lenses";
 
 const DismissWrapper = styled.div`
   cursor: pointer;
@@ -23,10 +22,8 @@ const ErrorWrapper = styled.div<{ severity: t.Severity }>`
 `;
 
 const ErrorBar: React.FC = () => {
-  const severity = actions.useSelector<t.Severity>(
-    R.view(paths.errorSeverityPath)
-  );
-  const text = actions.useSelector<string>(R.view(paths.errorTextPath));
+  const severity = actions.useLensSelector(lens.errorSeverity);
+  const text = actions.useLensSelector(lens.errorText);
   const { dismissError } = actions.useApi();
   return (
     <ErrorWrapper severity={severity}>
