@@ -27,7 +27,7 @@ export const hint = remoteState.hint;
 export const hintText = hint.text;
 export const hintNumber = hint.number;
 export const hintSubmitted = hint.submitted;
-export const winner = remoteState.winner;
+export const winner = remoteState.winner!;
 export const score = remoteState.score;
 export const serverAddress = localState.serverAddress;
 

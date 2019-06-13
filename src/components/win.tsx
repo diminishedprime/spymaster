@@ -1,27 +1,16 @@
 import React from "react";
-import * as t from "./../types";
-import R from "ramda";
-import { connect } from "react-redux";
-
-import { winnerPath } from "./../redux/paths";
-
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 import NewGame from "./new-game";
 
-interface StateProps {
-  winner: t.Team;
-}
+const Win: React.FC = () => {
+  const winner = actions.useLens(lens.winner);
+  return (
+    <div>
+      <div>The winner was {winner}</div>
+      <NewGame />
+    </div>
+  );
+};
 
-type AllProps = StateProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => ({
-  winner: R.view(winnerPath, state)
-});
-
-const Win: React.FC<AllProps> = ({ winner }) => (
-  <div>
-    <div>The winner was {winner}</div>
-    <NewGame />
-  </div>
-);
-
-export default connect(mapStateToProps)(Win);
+export default Win;
