@@ -1,15 +1,8 @@
 import React from "react";
-import * as t from "./../types";
 import R from "ramda";
-import { connect } from "react-redux";
-
-import {
-  rolePath,
-  teamPath,
-  styleForTeamPath,
-  usernamePath
-} from "./../redux/paths";
 import { largeTextStyle } from "./commonStyles";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 import Score from "./score";
 
@@ -41,39 +34,26 @@ const infoBabyStyle: React.CSSProperties = {
   marginTop: "10px"
 };
 
-interface StateProps {
-  style: React.CSSProperties;
-  role: t.Role;
-  username: string;
-}
-
-type AllProps = StateProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const role: t.Role = R.view(rolePath, state);
-  const team: t.Team = R.view(teamPath, state);
-  const style: React.CSSProperties = R.view(styleForTeamPath(team), state);
-  return {
-    style,
-    role: role,
-    username: R.view(usernamePath, state)
-  };
+const User: React.FC = () => {
+  const role = actions.useLensSelector(lens.role);
+  const team = actions.useLensSelector(lens.team);
+  const style = actions.useLensSelector(lens.teamStyle(team));
+  const username = actions.useLensSelector(lens.username);
+  return (
+    <div style={R.merge(flexStyle, infoBabyStyle)}>
+      <div style={R.merge(style, userStyle)}>
+        <div style={userRowStyle}>
+          <div>Role</div>
+          <div style={largeTextStyle}>{role}</div>
+        </div>
+        <div style={userRowStyle}>
+          <div>Username</div>
+          <div style={largeTextStyle}>{username}</div>
+        </div>
+      </div>
+      <Score />
+    </div>
+  );
 };
 
-const User: React.FC<AllProps> = ({ role, username, style }) => (
-  <div style={R.merge(flexStyle, infoBabyStyle)}>
-    <div style={R.merge(style, userStyle)}>
-      <div style={userRowStyle}>
-        <div>Role</div>
-        <div style={largeTextStyle}>{role}</div>
-      </div>
-      <div style={userRowStyle}>
-        <div>Username</div>
-        <div style={largeTextStyle}>{username}</div>
-      </div>
-    </div>
-    <Score />
-  </div>
-);
-
-export default connect(mapStateToProps)(User);
+export default User;
