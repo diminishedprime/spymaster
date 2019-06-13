@@ -1,16 +1,9 @@
 import React from "react";
-import * as t from "./../types";
 import R from "ramda";
-import { connect } from "react-redux";
-
 import { SPYMASTER } from "./../constants";
-import {
-  teamPath,
-  styleForTeamPath,
-  currentTeamPath,
-  rolePath
-} from "./../redux/paths";
 import { largeTextStyle } from "./commonStyles";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 import Pass from "./pass";
 
@@ -36,54 +29,25 @@ const infoBabyStyle = {
   marginTop: "10px"
 };
 
-interface StateProps {
-  yourTeam: t.Team;
-  currentTeam: t.Team;
-  currentTeamStyle: React.CSSProperties;
-  yourTeamStyle: React.CSSProperties;
-  role: t.Role;
-}
-type AllProps = StateProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const role: t.Role = R.view(rolePath, state);
-  const currentTeam: t.Team = R.view(currentTeamPath, state);
-  const yourTeam: t.Team = R.view(teamPath, state);
-  const yourTeamStyle: React.CSSProperties = R.view(
-    styleForTeamPath(yourTeam),
-    state
+const Teams: React.FC = () => {
+  const role = actions.useLensSelector(lens.role);
+  const currentTeam = actions.useLensSelector(lens.currentTeam);
+  const yourTeam = actions.useLensSelector(lens.team);
+  const yourTeamStyle = actions.useLensSelector(lens.teamStyle(yourTeam));
+  const currentTeamStyle = actions.useLensSelector(lens.teamStyle(currentTeam));
+  return (
+    <div style={R.merge(teamsStyle, infoBabyStyle)}>
+      <div style={R.merge(teamsRowStyle, currentTeamStyle)}>
+        <div>Current Team</div>
+        <div style={largeTextStyle}>{currentTeam}</div>
+      </div>
+      <div style={R.merge(teamsRowStyle, yourTeamStyle)}>
+        <div>Your Team</div>
+        <div style={largeTextStyle}>{yourTeam}</div>
+        {role !== SPYMASTER && <Pass />}
+      </div>
+    </div>
   );
-  const currentTeamStyle: React.CSSProperties = R.view(
-    styleForTeamPath(currentTeam),
-    state
-  );
-
-  return {
-    yourTeam,
-    currentTeam,
-    currentTeamStyle,
-    yourTeamStyle,
-    role
-  };
 };
-const Teams: React.FC<AllProps> = ({
-  currentTeamStyle,
-  yourTeamStyle,
-  yourTeam,
-  currentTeam,
-  role
-}) => (
-  <div style={R.merge(teamsStyle, infoBabyStyle)}>
-    <div style={R.merge(teamsRowStyle, currentTeamStyle)}>
-      <div>Current Team</div>
-      <div style={largeTextStyle}>{currentTeam}</div>
-    </div>
-    <div style={R.merge(teamsRowStyle, yourTeamStyle)}>
-      <div>Your Team</div>
-      <div style={largeTextStyle}>{yourTeam}</div>
-      {role !== SPYMASTER && <Pass />}
-    </div>
-  </div>
-);
 
-export default connect(mapStateToProps)(Teams);
+export default Teams;
