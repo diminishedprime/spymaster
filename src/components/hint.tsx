@@ -1,18 +1,9 @@
 import React from "react";
 import * as t from "./../types";
 import R from "ramda";
-import { connect } from "react-redux";
-
-import {
-  currentTeamPath,
-  styleForTeamPath,
-  hintSubmittedPath,
-  hintTextPath,
-  hintNumberPath,
-  rolePath
-} from "./../redux/paths";
-/* import font from "./font.css"; */
 import Forfeit from "./forfeit";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 import SpymasterHint from "./spymaster-hint";
 
@@ -30,54 +21,29 @@ const infoBabyStyle: React.CSSProperties = {
   marginTop: "10px"
 };
 
-interface StateProps {
-  showAgent: boolean;
-  text: string;
-  number: t.HintNumber;
-  hintSubmitted: boolean;
-  style: React.CSSProperties;
-}
-
-type AllProps = StateProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const text: string = R.view(hintTextPath, state);
-  const number: t.HintNumber = R.view(hintNumberPath, state);
-  const role: t.Role = R.view(rolePath, state);
-  const hintSubmitted: boolean = R.view(hintSubmittedPath, state);
-  const isAgent: boolean = role === t.Role.AGENT;
-  const showAgent: boolean = isAgent || hintSubmitted;
-  const team: t.Team = R.view(currentTeamPath, state);
-  const style: React.CSSProperties = R.view(styleForTeamPath(team), state);
-
-  return {
-    showAgent,
-    text,
-    number,
-    hintSubmitted,
-    style
-  };
+const AgentHint: React.FC = () => {
+  const text = actions.useLensSelector(lens.hintText);
+  const number = actions.useLensSelector(lens.hintNumber);
+  const team = actions.useLensSelector(lens.currentTeam);
+  const style = actions.useLensSelector(lens.teamStyle(team));
+  const hintSubmitted = actions.useLensSelector(lens.hintSubmitted);
+  return (
+    <div style={R.merge(infoBabyStyle, R.merge(hintStyle, style))}>
+      {!hintSubmitted && <div>Awaiting Hint</div>}
+      {hintSubmitted && <div>Hint</div>}
+      {hintSubmitted && <div className={"largeText"}>{text}</div>}
+      {hintSubmitted && <div className={"largeText"}>{number}</div>}
+      <Forfeit />
+    </div>
+  );
 };
 
-const AgentHint: React.FC<AllProps> = ({
-  hintSubmitted,
-  text,
-  number,
-  style
-}) => (
-  <div style={R.merge(infoBabyStyle, R.merge(hintStyle, style))}>
-    {!hintSubmitted && <div>Awaiting Hint</div>}
-    {hintSubmitted && <div>Hint</div>}
-    {hintSubmitted && <div className={"largeText"}>{text}</div>}
-    {hintSubmitted && <div className={"largeText"}>{number}</div>}
-    <Forfeit />
-  </div>
-);
-
-const ConnectedAgentHint = connect(mapStateToProps)(AgentHint);
-
-const Hint = connect(mapStateToProps)(({ showAgent }) =>
-  showAgent ? <ConnectedAgentHint /> : <SpymasterHint />
-);
+const Hint = () => {
+  const hintSubmitted = actions.useLensSelector(lens.hintSubmitted);
+  const role = actions.useLensSelector(lens.role);
+  const isAgent = role === t.Role.AGENT;
+  const showAgent = isAgent || hintSubmitted;
+  return showAgent ? <AgentHint /> : <SpymasterHint />;
+};
 
 export default Hint;
