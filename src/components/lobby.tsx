@@ -15,7 +15,11 @@ interface JoinGameProps {
 const JoinGame: React.FC<JoinGameProps> = ({ gameId, userId }) => {
   const { joinGame } = actions.useApi();
   return (
-    <button onClick={() => joinGame(gameId, userId)}>
+    <button
+      onClick={() => {
+        return joinGame(gameId, userId);
+      }}
+    >
       {gameId.substring(0, 8)}
     </button>
   );
@@ -31,9 +35,9 @@ const Lobby: React.FC = () => {
       <div>
         Join Existing Game
         <div>
-          {gameIds.map(gameId => (
-            <JoinGame key={gameId} gameId={gameId} userId={userId} />
-          ))}
+          {gameIds.map(gameId => {
+            return <JoinGame key={gameId} gameId={gameId} userId={userId} />;
+          })}
         </div>
       </div>
       <PickUsername />

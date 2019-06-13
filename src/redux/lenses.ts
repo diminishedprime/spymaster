@@ -31,23 +31,42 @@ export const winner = remoteState.winner!;
 export const score = remoteState.score;
 export const serverAddress = localState.serverAddress;
 
-export const cardFlipped = (cardId: t.CardId) => card(cardId).flipped;
-export const cardText = (cardId: t.CardId) => card(cardId).text;
-export const cardTeam = (cardId: t.CardId) => card(cardId).team;
-export const teamColor = (team: t.Team) => teamStyle(team)!.color!;
-export const teamBackgroundColor = (team: t.Team) =>
-  teamStyle(team)!.backgroundColor!;
+export const cardFlipped = (cardId: t.CardId) => {
+  return card(cardId).flipped;
+};
+export const cardText = (cardId: t.CardId) => {
+  return card(cardId).text;
+};
+export const cardTeam = (cardId: t.CardId) => {
+  return card(cardId).team;
+};
+export const teamColor = (team: t.Team) => {
+  return teamStyle(team)!.color!;
+};
+export const teamBackgroundColor = (team: t.Team) => {
+  return teamStyle(team)!.backgroundColor!;
+};
 export const card = (cardId: t.CardId) => {
-  const getter = (s: t.ReduxState) => cards.get()(s)[cardId];
-  const setter = (card: t.Card) =>
-    cards.set((old: t.Cards) => ({ ...old, [card.id]: card }));
+  const getter = (s: t.ReduxState) => {
+    return cards.get()(s)[cardId];
+  };
+  const setter = (card: t.Card) => {
+    return cards.set((old: t.Cards) => {
+      return { ...old, [card.id]: card };
+    });
+  };
   return l.lens<t.ReduxState, t.Card>(getter, setter);
 };
 
 export const teamStyle = (team: t.Team) => {
   const lens = style;
-  const getter = (s: t.ReduxState) => lens.get()(s)[team];
-  const setter = (style: React.CSSProperties) =>
-    lens.set((old: t.Style) => ({ ...old, [team]: style }));
+  const getter = (s: t.ReduxState) => {
+    return lens.get()(s)[team];
+  };
+  const setter = (style: React.CSSProperties) => {
+    return lens.set((old: t.Style) => {
+      return { ...old, [team]: style };
+    });
+  };
   return l.lens<t.ReduxState, React.CSSProperties>(getter, setter);
 };

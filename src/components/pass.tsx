@@ -26,15 +26,21 @@ const mapStateToProps = (state: t.ReduxState): StateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
-  pass: () => dispatch<t.NextTurn>(afNextTurn())
-});
+const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
+  return {
+    pass: () => {
+      return dispatch<t.NextTurn>(afNextTurn());
+    }
+  };
+};
 
-const Pass: React.FC<AllProps> = ({ pass, disabled }) => (
-  <button disabled={disabled} onClick={pass}>
-    Pass Turn
-  </button>
-);
+const Pass: React.FC<AllProps> = ({ pass, disabled }) => {
+  return (
+    <button disabled={disabled} onClick={pass}>
+      Pass Turn
+    </button>
+  );
+};
 
 export default connect(
   mapStateToProps,

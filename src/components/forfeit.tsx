@@ -16,13 +16,21 @@ interface DispatchProps {
 
 type AllProps = StateProps & DispatchProps;
 
-const Forfeit: React.FC<AllProps> = ({ team, forfeit }) => (
-  <button onClick={forfeit(team)}>Forfeit</button>
-);
+const Forfeit: React.FC<AllProps> = ({ team, forfeit }) => {
+  return <button onClick={forfeit(team)}>Forfeit</button>;
+};
 
 export default connect(
-  (state: t.ReduxState): StateProps => ({ team: R.view(teamPath, state) }),
-  (dispatch: t.Dispatch): DispatchProps => ({
-    forfeit: team => () => dispatch<t.Forfeit>(afForfeit(team))
-  })
+  (state: t.ReduxState): StateProps => {
+    return { team: R.view(teamPath, state) };
+  },
+  (dispatch: t.Dispatch): DispatchProps => {
+    return {
+      forfeit: team => {
+        return () => {
+          return dispatch<t.Forfeit>(afForfeit(team));
+        };
+      }
+    };
+  }
 )(Forfeit);

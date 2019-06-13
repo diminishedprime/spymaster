@@ -1,9 +1,11 @@
 import * as t from "../types";
 
-export const newScore = () => ({
-  TEAM_1: 0,
-  TEAM_2: 0
-});
+export const newScore = () => {
+  return {
+    TEAM_1: 0,
+    TEAM_2: 0
+  };
+};
 
 export const initialErrorState = {};
 export const initialUsersList = {};

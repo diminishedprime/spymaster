@@ -69,16 +69,26 @@ const Username = () => {
     );
   }, [username, onChange, onFocus, onKeyPress, updateUsername]);
   const showUsername = React.useMemo(() => {
-    return <div onClick={() => setEditing(true)}>{username}</div>;
+    return (
+      <div
+        onClick={() => {
+          return setEditing(true);
+        }}
+      >
+        {username}
+      </div>
+    );
   }, [username]);
   return <div>{editing ? editUsername : showUsername}</div>;
 };
 
-const PickUsername = () => (
-  <div style={pickUsernameStyle}>
-    <div>Your Name</div>
-    <Username />
-  </div>
-);
+const PickUsername = () => {
+  return (
+    <div style={pickUsernameStyle}>
+      <div>Your Name</div>
+      <Username />
+    </div>
+  );
+};
 
 export default PickUsername;

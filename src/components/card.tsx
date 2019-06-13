@@ -74,9 +74,13 @@ const CardWrapper = styled.button`
 const mapDispatchToProps = (
   dispatch: t.Dispatch,
   { cardId }: CardProps
-): DispatchProps => ({
-  flip: () => dispatch(afFlipCard(cardId))
-});
+): DispatchProps => {
+  return {
+    flip: () => {
+      return dispatch(afFlipCard(cardId));
+    }
+  };
+};
 
 const Card: React.FC<AllProps> = ({ flip, cardId }) => {
   const role = actions.useLens(lens.role);
@@ -93,7 +97,9 @@ const Card: React.FC<AllProps> = ({ flip, cardId }) => {
     !hintSubmitted;
   const text = actions.useLens(lens.cardText(cardId)!);
   const style = actions.useLens(lens.teamStyle(cardTeam)!);
-  const state = actions.useSelector(a => a);
+  const state = actions.useSelector(a => {
+    return a;
+  });
   console.log({ style, text, cardTeam, state });
   return (
     <CardWrapper style={style} disabled={disabled} onClick={flip}>

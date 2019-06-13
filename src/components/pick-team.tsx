@@ -33,11 +33,13 @@ const StyledButton: React.FC<StyledButtonProps> = ({
   style,
   text,
   onClick
-}) => (
-  <button onClick={onClick} style={style}>
-    {text}
-  </button>
-);
+}) => {
+  return (
+    <button onClick={onClick} style={style}>
+      {text}
+    </button>
+  );
+};
 
 interface TeamRowProps {
   team: t.Team;
@@ -56,27 +58,35 @@ const TeamRow: React.FC<TeamRowProps> = ({ team }) => {
         <StyledButton
           text={SPYMASTER}
           style={R.merge(style, teamButtonsStyle)}
-          onClick={() => pickRole(team, t.Role.SPYMASTER)}
+          onClick={() => {
+            return pickRole(team, t.Role.SPYMASTER);
+          }}
         />
         <StyledButton
           text={AGENT}
           style={R.merge(style, teamButtonsStyle)}
-          onClick={() => pickRole(team, t.Role.AGENT)}
+          onClick={() => {
+            return pickRole(team, t.Role.AGENT);
+          }}
         />
       </div>
       <CirclePicker
-        onChangeComplete={({ hex }) => setBackgroundColor(team, hex)}
+        onChangeComplete={({ hex }) => {
+          return setBackgroundColor(team, hex);
+        }}
         color={backgroundColor}
       />
     </div>
   );
 };
 
-const PickTeam = () => (
-  <div style={pickTeamStyle}>
-    <TeamRow team={t.Team.TEAM_1} />
-    <TeamRow team={t.Team.TEAM_2} />
-  </div>
-);
+const PickTeam = () => {
+  return (
+    <div style={pickTeamStyle}>
+      <TeamRow team={t.Team.TEAM_1} />
+      <TeamRow team={t.Team.TEAM_2} />
+    </div>
+  );
+};
 
 export default PickTeam;

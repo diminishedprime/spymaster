@@ -7,14 +7,21 @@ import { GAME_MODE_GAME } from "../constants";
 import * as p from "./paths";
 import { initialErrorState, initialState } from "./initial-state";
 
-const hiError = (state: t.ReduxState, { text, severity }: t.ErrorOccured) =>
-  R.set(p.errorSeverityPath, severity, R.set(p.errorTextPath, text, state));
+const hiError = (state: t.ReduxState, { text, severity }: t.ErrorOccured) => {
+  return R.set(
+    p.errorSeverityPath,
+    severity,
+    R.set(p.errorTextPath, text, state)
+  );
+};
 
-const dismissError = (state: t.ReduxState) =>
-  R.set(p.errorPath, initialErrorState, state);
+const dismissError = (state: t.ReduxState) => {
+  return R.set(p.errorPath, initialErrorState, state);
+};
 
-const toggleTitle = (state: t.ReduxState) =>
-  R.over(p.showTitlePath, R.not, state);
+const toggleTitle = (state: t.ReduxState) => {
+  return R.over(p.showTitlePath, R.not, state);
+};
 
 const pickRole = (state: t.ReduxState, { team, role }: t.PickRole) => {
   const first = R.set(p.playerTypePath, { team, role }, state);
@@ -22,47 +29,62 @@ const pickRole = (state: t.ReduxState, { team, role }: t.PickRole) => {
   return second;
 };
 
-const setWs = (state: t.ReduxState, { ws }: t.SetWs) =>
-  R.set(p.wsPath, ws, state);
+const setWs = (state: t.ReduxState, { ws }: t.SetWs) => {
+  return R.set(p.wsPath, ws, state);
+};
 
-const setUsername = (state: t.ReduxState, { username }: t.SetUsername) =>
-  R.set(p.usernamePath, username, state);
+const setUsername = (state: t.ReduxState, { username }: t.SetUsername) => {
+  return R.set(p.usernamePath, username, state);
+};
 
-const setEditing = (state: t.ReduxState, { flag }: t.SetEditing) =>
-  R.set(p.editingPath, flag, state);
+const setEditing = (state: t.ReduxState, { flag }: t.SetEditing) => {
+  return R.set(p.editingPath, flag, state);
+};
 
 const updateRemoteState = (
   state: t.ReduxState,
   { remoteState }: t.UpdateRemoteState
-) => R.set(p.remoteStatePath, remoteState, state);
+) => {
+  return R.set(p.remoteStatePath, remoteState, state);
+};
 
-const setPage = (state: t.ReduxState, { page }: t.SetPage) =>
-  R.set(p.page, page, state);
+const setPage = (state: t.ReduxState, { page }: t.SetPage) => {
+  return R.set(p.page, page, state);
+};
 
-export const updateHint = (state: t.ReduxState, { hint }: t.UpdateHint) =>
-  R.set(p.hintTextPath, hint, state);
+export const updateHint = (state: t.ReduxState, { hint }: t.UpdateHint) => {
+  return R.set(p.hintTextPath, hint, state);
+};
 
 export const updateServerAddress = (
   state: t.ReduxState,
   { serverAddress }: t.UpdateServerAddress
-) => R.set(p.serverAddressPath, serverAddress, state);
+) => {
+  return R.set(p.serverAddressPath, serverAddress, state);
+};
 
 export const updateHintNumber = (
   state: t.ReduxState,
   { hintNumber }: t.UpdateHintNumber
-) => R.set(p.hintNumberPath, hintNumber, state);
+) => {
+  return R.set(p.hintNumberPath, hintNumber, state);
+};
 
-export const setUserId = (state: t.ReduxState, { userId }: t.SetUserId) =>
-  lens.userId.set(userId)(state);
+export const setUserId = (state: t.ReduxState, { userId }: t.SetUserId) => {
+  return lens.userId.set(userId)(state);
+};
 
-const setGameIds = (state: t.ReduxState, { gameIds }: t.SetGameIds) =>
-  lens.gameIds.set(gameIds)(state);
+const setGameIds = (state: t.ReduxState, { gameIds }: t.SetGameIds) => {
+  return lens.gameIds.set(gameIds)(state);
+};
 
-const setGameId = (state: t.ReduxState, { gameId }: t.SetGameId) =>
-  lens.gameId.set(gameId)(state);
+const setGameId = (state: t.ReduxState, { gameId }: t.SetGameId) => {
+  return lens.gameId.set(gameId)(state);
+};
 
-const setConnected = (state: t.ReduxState, { flag }: t.SetConnected) =>
-  lens.connected.set(flag)(state);
+const setConnected = (state: t.ReduxState, { flag }: t.SetConnected) => {
+  return lens.connected.set(flag)(state);
+};
 
 export const app = (state: t.ReduxState = initialState, action: t.Action) => {
   switch (action.type) {

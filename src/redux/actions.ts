@@ -4,190 +4,260 @@ import * as t from "../types";
 import * as reactRedux from "react-redux";
 
 // Actions & Action Creators
-export const afSetPage = (page: t.Page) => ({
-  type: t.ActionType.SET_PAGE,
-  page
-});
+export const afSetPage = (page: t.Page) => {
+  return {
+    type: t.ActionType.SET_PAGE,
+    page
+  };
+};
 
-export const afSetCardFlipped = (cardId: t.CardId) => ({
-  type: t.ActionType.SET_CARD_FLIPPED,
-  cardId
-});
+export const afSetCardFlipped = (cardId: t.CardId) => {
+  return {
+    type: t.ActionType.SET_CARD_FLIPPED,
+    cardId
+  };
+};
 
-const afPickRole = (team: t.Team, role: t.Role): t.PickRole => ({
-  type: t.ActionType.PICK_ROLE,
-  team,
-  role
-});
+const afPickRole = (team: t.Team, role: t.Role): t.PickRole => {
+  return {
+    type: t.ActionType.PICK_ROLE,
+    team,
+    role
+  };
+};
 
-export const afSetTime = (seconds: number) => ({
-  type: t.ActionType.SET_TIME,
-  seconds
-});
+export const afSetTime = (seconds: number) => {
+  return {
+    type: t.ActionType.SET_TIME,
+    seconds
+  };
+};
 
-export const afError = (text: string, severity: t.Severity) => ({
-  type: t.ActionType.ERROR_OCCURED,
-  text,
-  severity
-});
+export const afError = (text: string, severity: t.Severity) => {
+  return {
+    type: t.ActionType.ERROR_OCCURED,
+    text,
+    severity
+  };
+};
 
-export const afDismissError = (): t.DimissError => ({
-  type: t.ActionType.DISMISS_ERROR
-});
+export const afDismissError = (): t.DimissError => {
+  return {
+    type: t.ActionType.DISMISS_ERROR
+  };
+};
 
-export const afSetWs = (ws: any) => ({
-  type: t.ActionType.SET_WS,
-  ws
-});
+export const afSetWs = (ws: any) => {
+  return {
+    type: t.ActionType.SET_WS,
+    ws
+  };
+};
 
-export const afSetUsername = (username: string): t.SetUsername => ({
-  type: t.ActionType.SET_USERNAME,
-  username
-});
+export const afSetUsername = (username: string): t.SetUsername => {
+  return {
+    type: t.ActionType.SET_USERNAME,
+    username
+  };
+};
 
-export const afSetEditing = (flag = true): t.SetEditing => ({
-  type: t.ActionType.SET_EDITING,
-  flag
-});
+export const afSetEditing = (flag = true): t.SetEditing => {
+  return {
+    type: t.ActionType.SET_EDITING,
+    flag
+  };
+};
 
-export const afUpdateUserList = (users: any) => ({
-  type: t.ActionType.UPDATE_USER_LIST,
-  users
-});
+export const afUpdateUserList = (users: any) => {
+  return {
+    type: t.ActionType.UPDATE_USER_LIST,
+    users
+  };
+};
 
-export const afUpdateRemoteState = (remoteState: any) => ({
-  type: t.ActionType.UPDATE_REMOTE_STATE,
-  remoteState
-});
+export const afUpdateRemoteState = (remoteState: any) => {
+  return {
+    type: t.ActionType.UPDATE_REMOTE_STATE,
+    remoteState
+  };
+};
 
-export const afAddUser = (user: any) => ({
-  type: t.ActionType.ADD_USER,
-  user
-});
+export const afAddUser = (user: any) => {
+  return {
+    type: t.ActionType.ADD_USER,
+    user
+  };
+};
 
-export const afRemoveUser = (user: any) => ({
-  type: t.ActionType.REMOVE_USER,
-  user
-});
+export const afRemoveUser = (user: any) => {
+  return {
+    type: t.ActionType.REMOVE_USER,
+    user
+  };
+};
 
-export const afUpdateUsername = (user: any, username: string) => ({
-  type: t.ActionType.UPDATE_USERNAME,
-  user,
-  username
-});
+export const afUpdateUsername = (user: any, username: string) => {
+  return {
+    type: t.ActionType.UPDATE_USERNAME,
+    user,
+    username
+  };
+};
 
-export const afUpdateHint = (hint: string): t.UpdateHint => ({
-  type: t.ActionType.UPDATE_HINT,
-  hint
-});
+export const afUpdateHint = (hint: string): t.UpdateHint => {
+  return {
+    type: t.ActionType.UPDATE_HINT,
+    hint
+  };
+};
 
-export const afStartTimer = (): t.StartTimer => ({
-  type: t.ActionType.START_TIMER
-});
+export const afStartTimer = (): t.StartTimer => {
+  return {
+    type: t.ActionType.START_TIMER
+  };
+};
 
 export const afUpdateHintNumber = (
   hintNumber: t.HintNumber
-): t.UpdateHintNumber => ({
-  type: t.ActionType.UPDATE_HINT_NUMBER,
-  hintNumber
-});
+): t.UpdateHintNumber => {
+  return {
+    type: t.ActionType.UPDATE_HINT_NUMBER,
+    hintNumber
+  };
+};
 
-export const afNextTurn = (): t.NextTurn => ({
-  type: t.ActionType.NEXT_TURN
-});
+export const afNextTurn = (): t.NextTurn => {
+  return {
+    type: t.ActionType.NEXT_TURN
+  };
+};
 
-export const afForfeit = (team: t.Team): t.Forfeit => ({
-  type: t.ActionType.FORFEIT,
-  team
-});
+export const afForfeit = (team: t.Team): t.Forfeit => {
+  return {
+    type: t.ActionType.FORFEIT,
+    team
+  };
+};
 
-export const afStopTimer = () => ({
-  type: t.ActionType.STOP_TIMER
-});
+export const afStopTimer = () => {
+  return {
+    type: t.ActionType.STOP_TIMER
+  };
+};
 
-export const afNewGame = (): t.NewGame => ({
-  type: t.ActionType.NEW_GAME
-});
+export const afNewGame = (): t.NewGame => {
+  return {
+    type: t.ActionType.NEW_GAME
+  };
+};
 
-export const afEmitAction = (action: any) => ({
-  type: t.ActionType.EMIT_ACTION,
-  action
-});
+export const afEmitAction = (action: any) => {
+  return {
+    type: t.ActionType.EMIT_ACTION,
+    action
+  };
+};
 
-export const afSetServerUsername = (username: string): t.SetServerUsername => ({
-  type: t.ActionType.SET_SERVER_USERNAME,
-  username
-});
+export const afSetServerUsername = (username: string): t.SetServerUsername => {
+  return {
+    type: t.ActionType.SET_SERVER_USERNAME,
+    username
+  };
+};
 
-export const afListenToWebsocket = () => ({
-  type: t.ActionType.LISTEN_TO_WEBSOCKET
-});
+export const afListenToWebsocket = () => {
+  return {
+    type: t.ActionType.LISTEN_TO_WEBSOCKET
+  };
+};
 
 export const afChangeBackgroundColor = (
   team: t.Team,
   backgroundColor: string
-): t.ChangeBackgroundColor => ({
-  type: t.ActionType.CHANGE_BACKGROUND_COLOR,
-  team,
-  backgroundColor
-});
+): t.ChangeBackgroundColor => {
+  return {
+    type: t.ActionType.CHANGE_BACKGROUND_COLOR,
+    team,
+    backgroundColor
+  };
+};
 
-export const afSubmitHint = (): t.SubmitHint => ({
-  type: t.ActionType.SUBMIT_HINT
-});
+export const afSubmitHint = (): t.SubmitHint => {
+  return {
+    type: t.ActionType.SUBMIT_HINT
+  };
+};
 
-export const afFlipCard = (cardId: t.CardId): t.FlipCard => ({
-  type: t.ActionType.FLIP_CARD,
-  cardId
-});
+export const afFlipCard = (cardId: t.CardId): t.FlipCard => {
+  return {
+    type: t.ActionType.FLIP_CARD,
+    cardId
+  };
+};
 
 // Newish?
-export const afNewGame2 = (): t.NewGame2 => ({
-  type: t.ActionType.NEW_GAME_2
-});
+export const afNewGame2 = (): t.NewGame2 => {
+  return {
+    type: t.ActionType.NEW_GAME_2
+  };
+};
 
-export const afSetUserId = (userId: t.UserId) => ({
-  type: t.ActionType.SET_USER_ID,
-  userId
-});
+export const afSetUserId = (userId: t.UserId) => {
+  return {
+    type: t.ActionType.SET_USER_ID,
+    userId
+  };
+};
 
-export const afSetGameIds = (gameIds: Array<t.GameId>) => ({
-  type: t.ActionType.SET_GAME_IDS,
-  gameIds
-});
+export const afSetGameIds = (gameIds: Array<t.GameId>) => {
+  return {
+    type: t.ActionType.SET_GAME_IDS,
+    gameIds
+  };
+};
 
-export const afSetGameId = (gameId: t.GameId) => ({
-  type: t.ActionType.SET_GAME_ID,
-  gameId
-});
+export const afSetGameId = (gameId: t.GameId) => {
+  return {
+    type: t.ActionType.SET_GAME_ID,
+    gameId
+  };
+};
 
-export const afJoinGame = (gameId: t.GameId, userId: t.UserId): t.JoinGame => ({
-  type: t.ActionType.JOIN_GAME,
-  gameId,
-  userId
-});
+export const afJoinGame = (gameId: t.GameId, userId: t.UserId): t.JoinGame => {
+  return {
+    type: t.ActionType.JOIN_GAME,
+    gameId,
+    userId
+  };
+};
 
-export const afConnectToServer = (
-  serverAddress: string
-): t.ConnectToServer => ({
-  type: t.ActionType.CONNECT_TO_SERVER,
-  serverAddress
-});
+export const afConnectToServer = (serverAddress: string): t.ConnectToServer => {
+  return {
+    type: t.ActionType.CONNECT_TO_SERVER,
+    serverAddress
+  };
+};
 
-export const afUpdateServerAddress = (serverAddress: string) => ({
-  type: t.ActionType.UPDATE_SERVER_ADDRESS,
-  serverAddress
-});
+export const afUpdateServerAddress = (serverAddress: string) => {
+  return {
+    type: t.ActionType.UPDATE_SERVER_ADDRESS,
+    serverAddress
+  };
+};
 
-export const afSetConnected = (flag: boolean) => ({
-  type: t.ActionType.SET_CONNECTED,
-  flag
-});
+export const afSetConnected = (flag: boolean) => {
+  return {
+    type: t.ActionType.SET_CONNECTED,
+    flag
+  };
+};
 
-const afToServer = (action: t.ServerAction): t.ToServer => ({
-  type: t.ActionType.TO_SERVER,
-  action
-});
+const afToServer = (action: t.ServerAction): t.ToServer => {
+  return {
+    type: t.ActionType.TO_SERVER,
+    action
+  };
+};
 
 // TODO: - once this hook is standardized, update to use it directly.
 export const useSelector = <T>(

@@ -36,10 +36,9 @@ type AllProps = StateProps;
 const mapStateToProps = (state: t.ReduxState): StateProps => {
   const cards: t.Card[] = R.view(cardsPath, state);
 
-  const team1cards: t.Card[] = R.filter(
-    ({ team }) => team === t.Team.TEAM_1,
-    cards
-  );
+  const team1cards: t.Card[] = R.filter(({ team }) => {
+    return team === t.Team.TEAM_1;
+  }, cards);
   const team1Total: number = R.keys(team1cards).length;
   const team1Flipped: number = R.keys(R.filter(R.prop("flipped"), team1cards))
     .length;
@@ -48,10 +47,9 @@ const mapStateToProps = (state: t.ReduxState): StateProps => {
     state
   );
 
-  const team2cards: t.Card[] = R.filter(
-    ({ team }) => team === t.Team.TEAM_2,
-    cards
-  );
+  const team2cards: t.Card[] = R.filter(({ team }) => {
+    return team === t.Team.TEAM_2;
+  }, cards);
   const team2Total: number = R.keys(team2cards).length;
   const team2Flipped: number = R.keys(R.filter(R.prop("flipped"), team2cards))
     .length;
@@ -77,15 +75,17 @@ const Teams: React.FC<AllProps> = ({
   team2Total,
   team1Style,
   team2Style
-}) => (
-  <div style={scoreStyle}>
-    <div style={R.merge(teamStyle, team1Style)}>
-      {team1Flipped} / {team1Total}
+}) => {
+  return (
+    <div style={scoreStyle}>
+      <div style={R.merge(teamStyle, team1Style)}>
+        {team1Flipped} / {team1Total}
+      </div>
+      <div style={R.merge(teamStyle, team2Style)}>
+        {team2Flipped} / {team2Total}
+      </div>
     </div>
-    <div style={R.merge(teamStyle, team2Style)}>
-      {team2Flipped} / {team2Total}
-    </div>
-  </div>
-);
+  );
+};
 
 export default connect(mapStateToProps)(Teams);

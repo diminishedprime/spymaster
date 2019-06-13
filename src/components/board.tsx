@@ -14,12 +14,14 @@ interface BoardProps {
   cardIds: t.CardId[];
 }
 
-const Board: React.FC<BoardProps> = ({ cardIds }) => (
-  <div style={boardStyle}>
-    {R.splitEvery(5, cardIds).map(cardIds => (
-      <CardRow key={cardIds.join("-")} cardIds={cardIds} />
-    ))}
-  </div>
-);
+const Board: React.FC<BoardProps> = ({ cardIds }) => {
+  return (
+    <div style={boardStyle}>
+      {R.splitEvery(5, cardIds).map(cardIds => {
+        return <CardRow key={cardIds.join("-")} cardIds={cardIds} />;
+      })}
+    </div>
+  );
+};
 
 export default Board;

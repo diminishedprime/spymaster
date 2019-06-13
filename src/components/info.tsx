@@ -11,12 +11,14 @@ const infoStyle: React.CSSProperties = {
   flexWrap: "wrap"
 };
 
-const Info = () => (
-  <div style={infoStyle}>
-    <Hint />
-    <Teams />
-    <User />
-  </div>
-);
+const Info = () => {
+  return (
+    <div style={infoStyle}>
+      <Hint />
+      <Teams />
+      <User />
+    </div>
+  );
+};
 
 export default Info;

@@ -24,24 +24,28 @@ const spymasterStyle: React.CSSProperties = {
   padding: "10px"
 };
 
-const NumberGroup = ({ numberGroup }: { numberGroup: t.HintNumber[] }) => (
-  <div>
-    {numberGroup.map((number: t.HintNumber) => (
-      <NumberButton key={number} number={number} />
-    ))}
-  </div>
-);
+const NumberGroup = ({ numberGroup }: { numberGroup: t.HintNumber[] }) => {
+  return (
+    <div>
+      {numberGroup.map((number: t.HintNumber) => {
+        return <NumberButton key={number} number={number} />;
+      })}
+    </div>
+  );
+};
 
 const numbers: t.HintNumber[] = ["Zero", 1, 2, 3, 4, 5, 6, 7, 8, "Infinity"];
 const groupedNumbers = R.splitEvery(5, numbers);
 
-const Numbers = ({ groupedNumbers }: { groupedNumbers: t.HintNumber[][] }) => (
-  <div>
-    {groupedNumbers.map((group, idx) => (
-      <NumberGroup key={idx} numberGroup={group} />
-    ))}
-  </div>
-);
+const Numbers = ({ groupedNumbers }: { groupedNumbers: t.HintNumber[][] }) => {
+  return (
+    <div>
+      {groupedNumbers.map((group, idx) => {
+        return <NumberGroup key={idx} numberGroup={group} />;
+      })}
+    </div>
+  );
+};
 
 interface StateProps {
   style: React.CSSProperties;
@@ -80,11 +84,16 @@ const mapStateToProps = (state: t.ReduxState): StateProps => {
 };
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
-  const updateHint = (hint: string) => dispatch(afUpdateHint(hint));
-  const submitHint = () => dispatch(afSubmitHint());
+  const updateHint = (hint: string) => {
+    return dispatch(afUpdateHint(hint));
+  };
+  const submitHint = () => {
+    return dispatch(afSubmitHint());
+  };
 
-  const onChange = ({ target: { value } }: { target: { value: string } }) =>
-    updateHint(value);
+  const onChange = ({ target: { value } }: { target: { value: string } }) => {
+    return updateHint(value);
+  };
 
   return {
     submitHint,
@@ -99,15 +108,17 @@ const SpymasterHint: React.FC<AllProps> = ({
   submitDisabled,
   submitHint,
   style
-}) => (
-  <div style={R.merge(spymasterStyle, style)}>
-    <input value={text} onChange={onChange} disabled={inputDisabled} />
-    <Numbers groupedNumbers={groupedNumbers} />
-    <button disabled={submitDisabled} onClick={submitHint}>
-      Submit
-    </button>
-  </div>
-);
+}) => {
+  return (
+    <div style={R.merge(spymasterStyle, style)}>
+      <input value={text} onChange={onChange} disabled={inputDisabled} />
+      <Numbers groupedNumbers={groupedNumbers} />
+      <button disabled={submitDisabled} onClick={submitHint}>
+        Submit
+      </button>
+    </div>
+  );
+};
 
 export default connect(
   mapStateToProps,

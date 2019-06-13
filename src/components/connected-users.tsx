@@ -31,15 +31,17 @@ const mapStateToProps = (state: t.ReduxState): StateProps => {
     users
   };
 };
-const ConnectedUsers: React.FC<AllProps> = ({ users }) => (
-  <div style={connectedUsersStyle}>
-    <h3>Connected Users</h3>
-    <div style={usersStyle}>
-      {users.map(userId => (
-        <div key={userId}>{userId}</div>
-      ))}
+const ConnectedUsers: React.FC<AllProps> = ({ users }) => {
+  return (
+    <div style={connectedUsersStyle}>
+      <h3>Connected Users</h3>
+      <div style={usersStyle}>
+        {users.map(userId => {
+          return <div key={userId}>{userId}</div>;
+        })}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default connect(mapStateToProps)(ConnectedUsers);

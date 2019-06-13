@@ -15,10 +15,12 @@ const ErrorWrapper = styled.div<{ severity: t.Severity }>`
   align-items: center;
   font-size: 2em;
   padding: 5px;
-  color: ${({ severity }) =>
-    severity === t.Severity.ERROR ? "white" : "black"};
-  background-color: ${({ severity }) =>
-    severity === t.Severity.ERROR ? "#DE0707" : "#FFDD00"};
+  color: ${({ severity }) => {
+    return severity === t.Severity.ERROR ? "white" : "black";
+  }};
+  background-color: ${({ severity }) => {
+    return severity === t.Severity.ERROR ? "#DE0707" : "#FFDD00";
+  }};
 `;
 
 const ErrorBar: React.FC = () => {

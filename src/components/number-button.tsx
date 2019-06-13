@@ -54,25 +54,31 @@ const mapStateToProps = (state: t.ReduxState, { number }: OwnProps) => {
 const mapDispatchToProps = (
   dispatch: t.Dispatch,
   { number }: OwnProps
-): DispatchProps => ({
-  setHintNumber: () => dispatch<t.UpdateHintNumber>(afUpdateHintNumber(number))
-});
+): DispatchProps => {
+  return {
+    setHintNumber: () => {
+      return dispatch<t.UpdateHintNumber>(afUpdateHintNumber(number));
+    }
+  };
+};
 
 const NumberButton: React.FC<AllProps> = ({
   number,
   disabled,
   style,
   setHintNumber
-}) => (
-  <button
-    key={number}
-    disabled={disabled}
-    style={style}
-    onClick={setHintNumber}
-  >
-    {number}
-  </button>
-);
+}) => {
+  return (
+    <button
+      key={number}
+      disabled={disabled}
+      style={style}
+      onClick={setHintNumber}
+    >
+      {number}
+    </button>
+  );
+};
 
 export default connect(
   mapStateToProps,

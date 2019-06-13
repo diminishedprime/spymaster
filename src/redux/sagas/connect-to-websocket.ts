@@ -26,10 +26,18 @@ const listenToWebsocket = function*() {
   const ws = yield select(lens.ws.get());
 
   const wsChan = eventChannel((emitter: any) => {
-    ws.on("message", (message: any) => emitter({ message }));
-    ws.on("action", (action: any) => emitter({ action }));
-    ws.on("disconnect", () => emitter({ disconnect: true }) && emitter(END));
-    return () => ws.disconnect();
+    ws.on("message", (message: any) => {
+      return emitter({ message });
+    });
+    ws.on("action", (action: any) => {
+      return emitter({ action });
+    });
+    ws.on("disconnect", () => {
+      return emitter({ disconnect: true }) && emitter(END);
+    });
+    return () => {
+      return ws.disconnect();
+    };
   });
 
   try {

@@ -32,7 +32,9 @@ const Title: React.FC = () => {
   const [showTitle, setShowTitle] = React.useState(true);
 
   const toggleTitle = React.useCallback(() => {
-    setShowTitle(a => !a);
+    setShowTitle(a => {
+      return !a;
+    });
   }, []);
 
   return showTitle ? (

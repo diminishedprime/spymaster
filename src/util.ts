@@ -3,8 +3,11 @@ interface RGB {
   green: number;
   blue: number;
 }
-const fgColorForRGB = ({ red, green, blue }: RGB) =>
-  red * 0.299 + green * 0.587 + blue * 0.114 > 186 ? "#000000" : "#ffffff";
+const fgColorForRGB = ({ red, green, blue }: RGB) => {
+  return red * 0.299 + green * 0.587 + blue * 0.114 > 186
+    ? "#000000"
+    : "#ffffff";
+};
 
 const hexToRGB = (hex: string) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -18,4 +21,6 @@ const hexToRGB = (hex: string) => {
   };
 };
 
-export const fgForHex = (hex: string) => fgColorForRGB(hexToRGB(hex));
+export const fgForHex = (hex: string) => {
+  return fgColorForRGB(hexToRGB(hex));
+};

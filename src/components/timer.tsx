@@ -16,9 +16,13 @@ interface DispatchProps {
 
 type AllProps = DispatchProps;
 
-const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
-  start: () => dispatch(afStartTimer())
-});
+const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
+  return {
+    start: () => {
+      return dispatch(afStartTimer());
+    }
+  };
+};
 
 const Timer: React.FC<AllProps> = ({ start }) => {
   const time = actions.useLens(lens.time);

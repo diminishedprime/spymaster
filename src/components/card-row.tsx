@@ -12,12 +12,14 @@ interface CardRowProps {
   cardIds: t.CardId[];
 }
 
-const CardRow: React.FC<CardRowProps> = ({ cardIds }) => (
-  <div style={rowStyle}>
-    {cardIds.map((cardId: string) => (
-      <Card cardId={cardId} />
-    ))}
-  </div>
-);
+const CardRow: React.FC<CardRowProps> = ({ cardIds }) => {
+  return (
+    <div style={rowStyle}>
+      {cardIds.map((cardId: string) => {
+        return <Card cardId={cardId} />;
+      })}
+    </div>
+  );
+};
 
 export default CardRow;
