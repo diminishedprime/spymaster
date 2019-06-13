@@ -41,10 +41,10 @@ const Title: React.FC = () => {
 };
 
 const App: React.FC = () => {
-  const page = actions.useLensSelector(lens.page);
-  const hasError = actions.useLensSelector(lens.errorText);
-  const connected = actions.useLensSelector(lens.connected);
-  const winner = actions.useLensSelector(lens.winner!);
+  const page = actions.useLens(lens.page);
+  const hasError = actions.useLens(lens.errorText);
+  const connected = actions.useLens(lens.connected);
+  const winner = actions.useLens(lens.winner!);
   return (
     <Wrapper>
       <Title />

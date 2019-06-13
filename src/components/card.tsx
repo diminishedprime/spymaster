@@ -79,20 +79,20 @@ const mapDispatchToProps = (
 });
 
 const Card: React.FC<AllProps> = ({ flip, cardId }) => {
-  const role = actions.useLensSelector(lens.role);
-  const playerTeam = actions.useLensSelector(lens.team);
+  const role = actions.useLens(lens.role);
+  const playerTeam = actions.useLens(lens.team);
   // TODO - Is there something we can do about all the bangs (!) here?
-  const currentTeam = actions.useLensSelector(lens.currentTeam!);
-  const flipped = actions.useLensSelector(lens.cardFlipped(cardId)!);
-  const cardTeam = actions.useLensSelector(lens.cardTeam(cardId)!);
-  const hintSubmitted = actions.useLensSelector(lens.hintSubmitted!);
+  const currentTeam = actions.useLens(lens.currentTeam!);
+  const flipped = actions.useLens(lens.cardFlipped(cardId)!);
+  const cardTeam = actions.useLens(lens.cardTeam(cardId)!);
+  const hintSubmitted = actions.useLens(lens.hintSubmitted!);
   const disabled =
     role === t.Role.SPYMASTER ||
     playerTeam !== currentTeam ||
     flipped ||
     !hintSubmitted;
-  const text = actions.useLensSelector(lens.cardText(cardId)!);
-  const style = actions.useLensSelector(lens.teamStyle(cardTeam)!);
+  const text = actions.useLens(lens.cardText(cardId)!);
+  const style = actions.useLens(lens.teamStyle(cardTeam)!);
   const state = actions.useSelector(a => a);
   console.log({ style, text, cardTeam, state });
   return (

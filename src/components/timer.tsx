@@ -21,8 +21,8 @@ const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => ({
 });
 
 const Timer: React.FC<AllProps> = ({ start }) => {
-  const time = actions.useLensSelector(lens.time);
-  const disabled = !actions.useLensSelector(lens.hintSubmitted);
+  const time = actions.useLens(lens.time);
+  const disabled = !actions.useLens(lens.hintSubmitted);
   return (
     <div style={timerStyle}>
       {time ? (

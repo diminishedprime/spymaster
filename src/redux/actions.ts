@@ -197,7 +197,7 @@ export const useSelector = <T>(
   return (reactRedux as any).useSelector(selector, comparisonFn);
 };
 
-export const useLensSelector = <T>(lens: l.LensImpl<t.ReduxState, T>) => {
+export const useLens = <T>(lens: l.LensImpl<t.ReduxState, T>) => {
   return useSelector(lens.get());
 };
 

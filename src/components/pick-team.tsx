@@ -46,11 +46,9 @@ interface TeamRowProps {
 const TeamRow: React.FC<TeamRowProps> = ({ team }) => {
   const { setBackgroundColor, pickRole } = actions.useApi();
 
-  const backgroundColor = actions.useLensSelector(
-    lens.teamBackgroundColor(team)
-  );
+  const backgroundColor = actions.useLens(lens.teamBackgroundColor(team));
 
-  const style = actions.useLensSelector(lens.teamStyle(team));
+  const style = actions.useLens(lens.teamStyle(team));
 
   return (
     <div style={teamRowStyle}>

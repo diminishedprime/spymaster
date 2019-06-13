@@ -22,8 +22,8 @@ const ErrorWrapper = styled.div<{ severity: t.Severity }>`
 `;
 
 const ErrorBar: React.FC = () => {
-  const severity = actions.useLensSelector(lens.errorSeverity);
-  const text = actions.useLensSelector(lens.errorText);
+  const severity = actions.useLens(lens.errorSeverity);
+  const text = actions.useLens(lens.errorText);
   const { dismissError } = actions.useApi();
   return (
     <ErrorWrapper severity={severity}>

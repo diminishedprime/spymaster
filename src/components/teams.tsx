@@ -30,11 +30,11 @@ const infoBabyStyle = {
 };
 
 const Teams: React.FC = () => {
-  const role = actions.useLensSelector(lens.role);
-  const currentTeam = actions.useLensSelector(lens.currentTeam);
-  const yourTeam = actions.useLensSelector(lens.team);
-  const yourTeamStyle = actions.useLensSelector(lens.teamStyle(yourTeam));
-  const currentTeamStyle = actions.useLensSelector(lens.teamStyle(currentTeam));
+  const role = actions.useLens(lens.role);
+  const currentTeam = actions.useLens(lens.currentTeam);
+  const yourTeam = actions.useLens(lens.team);
+  const yourTeamStyle = actions.useLens(lens.teamStyle(yourTeam));
+  const currentTeamStyle = actions.useLens(lens.teamStyle(currentTeam));
   return (
     <div style={R.merge(teamsStyle, infoBabyStyle)}>
       <div style={R.merge(teamsRowStyle, currentTeamStyle)}>

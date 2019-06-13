@@ -35,10 +35,10 @@ const infoBabyStyle: React.CSSProperties = {
 };
 
 const User: React.FC = () => {
-  const role = actions.useLensSelector(lens.role);
-  const team = actions.useLensSelector(lens.team);
-  const style = actions.useLensSelector(lens.teamStyle(team));
-  const username = actions.useLensSelector(lens.username);
+  const role = actions.useLens(lens.role);
+  const team = actions.useLens(lens.team);
+  const style = actions.useLens(lens.teamStyle(team));
+  const username = actions.useLens(lens.username);
   return (
     <div style={R.merge(flexStyle, infoBabyStyle)}>
       <div style={R.merge(style, userStyle)}>

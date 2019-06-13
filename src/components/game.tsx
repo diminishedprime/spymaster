@@ -6,7 +6,7 @@ import * as lens from "../redux/lenses";
 import * as actions from "../redux/actions";
 
 const Game: React.FC = () => {
-  const cards = actions.useLensSelector(lens.cards);
+  const cards = actions.useLens(lens.cards);
   const cardIds = Object.keys(cards);
   return (
     <div>

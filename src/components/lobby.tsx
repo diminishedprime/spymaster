@@ -22,9 +22,9 @@ const JoinGame: React.FC<JoinGameProps> = ({ gameId, userId }) => {
 };
 
 const Lobby: React.FC = () => {
-  const gameIds = actions.useLensSelector(lens.gameIds);
+  const gameIds = actions.useLens(lens.gameIds);
   console.log({ gameIds });
-  const userId = actions.useLensSelector(lens.userId);
+  const userId = actions.useLens(lens.userId);
   return (
     <div>
       <NewGame />

@@ -22,11 +22,11 @@ const infoBabyStyle: React.CSSProperties = {
 };
 
 const AgentHint: React.FC = () => {
-  const text = actions.useLensSelector(lens.hintText);
-  const number = actions.useLensSelector(lens.hintNumber);
-  const team = actions.useLensSelector(lens.currentTeam);
-  const style = actions.useLensSelector(lens.teamStyle(team));
-  const hintSubmitted = actions.useLensSelector(lens.hintSubmitted);
+  const text = actions.useLens(lens.hintText);
+  const number = actions.useLens(lens.hintNumber);
+  const team = actions.useLens(lens.currentTeam);
+  const style = actions.useLens(lens.teamStyle(team));
+  const hintSubmitted = actions.useLens(lens.hintSubmitted);
   return (
     <div style={R.merge(infoBabyStyle, R.merge(hintStyle, style))}>
       {!hintSubmitted && <div>Awaiting Hint</div>}
@@ -39,8 +39,8 @@ const AgentHint: React.FC = () => {
 };
 
 const Hint = () => {
-  const hintSubmitted = actions.useLensSelector(lens.hintSubmitted);
-  const role = actions.useLensSelector(lens.role);
+  const hintSubmitted = actions.useLens(lens.hintSubmitted);
+  const role = actions.useLens(lens.role);
   const isAgent = role === t.Role.AGENT;
   const showAgent = isAgent || hintSubmitted;
   return showAgent ? <AgentHint /> : <SpymasterHint />;
