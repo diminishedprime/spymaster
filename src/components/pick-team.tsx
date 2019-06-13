@@ -3,8 +3,8 @@ import * as t from "./../types";
 import R from "ramda";
 import { CirclePicker } from "react-color";
 import { AGENT, SPYMASTER } from "./../constants";
-import * as actions from "./../redux/actions";
-import { styleForTeamPath, backgroundColorForTeamPath } from "./../redux/paths";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 const teamRowStyle: React.CSSProperties = {
   display: "flex",
@@ -46,13 +46,11 @@ interface TeamRowProps {
 const TeamRow: React.FC<TeamRowProps> = ({ team }) => {
   const { setBackgroundColor, pickRole } = actions.useApi();
 
-  const backgroundColor = actions.useSelector<string>(state =>
-    R.view(backgroundColorForTeamPath(team), state)
+  const backgroundColor = actions.useLensSelector(
+    lens.teamBackgroundColor(team)
   );
 
-  const style = actions.useSelector<React.CSSProperties>(state =>
-    R.view(styleForTeamPath(team), state)
-  );
+  const style = actions.useLensSelector(lens.teamStyle(team));
 
   return (
     <div style={teamRowStyle}>
