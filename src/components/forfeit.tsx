@@ -1,10 +1,8 @@
 import React from "react";
 import * as t from "./../types";
-import R from "ramda";
 import { connect } from "react-redux";
-
-import { afForfeit } from "./../redux/actions";
-import { teamPath } from "./../redux/paths";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 interface StateProps {
   team: t.Team;
@@ -16,21 +14,22 @@ interface DispatchProps {
 
 type AllProps = StateProps & DispatchProps;
 
-const Forfeit: React.FC<AllProps> = ({ team, forfeit }) => {
+const Forfeit: React.FC<AllProps> = ({ forfeit }) => {
+  const team = actions.useLens(lens.team);
   return <button onClick={forfeit(team)}>Forfeit</button>;
 };
 
+const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
+  return {
+    forfeit: team => {
+      return () => {
+        return dispatch<t.Forfeit>(actions.afForfeit(team));
+      };
+    }
+  };
+};
+
 export default connect(
-  (state: t.ReduxState): StateProps => {
-    return { team: R.view(teamPath, state) };
-  },
-  (dispatch: t.Dispatch): DispatchProps => {
-    return {
-      forfeit: team => {
-        return () => {
-          return dispatch<t.Forfeit>(afForfeit(team));
-        };
-      }
-    };
-  }
+  undefined,
+  mapDispatchToProps
 )(Forfeit);
