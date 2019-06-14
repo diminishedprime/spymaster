@@ -266,7 +266,7 @@ interface Settings {
   showTitle: boolean;
 }
 
-interface ErrorData {
+export interface Error {
   text: string;
   severity: Severity;
 }
@@ -283,7 +283,7 @@ export interface LocalState {
   serverAddress: string;
   username: string;
   settings: Settings;
-  error?: ErrorData;
+  error?: Error;
   page: Page;
   playerType: PlayerType;
   gameIds: GameId[];
