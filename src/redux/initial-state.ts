@@ -7,7 +7,6 @@ export const newScore = () => {
   };
 };
 
-export const initialErrorState = {};
 export const initialUsersList = {};
 export const initialHint = {
   text: "",

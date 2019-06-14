@@ -1,73 +1,56 @@
-import * as R from "ramda";
 import * as t from "../types";
 import * as lens from "./lenses";
+import { initialState } from "./initial-state";
 
-import { GAME_MODE_GAME } from "../constants";
-
-import * as p from "./paths";
-import { initialErrorState, initialState } from "./initial-state";
-
-const hiError = (state: t.ReduxState, { text, severity }: t.ErrorOccured) => {
-  return R.set(
-    p.errorSeverityPath,
-    severity,
-    R.set(p.errorTextPath, text, state)
-  );
+const setError = (state: t.ReduxState, { text, severity }: t.ErrorOccured) => {
+  return lens.errorText.set(text)(lens.errorSeverity.set(severity)(state));
 };
 
 const dismissError = (state: t.ReduxState) => {
-  return R.set(p.errorPath, initialErrorState, state);
-};
-
-const toggleTitle = (state: t.ReduxState) => {
-  return R.over(p.showTitlePath, R.not, state);
+  return lens.error.set(undefined)(state);
 };
 
 const pickRole = (state: t.ReduxState, { team, role }: t.PickRole) => {
-  const first = R.set(p.playerTypePath, { team, role }, state);
-  const second = R.set(p.page, GAME_MODE_GAME, first);
+  const first = lens.playerType.set({ team, role })(state);
+  const second = lens.page.set(t.Page.GAME_MODE_GAME)(first);
   return second;
 };
 
 const setWs = (state: t.ReduxState, { ws }: t.SetWs) => {
-  return R.set(p.wsPath, ws, state);
+  return lens.ws.set(ws)(state);
 };
 
 const setUsername = (state: t.ReduxState, { username }: t.SetUsername) => {
-  return R.set(p.usernamePath, username, state);
-};
-
-const setEditing = (state: t.ReduxState, { flag }: t.SetEditing) => {
-  return R.set(p.editingPath, flag, state);
+  return lens.username.set(username)(state);
 };
 
 const updateRemoteState = (
   state: t.ReduxState,
   { remoteState }: t.UpdateRemoteState
 ) => {
-  return R.set(p.remoteStatePath, remoteState, state);
+  return lens.remoteState.set(remoteState)(state);
 };
 
 const setPage = (state: t.ReduxState, { page }: t.SetPage) => {
-  return R.set(p.page, page, state);
+  return lens.page.set(page)(state);
 };
 
 export const updateHint = (state: t.ReduxState, { hint }: t.UpdateHint) => {
-  return R.set(p.hintTextPath, hint, state);
+  return lens.hintText.set(hint)(state);
 };
 
 export const updateServerAddress = (
   state: t.ReduxState,
   { serverAddress }: t.UpdateServerAddress
 ) => {
-  return R.set(p.serverAddressPath, serverAddress, state);
+  return lens.serverAddress.set(serverAddress)(state);
 };
 
 export const updateHintNumber = (
   state: t.ReduxState,
   { hintNumber }: t.UpdateHintNumber
 ) => {
-  return R.set(p.hintNumberPath, hintNumber, state);
+  return lens.hintNumber.set(hintNumber)(state);
 };
 
 export const setUserId = (state: t.ReduxState, { userId }: t.SetUserId) => {
@@ -103,17 +86,13 @@ export const app = (state: t.ReduxState = initialState, action: t.Action) => {
     case t.ActionType.DISMISS_ERROR:
       return dismissError(state);
     case t.ActionType.ERROR_OCCURED:
-      return hiError(state, action);
-    case t.ActionType.TOGGLE_TITLE:
-      return toggleTitle(state);
+      return setError(state, action);
     case t.ActionType.PICK_ROLE:
       return pickRole(state, action);
     case t.ActionType.SET_WS:
       return setWs(state, action);
     case t.ActionType.SET_USERNAME:
       return setUsername(state, action);
-    case t.ActionType.SET_EDITING:
-      return setEditing(state, action);
     case t.ActionType.UPDATE_REMOTE_STATE:
       return updateRemoteState(state, action);
     case t.ActionType.UPDATE_SERVER_ADDRESS:
