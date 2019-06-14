@@ -1,9 +1,8 @@
 import React from "react";
 import * as t from "./../types";
 import R from "ramda";
-import { connect } from "react-redux";
-
-import { styleForTeamPath, cardsPath } from "./../redux/paths";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 const scoreStyle: React.CSSProperties = {
   display: "flex",
@@ -33,49 +32,18 @@ interface StateProps {
 
 type AllProps = StateProps;
 
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const cards: t.Card[] = R.view(cardsPath, state);
+const Teams: React.FC<AllProps> = () => {
+  const cards = actions.useLens(lens.cards);
+  const team1Cards = R.filter(c => c.team === t.Team.TEAM_1, cards);
+  const team1Total = Object.keys(team1Cards).length;
+  const team1Flipped = Object.keys(R.filter(a => a.flipped, team1Cards)).length;
+  const team1Style = actions.useLens(lens.teamStyle(t.Team.TEAM_1));
 
-  const team1cards: t.Card[] = R.filter(({ team }) => {
-    return team === t.Team.TEAM_1;
-  }, cards);
-  const team1Total: number = R.keys(team1cards).length;
-  const team1Flipped: number = R.keys(R.filter(R.prop("flipped"), team1cards))
-    .length;
-  const team1Style: React.CSSProperties = R.view(
-    styleForTeamPath(t.Team.TEAM_1),
-    state
-  );
+  const team2Cards = R.filter(c => c.team === t.Team.TEAM_2, cards);
+  const team2Total = Object.keys(team2Cards).length;
+  const team2Flipped = Object.keys(R.filter(a => a.flipped, team2Cards)).length;
+  const team2Style = actions.useLens(lens.teamStyle(t.Team.TEAM_2));
 
-  const team2cards: t.Card[] = R.filter(({ team }) => {
-    return team === t.Team.TEAM_2;
-  }, cards);
-  const team2Total: number = R.keys(team2cards).length;
-  const team2Flipped: number = R.keys(R.filter(R.prop("flipped"), team2cards))
-    .length;
-  const team2Style: React.CSSProperties = R.view(
-    styleForTeamPath(t.Team.TEAM_2),
-    state
-  );
-
-  return {
-    team1Flipped,
-    team1Total,
-    team2Flipped,
-    team2Total,
-    team1Style,
-    team2Style
-  };
-};
-
-const Teams: React.FC<AllProps> = ({
-  team1Flipped,
-  team1Total,
-  team2Flipped,
-  team2Total,
-  team1Style,
-  team2Style
-}) => {
   return (
     <div style={scoreStyle}>
       <div style={R.merge(teamStyle, team1Style)}>
@@ -88,4 +56,4 @@ const Teams: React.FC<AllProps> = ({
   );
 };
 
-export default connect(mapStateToProps)(Teams);
+export default Teams;
