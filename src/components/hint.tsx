@@ -33,7 +33,7 @@ const AgentHint: React.FC = () => {
       {hintSubmitted && <div>Hint</div>}
       {hintSubmitted && <div className={"largeText"}>{text}</div>}
       {hintSubmitted && <div className={"largeText"}>{number}</div>}
-      <Forfeit />
+      <Forfeit team={team} />
     </div>
   );
 };

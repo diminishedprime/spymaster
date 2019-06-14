@@ -21,18 +21,7 @@ const teamStyle: React.CSSProperties = {
   flexGrow: 1
 };
 
-interface StateProps {
-  team1Flipped: number;
-  team1Total: number;
-  team2Flipped: number;
-  team2Total: number;
-  team1Style: React.CSSProperties;
-  team2Style: React.CSSProperties;
-}
-
-type AllProps = StateProps;
-
-const Teams: React.FC<AllProps> = () => {
+const Teams: React.FC = () => {
   const cards = actions.useLens(lens.cards);
   const team1Cards = R.filter(c => c.team === t.Team.TEAM_1, cards);
   const team1Total = Object.keys(team1Cards).length;
