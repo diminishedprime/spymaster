@@ -2,7 +2,6 @@ import React from "react";
 import * as t from "./../types";
 import styled from "styled-components";
 import * as actions from "../redux/actions";
-import * as lens from "../redux/lenses";
 
 const DismissWrapper = styled.div`
   cursor: pointer;
@@ -24,9 +23,13 @@ const ErrorWrapper = styled.div<{ severity: t.Severity }>`
 `;
 
 const ErrorBar: React.FC = () => {
-  const severity = actions.useLens(lens.errorSeverity);
-  const text = actions.useLens(lens.errorText);
+  const error = actions.useMLens(t.lens.reduxState.localState.error);
   const { dismissError } = actions.useApi();
+  if (error.isNone()) {
+    return null;
+  }
+  const severity = error.value.severity;
+  const text = error.value.severity;
   return (
     <ErrorWrapper severity={severity}>
       <div>{text}</div>

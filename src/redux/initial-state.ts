@@ -1,4 +1,5 @@
 import * as t from "../types";
+import * as fp from "fp-ts";
 
 export const newScore = () => {
   return {
@@ -17,6 +18,7 @@ export const initialHint = {
 const newState = (s = {}): t.ReduxState => {
   const s2: t.ReduxState = {
     localState: {
+      error: fp.option.none,
       ws: undefined,
       userId: undefined,
       connected: false,

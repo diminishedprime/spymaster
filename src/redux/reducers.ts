@@ -1,13 +1,16 @@
 import * as t from "../types";
 import * as lens from "./lenses";
+import * as fp from "fp-ts";
 import { initialState } from "./initial-state";
 
 const setError = (state: t.ReduxState, { text, severity }: t.ErrorOccured) => {
-  return lens.errorText.set(text)(lens.errorSeverity.set(severity)(state));
+  return t.lens.reduxState.localState.error.set(
+    fp.option.some({ text, severity })
+  )(state);
 };
 
 const dismissError = (state: t.ReduxState) => {
-  return lens.error.set(undefined)(state);
+  return t.lens.reduxState.localState.error.set(fp.option.none)(state);
 };
 
 const pickRole = (state: t.ReduxState, { team, role }: t.PickRole) => {

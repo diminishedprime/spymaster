@@ -1,7 +1,9 @@
 import React from "react";
 import * as l from "lens.ts";
+import * as m from "monocle-ts";
 import * as t from "../types";
 import * as reactRedux from "react-redux";
+import * as fp from "fp-ts";
 
 // Actions & Action Creators
 export const afSetPage = (page: t.Page) => {
@@ -265,6 +267,16 @@ export const useSelector = <T>(
   comparisonFn?: (t1: T, t2: T) => boolean
 ): T => {
   return (reactRedux as any).useSelector(selector, comparisonFn);
+};
+
+export const useOptionLens = <T>(
+  lens: m.Optional<t.ReduxState, T>
+): fp.option.Option<T> => {
+  return useSelector(lens.getOption);
+};
+
+export const useMLens = <T>(lens: m.Lens<t.ReduxState, T>) => {
+  return useSelector(lens.get);
 };
 
 export const useLens = <T>(lens: l.LensImpl<t.ReduxState, T>) => {

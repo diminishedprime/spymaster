@@ -1,4 +1,6 @@
 import { Dispatch as ReduxDispatch } from "redux";
+import * as fp from "fp-ts";
+import * as m from "monocle-ts";
 
 export type Dispatch = ReduxDispatch<Action>;
 
@@ -283,7 +285,7 @@ export interface LocalState {
   serverAddress: string;
   username: string;
   settings: Settings;
-  error?: Error;
+  error: fp.option.Option<Error>;
   page: Page;
   playerType: PlayerType;
   gameIds: GameId[];
@@ -311,7 +313,7 @@ export interface Style {
 }
 
 export interface RemoteState {
-  winner?: Team;
+  winner: fp.option.Option<Team>;
   time: number;
   score: Score;
   hint: Hint;
@@ -335,3 +337,24 @@ export interface Api {
   connectToServer: (serverAddress: string) => void;
   newGame: () => void;
 }
+
+export const lens = (() => {
+  const reduxStateBase = m.Lens.fromProp<ReduxState>();
+  const localStateLens = reduxStateBase("localState");
+
+  const localStateBase = m.Lens.fromProp<LocalState>();
+  const pageLens = localStateBase("page");
+  const errorLens = localStateBase("error");
+
+  const thing = {
+    reduxState: {
+      // This one is weird, but the top level seems to have to be weird?
+      localState: {
+        _lens: localStateLens,
+        page: localStateLens.compose(pageLens),
+        error: localStateLens.compose(errorLens)
+      }
+    }
+  };
+  return thing;
+})();

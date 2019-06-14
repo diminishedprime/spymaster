@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "fp-ts": "^1.18.2",
     "lens.ts": "^0.5.1",
+    "monocle-ts": "^1.7.2",
     "ramda": "^0.24.1",
     "react": "^16.8.6",
     "react-color": "^2.13.8",

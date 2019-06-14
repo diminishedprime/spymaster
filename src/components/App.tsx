@@ -44,13 +44,12 @@ const Title: React.FC = () => {
 
 const App: React.FC = () => {
   const page = actions.useLens(lens.page);
-  const hasError = actions.useLens(lens.errorText);
   const connected = actions.useLens(lens.connected);
   const winner = actions.useLens(lens.winner!);
   return (
     <Wrapper>
       <Title />
-      {hasError && <ErrorBar />}
+      <ErrorBar />
       {!connected && <ConnectToServer />}
       {connected && !winner && (
         <div>
