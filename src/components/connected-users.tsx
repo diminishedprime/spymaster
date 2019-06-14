@@ -1,9 +1,6 @@
 import React from "react";
-import R from "ramda";
-import { connect } from "react-redux";
-import * as t from "./../types";
-
-import { clientUsersPath } from "./../redux/paths";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 const connectedUsersStyle: React.CSSProperties = {
   display: "flex",
@@ -19,19 +16,8 @@ const usersStyle: React.CSSProperties = {
   textAlign: "center"
 };
 
-interface StateProps {
-  users: t.UserId[];
-}
-
-type AllProps = StateProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const users = R.keys(R.view(clientUsersPath, state));
-  return {
-    users
-  };
-};
-const ConnectedUsers: React.FC<AllProps> = ({ users }) => {
+const ConnectedUsers: React.FC = () => {
+  const users = actions.useLens(lens.clientUsers);
   return (
     <div style={connectedUsersStyle}>
       <h3>Connected Users</h3>
@@ -44,4 +30,4 @@ const ConnectedUsers: React.FC<AllProps> = ({ users }) => {
   );
 };
 
-export default connect(mapStateToProps)(ConnectedUsers);
+export default ConnectedUsers;

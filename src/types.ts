@@ -277,7 +277,7 @@ interface PlayerType {
 }
 
 export interface LocalState {
-  ws?: any;
+  ws: any;
   userId: UserId;
   connected: boolean;
   serverAddress: string;
@@ -317,7 +317,7 @@ export interface RemoteState {
   hint: Hint;
   cards: Cards;
   style: Style;
-  clientUsers: {};
+  clientUsers: string[];
   currentTeam: Team;
 }
 
