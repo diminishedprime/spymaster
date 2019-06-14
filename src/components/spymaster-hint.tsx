@@ -1,17 +1,10 @@
 import React from "react";
 import * as t from "./../types";
 import R from "ramda";
-import { connect } from "react-redux";
-
-import {
-  styleForTeamPath,
-  hintSubmittedPath,
-  hintTextPath,
-  hintNumberPath,
-  teamPath,
-  currentTeamPath
-} from "./../redux/paths";
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 import { afUpdateHint, afSubmitHint } from "./../redux/actions";
+import { connect } from "react-redux";
 
 import NumberButton from "./number-button";
 
@@ -47,41 +40,12 @@ const Numbers = ({ groupedNumbers }: { groupedNumbers: t.HintNumber[][] }) => {
   );
 };
 
-interface StateProps {
-  style: React.CSSProperties;
-  text: string;
-  number: string;
-  submitDisabled: boolean;
-  inputDisabled: boolean;
-}
-
 interface DispatchProps {
   submitHint: () => void;
   onChange: (a: { target: { value: string } }) => void;
 }
 
-type AllProps = DispatchProps & StateProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const text: string = R.view(hintTextPath, state);
-  const number: string = R.view(hintNumberPath, state);
-  const hintSubmitted: boolean = R.view(hintSubmittedPath, state);
-  const playerTeam = R.view(teamPath, state);
-  const currentTeam = R.view(currentTeamPath, state);
-  const inputDisabled = playerTeam !== currentTeam;
-  const submitDisabled: boolean =
-    text === "" || number === "" || inputDisabled || hintSubmitted;
-  const team: t.Team = R.view(currentTeamPath, state);
-  const style: React.CSSProperties = R.view(styleForTeamPath(team), state);
-
-  return {
-    style,
-    text,
-    number,
-    submitDisabled,
-    inputDisabled
-  };
-};
+type AllProps = DispatchProps;
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
   const updateHint = (hint: string) => {
@@ -101,14 +65,19 @@ const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
   };
 };
 
-const SpymasterHint: React.FC<AllProps> = ({
-  text,
-  inputDisabled,
-  onChange,
-  submitDisabled,
-  submitHint,
-  style
-}) => {
+const SpymasterHint: React.FC<AllProps> = ({ onChange, submitHint }) => {
+  const text: string = actions.useLens(lens.hintText);
+  const number = actions.useLens(lens.hintNumber);
+  const hintSubmitted: boolean = actions.useLens(lens.hintSubmitted);
+  const playerTeam = actions.useLens(lens.team);
+  const currentTeam = actions.useLens(lens.currentTeam);
+  const inputDisabled = playerTeam !== currentTeam;
+  const submitDisabled: boolean =
+    text === "" || number + "" === "" || inputDisabled || hintSubmitted;
+  const style: React.CSSProperties = actions.useLens(
+    lens.teamStyle(currentTeam)
+  );
+
   return (
     <div style={R.merge(spymasterStyle, style)}>
       <input value={text} onChange={onChange} disabled={inputDisabled} />
@@ -121,6 +90,6 @@ const SpymasterHint: React.FC<AllProps> = ({
 };
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(SpymasterHint);
