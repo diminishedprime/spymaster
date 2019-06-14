@@ -1,30 +1,15 @@
 import React from "react";
 import * as t from "./../types";
-import R from "ramda";
 import { connect } from "react-redux";
-
-import { currentTeamPath, teamPath } from "./../redux/paths";
 import { afNextTurn } from "./../redux/actions";
-
-interface StateProps {
-  disabled: boolean;
-}
+import * as actions from "../redux/actions";
+import * as lens from "../redux/lenses";
 
 interface DispatchProps {
   pass: () => void;
 }
 
-type AllProps = StateProps & DispatchProps;
-
-const mapStateToProps = (state: t.ReduxState): StateProps => {
-  const playerTeam = R.view(teamPath, state);
-  const currentTeam = R.view(currentTeamPath, state);
-  const disabled = playerTeam !== currentTeam;
-
-  return {
-    disabled
-  };
-};
+type AllProps = DispatchProps;
 
 const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
   return {
@@ -34,7 +19,10 @@ const mapDispatchToProps = (dispatch: t.Dispatch): DispatchProps => {
   };
 };
 
-const Pass: React.FC<AllProps> = ({ pass, disabled }) => {
+const Pass: React.FC<AllProps> = ({ pass }) => {
+  const playerTeam = actions.useLens(lens.team);
+  const currentTeam = actions.useLens(lens.currentTeam);
+  const disabled = playerTeam !== currentTeam;
   return (
     <button disabled={disabled} onClick={pass}>
       Pass Turn
@@ -43,6 +31,6 @@ const Pass: React.FC<AllProps> = ({ pass, disabled }) => {
 };
 
 export default connect(
-  mapStateToProps,
+  undefined,
   mapDispatchToProps
 )(Pass);
