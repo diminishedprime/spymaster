@@ -24,7 +24,7 @@ const infoBabyStyle: React.CSSProperties = {
 const AgentHint: React.FC = () => {
   const text = actions.useLens(lens.hintText);
   const number = actions.useLens(lens.hintNumber);
-  const team = actions.useLens(lens.currentTeam);
+  const team = actions.useMLens(t.lens.reduxState.localState.playerType);
   const style = actions.useLens(lens.teamStyle(team));
   const hintSubmitted = actions.useLens(lens.hintSubmitted);
   return (

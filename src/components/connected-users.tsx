@@ -1,6 +1,6 @@
 import React from "react";
 import * as actions from "../redux/actions";
-import * as lens from "../redux/lenses";
+import * as t from "../types";
 
 const connectedUsersStyle: React.CSSProperties = {
   display: "flex",
@@ -17,7 +17,9 @@ const usersStyle: React.CSSProperties = {
 };
 
 const ConnectedUsers: React.FC = () => {
-  const users = actions.useLens(lens.clientUsers);
+  const users = actions
+    .useOptionLens(t.lens.reduxState.remoteState.clientUsers)
+    .getOrElse([]);
   return (
     <div style={connectedUsersStyle}>
       <h3>Connected Users</h3>

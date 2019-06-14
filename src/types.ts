@@ -277,7 +277,6 @@ interface PlayerType {
   team: Team;
   role: Role;
 }
-
 export interface LocalState {
   ws: any;
   userId: UserId;
@@ -291,7 +290,6 @@ export interface LocalState {
   gameIds: GameId[];
   gameId?: GameId;
 }
-
 interface Score {
   [Team.TEAM_1]: number;
   [Team.TEAM_2]: number;
@@ -325,7 +323,7 @@ export interface RemoteState {
 
 export interface ReduxState {
   localState: LocalState;
-  remoteState?: RemoteState;
+  remoteState: fp.option.Option<RemoteState>;
 }
 
 export interface Api {
@@ -338,22 +336,69 @@ export interface Api {
   newGame: () => void;
 }
 
+const playerType = (
+  parent: m.Lens<ReduxState, PlayerType>
+): MyLens<ReduxState, PlayerType> => {
+  const base = m.Lens.fromProp<PlayerType>();
+  return {
+    team: parent.compose(base("team")),
+    role: parent.compose(base("role"))
+  };
+};
+
+const localState = (
+  parent: m.Lens<ReduxState, LocalState>
+): MyLens<ReduxState, LocalState> => {
+  const base = m.Lens.fromProp<LocalState>();
+  return {
+    ws: parent.compose(base("ws")),
+    userId: parent.compose(base("userId")),
+    connected: parent.compose(base("connected")),
+    serverAddress: parent.compose(base("serverAddress")),
+    username: parent.compose(base("username")),
+    settings: parent.compose(base("settings")),
+    error: parent.compose(base("error")),
+    page: parent.compose(base("page")),
+    playerType: playerType(parent.compose(base("playerType"))),
+    gameIds: parent.compose(base("gameIds")),
+    gameId: parent.compose(base("gameId"))
+  };
+};
+
+// TODO - figure out how to get this type to work with the optional ones as well.
+type MyLens<Parent, Child> =
+  | m.Lens<Parent, Child>
+  | { [k in keyof Child]: MyLens<Parent, Child[k]> };
+
+const remoteState = (
+  parent: m.Optional<ReduxState, RemoteState>
+): { [K in keyof RemoteState]: any } => {
+  const base = m.Lens.fromProp<RemoteState>();
+  const baseOptional = m.Optional.fromOptionProp<RemoteState>();
+
+  return {
+    winner: parent.compose(baseOptional("winner")),
+    time: parent.compose(base("time").asOptional()),
+    score: parent.compose(base("score").asOptional()),
+    hint: parent.compose(base("hint").asOptional()),
+    cards: parent.compose(base("cards").asOptional()),
+    style: parent.compose(base("style").asOptional()),
+    clientUsers: parent.compose(base("clientUsers").asOptional()),
+    currentTeam: parent.compose(base("currentTeam").asOptional())
+  };
+};
+
 export const lens = (() => {
   const reduxStateBase = m.Lens.fromProp<ReduxState>();
-  const localStateLens = reduxStateBase("localState");
+  const reduxStateOptionalBase = m.Optional.fromOptionProp<ReduxState>();
 
-  const localStateBase = m.Lens.fromProp<LocalState>();
-  const pageLens = localStateBase("page");
-  const errorLens = localStateBase("error");
+  const localStateLens = reduxStateBase("localState");
+  const remoteStateOptionalLens = reduxStateOptionalBase("remoteState");
 
   const thing = {
     reduxState: {
-      // This one is weird, but the top level seems to have to be weird?
-      localState: {
-        _lens: localStateLens,
-        page: localStateLens.compose(pageLens),
-        error: localStateLens.compose(errorLens)
-      }
+      localState: localState(localStateLens),
+      remoteState: remoteState(remoteStateOptionalLens)
     }
   };
   return thing;
