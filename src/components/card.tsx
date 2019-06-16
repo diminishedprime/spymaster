@@ -87,7 +87,7 @@ const Card: React.FC<AllProps> = ({ flip, cardId }) => {
   const playerTeam = actions.useLens(lens.team);
   // TODO - Is there something we can do about all the bangs (!) here?
   const currentTeam = actions.useLens(lens.currentTeam!);
-  const flipped = actions.useLens(lens.cardFlipped(cardId)!);
+  const flipped = actions.useLens(t.lens.cardFlipped(cardId)!);
   const cardTeam = actions.useLens(lens.cardTeam(cardId)!);
   const hintSubmitted = actions.useLens(lens.hintSubmitted!);
   const disabled =

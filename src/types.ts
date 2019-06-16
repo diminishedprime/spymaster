@@ -336,69 +336,76 @@ export interface Api {
   newGame: () => void;
 }
 
-const playerType = (
-  parent: m.Lens<ReduxState, PlayerType>
-): MyLens<ReduxState, PlayerType> => {
-  const base = m.Lens.fromProp<PlayerType>();
-  return {
-    team: parent.compose(base("team")),
-    role: parent.compose(base("role"))
-  };
-};
-
-const localState = (
-  parent: m.Lens<ReduxState, LocalState>
-): MyLens<ReduxState, LocalState> => {
-  const base = m.Lens.fromProp<LocalState>();
-  return {
-    ws: parent.compose(base("ws")),
-    userId: parent.compose(base("userId")),
-    connected: parent.compose(base("connected")),
-    serverAddress: parent.compose(base("serverAddress")),
-    username: parent.compose(base("username")),
-    settings: parent.compose(base("settings")),
-    error: parent.compose(base("error")),
-    page: parent.compose(base("page")),
-    playerType: playerType(parent.compose(base("playerType"))),
-    gameIds: parent.compose(base("gameIds")),
-    gameId: parent.compose(base("gameId"))
-  };
-};
-
-// TODO - figure out how to get this type to work with the optional ones as well.
-type MyLens<Parent, Child> =
-  | m.Lens<Parent, Child>
-  | { [k in keyof Child]: MyLens<Parent, Child[k]> };
-
-const remoteState = (
-  parent: m.Optional<ReduxState, RemoteState>
-): { [K in keyof RemoteState]: m.Optional<ReduxState, RemoteState[K]> } => {
-  const base = m.Lens.fromProp<RemoteState>();
-
-  return {
-    winner: parent.compose(base("winner").asOptional()),
-    time: parent.compose(base("time").asOptional()),
-    score: parent.compose(base("score").asOptional()),
-    hint: parent.compose(base("hint").asOptional()),
-    cards: parent.compose(base("cards").asOptional()),
-    style: parent.compose(base("style").asOptional()),
-    clientUsers: parent.compose(base("clientUsers").asOptional()),
-    currentTeam: parent.compose(base("currentTeam").asOptional())
-  };
-};
-
 export const lens = (() => {
-  const reduxStateBase = m.Lens.fromProp<ReduxState>();
-  const reduxStateOptionalBase = m.Optional.fromOptionProp<ReduxState>();
+  const reduxStateFP = m.Lens.fromProp<ReduxState>();
+  const reduxStateFOP = m.Optional.fromOptionProp<ReduxState>();
+  const localStateFP = m.Lens.fromProp<LocalState>();
+  const remoteStateFP = m.Lens.fromProp<RemoteState>();
+  const playerTypeFP = m.Lens.fromProp<PlayerType>();
+  const cardFP = m.Lens.fromProp<Card>();
 
-  const localStateLens = reduxStateBase("localState");
-  const remoteStateOptionalLens = reduxStateOptionalBase("remoteState");
+  const localStateL = reduxStateFP("localState");
+  const remoteStateL = reduxStateFOP("remoteState");
+  const playerTypeL = localStateL.compose(localStateFP("playerType"));
 
-  const thing = {
+  const playerType = {
+    team: playerTypeL.compose(playerTypeFP("team")),
+    role: playerTypeL.compose(playerTypeFP("role"))
+  };
+
+  const localState = {
+    ws: localStateL.compose(localStateFP("ws")),
+    userId: localStateL.compose(localStateFP("userId")),
+    connected: localStateL.compose(localStateFP("connected")),
+    serverAddress: localStateL.compose(localStateFP("serverAddress")),
+    username: localStateL.compose(localStateFP("username")),
+    settings: localStateL.compose(localStateFP("settings")),
+    error: localStateL.compose(localStateFP("error")),
+    page: localStateL.compose(localStateFP("page")),
+    playerType,
+    gameIds: localStateL.compose(localStateFP("gameIds")),
+    gameId: localStateL.compose(localStateFP("gameId"))
+  };
+
+  const remoteState = {
+    winner: remoteStateL.compose(remoteStateFP("winner").asOptional()),
+    time: remoteStateL.compose(remoteStateFP("time").asOptional()),
+    score: remoteStateL.compose(remoteStateFP("score").asOptional()),
+    hint: remoteStateL.compose(remoteStateFP("hint").asOptional()),
+    cards: {
+      l: remoteStateL.compose(remoteStateFP("cards").asOptional()),
+      idx: (i: number) => {
+        const cardsLens = remoteStateL.compose(
+          remoteStateFP("cards")
+            .asOptional()
+            .compose(
+              new m.Lens(
+                (a: Cards) => a[i],
+                (c: Card) => (cs: Cards) => ({ ...cs, [c.id]: c })
+              ).asOptional()
+            )
+        );
+        const card = {
+          text: cardsLens.compose(cardFP("text").asOptional())
+        };
+
+        return {
+          card: cardsLens,
+          ...card
+        };
+      }
+    },
+    style: remoteStateL.compose(remoteStateFP("style").asOptional()),
+    clientUsers: remoteStateL.compose(
+      remoteStateFP("clientUsers").asOptional()
+    ),
+    currentTeam: remoteStateL.compose(remoteStateFP("currentTeam").asOptional())
+  };
+
+  return {
     reduxState: {
-      localState: localState(localStateLens),
-      remoteState: remoteState(remoteStateOptionalLens)
+      localState,
+      remoteState
     }
   };
-  return thing;
 })();

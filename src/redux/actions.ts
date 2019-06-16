@@ -275,12 +275,8 @@ export const useOptionLens = <T>(
   return useSelector(lens.getOption);
 };
 
-export const useMLens = <T>(lens: m.Lens<t.ReduxState, T>) => {
+export const useLens = <T>(lens: m.Lens<t.ReduxState, T>) => {
   return useSelector(lens.get);
-};
-
-export const useLens = <T>(lens: l.LensImpl<t.ReduxState, T>) => {
-  return useSelector(lens.get());
 };
 
 const useDispatch: () => t.Dispatch = (reactRedux as any).useDispatch;

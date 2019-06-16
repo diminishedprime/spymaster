@@ -23,7 +23,7 @@ const ErrorWrapper = styled.div<{ severity: t.Severity }>`
 `;
 
 const ErrorBar: React.FC = () => {
-  const error = actions.useMLens(t.lens.reduxState.localState.error);
+  const error = actions.useLens(t.lens.reduxState.localState.error);
   const { dismissError } = actions.useApi();
   if (error.isNone()) {
     return null;

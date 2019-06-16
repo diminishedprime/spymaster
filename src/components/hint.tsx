@@ -22,9 +22,13 @@ const infoBabyStyle: React.CSSProperties = {
 };
 
 const AgentHint: React.FC = () => {
-  const text = actions.useLens(lens.hintText);
-  const number = actions.useLens(lens.hintNumber);
-  const team = actions.useMLens(t.lens.reduxState.localState.playerType);
+  const hint = actions.useOptionLens(t.lens.reduxState.remoteState.hint);
+  const { text, number } = hint.getOrElse({
+    text: "",
+    number: "Zero",
+    submitted: false
+  });
+  const team = actions.useLens(t.lens.reduxState.localState.playerType.team);
   const style = actions.useLens(lens.teamStyle(team));
   const hintSubmitted = actions.useLens(lens.hintSubmitted);
   return (
