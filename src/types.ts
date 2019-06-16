@@ -372,12 +372,11 @@ type MyLens<Parent, Child> =
 
 const remoteState = (
   parent: m.Optional<ReduxState, RemoteState>
-): { [K in keyof RemoteState]: any } => {
+): { [K in keyof RemoteState]: m.Optional<ReduxState, RemoteState[K]> } => {
   const base = m.Lens.fromProp<RemoteState>();
-  const baseOptional = m.Optional.fromOptionProp<RemoteState>();
 
   return {
-    winner: parent.compose(baseOptional("winner")),
+    winner: parent.compose(base("winner").asOptional()),
     time: parent.compose(base("time").asOptional()),
     score: parent.compose(base("score").asOptional()),
     hint: parent.compose(base("hint").asOptional()),
