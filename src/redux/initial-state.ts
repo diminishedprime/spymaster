@@ -34,7 +34,7 @@ const newState = (s = {}): t.ReduxState => {
         role: t.Role.SPYMASTER
       }
     },
-    remoteState: undefined
+    remoteState: fp.option.none
   };
   return s2;
 };

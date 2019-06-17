@@ -7,7 +7,7 @@ import express = require("express");
 import { PORT, BASE_URL } from "../../src/constants";
 
 import { store } from "./redux/index";
-import { afConnectWebsocketServer } from "./redux/actions";
+import { connectWebsocket } from "./redux/actions";
 
 // const options = {
 //   key: fs.readFileSync('/etc/letsencrypt/live/spymaster.mjh.io/privkey.pem'),
@@ -19,7 +19,7 @@ const app = express();
 const server = createServer(app);
 
 // Connect websocket server
-store.dispatch(afConnectWebsocketServer(server));
+store.dispatch(connectWebsocket(server));
 
 // Serve static resources
 app.use("/", express.static(path.resolve(__dirname + "/../../build/")));
