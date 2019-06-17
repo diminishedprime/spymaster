@@ -1,5 +1,6 @@
 import * as t from "../types";
 import * as http from "http";
+import * as io from "socket.io";
 
 // export const afAddUser = (userId: t.UserId, ws: any) => ({
 //   type: t.ServerActionType.ADD_USER,
@@ -17,6 +18,14 @@ export const connectWebsocket = (
 ): t.ConnectWebsocket => ({
   type: t.ServerActionType.ConnectWebsocket,
   server: httpServer
+});
+
+export const addUser = (id: t.UserId, socket: io.Socket): t.AddUser2 => ({
+  type: t.ServerActionType.AddUser,
+  user: {
+    id,
+    socket
+  }
 });
 
 // export const afBroadcastMessageToUserId = (

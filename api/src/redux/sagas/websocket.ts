@@ -99,33 +99,33 @@ import * as effects from "redux-saga/effects";
 //   }
 // };
 
-// const connectWS = function*(ws: any) {
-//   // eslint-disable-next-line
-//   const userId = uuid4();
+const connectWS = function*(ws: any) {
+  // eslint-disable-next-line
+  const userId = uuid4();
 
-//   // const clientActionChan = reduxSaga.eventChannel(emitter => {
-//   //   ws.on("client action", emitter);
-//   //   // eslint-disable-next-line no-console
-//   //   return () => console.log("something unsubscribe socket");
-//   // });
+  // const clientActionChan = reduxSaga.eventChannel(emitter => {
+  //   ws.on("client action", emitter);
+  //   // eslint-disable-next-line no-console
+  //   return () => console.log("something unsubscribe socket");
+  // });
 
-//   // const disconnectChan = reduxSaga.eventChannel(emitter => {
-//   //   ws.on("disconnect", () => emitter(userId));
-//   //   // eslint-disable-next-line no-console
-//   //   return () => console.log("something unsubscribe socket");
-//   // });
+  // const disconnectChan = reduxSaga.eventChannel(emitter => {
+  //   ws.on("disconnect", () => emitter(userId));
+  //   // eslint-disable-next-line no-console
+  //   return () => console.log("something unsubscribe socket");
+  // });
 
-//   yield effects.put(actions.afAddUser(userId, ws));
-//   yield effects.put(
-//     actions.afBroadcastMessageToUserId(
-//       userId,
-//       "thanks for connecting via websockets"
-//     )
-//   );
-//   yield effects.put(actions.afUserConnected(userId));
-//   // yield effects.fork(onClientAction, clientActionChan);
-//   // yield onDisconnect(disconnectChan);
-// };
+  yield effects.put(actions.addUser(userId, ws));
+  // yield effects.put(
+  //   actions.afBroadcastMessageToUserId(
+  //     userId,
+  //     "thanks for connecting via websockets"
+  //   )
+  // );
+  // yield effects.put(actions.afUserConnected(userId));
+  // // yield effects.fork(onClientAction, clientActionChan);
+  // // yield onDisconnect(disconnectChan);
+};
 
 const connectWSS = function*() {
   yield effects.takeLatest<t.ConnectWebsocket>(
@@ -139,7 +139,7 @@ const connectWSS = function*() {
       });
       let ws;
       while ((ws = yield effects.take<io.Socket>(channel))) {
-        // yield effects.fork(connectWS, ws);
+        yield effects.fork(connectWS, ws);
       }
     }
   );

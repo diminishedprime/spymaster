@@ -3,9 +3,8 @@ import * as fp from "fp-ts";
 export * from "../../src/types";
 import * as http from "http";
 import * as m from "monocle-ts";
-import * as ioTypes from "socket.io";
-
-export const io = ioTypes;
+import * as io from "socket.io";
+import { UserId } from "../../src/types";
 
 // export enum ServerActionType {
 //   ADD_USER = "new user",
@@ -114,24 +113,37 @@ export const io = ioTypes;
 //   | CHANGE_BACKGROUND_COLOR_SERVERAction
 //   | REMOVE_USER_FROM_GAMEAction;
 
+export type ServerAction = ConnectWebsocket | AddUser2;
+export type SagaAction = never;
+
+export interface AddUser2 {
+  type: ServerActionType.AddUser;
+  user: User;
+}
+
 export interface ConnectWebsocket {
   type: ServerActionType.ConnectWebsocket;
   server: http.Server;
 }
 
 export enum ServerActionType {
-  ConnectWebsocket
+  ConnectWebsocket,
+  AddUser
 }
 
 export const app = (
   state: ServerReduxState = initialState,
-  action: ServerAction | SagaAction
+  action: ServerAction
 ): ServerReduxState => {
   switch (action.type) {
     case ServerActionType.ConnectWebsocket:
+      // TODO - I'm not sure if I actually need to set this or include it in
+      // state, I just need the saga to run.
       return lens.server.set(fp.option.some(action.server))(state);
+    case ServerActionType.AddUser:
+      return lens.user(action.user.id).set(fp.option.some(action.user))(state);
     default:
-      return assertNever(action.type);
+      throw new Error("this should not happen");
   }
 };
 
@@ -139,15 +151,13 @@ const assertNever = (x: never): never => {
   throw new Error("Unexpected object: " + x);
 };
 
-export type ServerAction = ConnectWebsocket;
-export type SagaAction = never;
-
 type CardId = string;
 type GameId = string;
 type PlayerId = string;
 type Games = i.Map<GameId, Game>;
 type Cards = i.Map<CardId, Card>;
 type Players = i.Set<Player>;
+type Users = i.Map<UserId, User>;
 type Option<T> = fp.option.Option<T>;
 
 enum Team {
@@ -156,6 +166,11 @@ enum Team {
   Bystander = "Bystander",
   Team1 = "Team 1",
   Team2 = "Team 2"
+}
+
+interface User {
+  id: UserId;
+  socket: io.Socket;
 }
 
 interface Player {
@@ -180,16 +195,27 @@ interface Game {
 
 export interface ServerReduxState {
   games: Games;
+  users: Users;
   server: Option<http.Server>;
 }
 
 const serverReduxStateLens = m.Lens.fromProp<ServerReduxState>();
 
 const lens = {
-  server: serverReduxStateLens("server")
+  server: serverReduxStateLens("server"),
+  users: serverReduxStateLens("users"),
+  user: (id: UserId) => {
+    const getter = (a: Users) => fp.option.fromNullable(a.get(id));
+    const setter = (c: Option<User>) => (cs: Users) =>
+      c.isSome() ? cs.set(c.value.id, c.value) : cs;
+    return serverReduxStateLens("users").compose(
+      new m.Lens<Users, Option<User>>(getter, setter)
+    );
+  }
 };
 
 const initialState: ServerReduxState = {
   games: i.Map(),
+  users: i.Map(),
   server: fp.option.none
 };
