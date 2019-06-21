@@ -41,38 +41,45 @@ const app = ta
     lens.server.set(t.some(payload.httpServer))(state)
   );
 
-const websocketEpic: ro.Epic<
+const clientWebsocketEpic: ro.Epic<
   t.RootAction,
   t.RootAction,
-  t.ReduxState
+  t.ServerReduxState
 > = action$ =>
   action$.pipe(
     filter(ta.isActionOf(a.connectWebsocket)),
     flatMap(action => {
       console.log("connectWebsocket happened.");
       const socketServer = io(action.payload.httpServer);
-      return fromEventPattern<t.RootAction>(add => {
-        socketServer.on("connection", (socket: any) => {
-          const userId = uuid4();
-          // Add this user to the server.
-          add(a.addUser(userId, socket));
-          // // Send message about connecting.
-          // add(a.sendMessage(clientId, 'thanks for connecting.'))
+      return fromEventPattern<t.RootAction>(
+        add => {
+          socketServer.on("connection", (socket: any) => {
+            const userId = uuid4();
+            // Add this user to the server.
+            add(a.addUser(userId, socket));
+            // // Send message about connecting.
+            // add(a.sendMessage(clientId, 'thanks for connecting.'))
 
-          // This any is actually events that the client can send?
-          socket.on("client action", (a: any) => {
-            add(a);
+            // This any is actually events that the client can send?
+            socket.on("client action", (a: any) => {
+              add(a);
+            });
           });
-        });
-      });
+        },
+        (remove: any) => {
+          socketServer.on("disconnection", (socket: any) => {
+            // TODO - what to do here?
+          });
+        }
+      );
     })
   );
 
-const rootEpic = ro.combineEpics(websocketEpic);
+const rootEpic = ro.combineEpics(clientWebsocketEpic);
 const epicMiddleware = ro.createEpicMiddleware<
   t.RootAction,
   t.RootAction,
-  t.ReduxState
+  t.ServerReduxState
 >();
 export const store = createStore(app, applyMiddleware(epicMiddleware));
 epicMiddleware.run(rootEpic);

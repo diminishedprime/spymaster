@@ -1,4 +1,5 @@
 import { Dispatch as ReduxDispatch } from "redux";
+import * as ta from "typesafe-actions";
 import * as fp from "fp-ts";
 import * as m from "monocle-ts";
 
@@ -409,3 +410,13 @@ export const lens = (() => {
     }
   };
 })();
+
+export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
+
+declare module "typesafe-actions" {
+  interface Types {
+    RootAction: RootAction;
+  }
+}
+
+export interface ReduxState2 {}

@@ -2,11 +2,9 @@ import * as i from "immutable";
 import * as ta from "typesafe-actions";
 import { Reducer } from "redux";
 import * as fp from "fp-ts";
-export * from "../../src/types";
 import * as http from "http";
 import * as m from "monocle-ts";
 import * as io from "socket.io";
-import { UserId } from "../../src/types";
 
 // export enum ServerActionType {
 //   ADD_USER = "new user",
@@ -137,6 +135,7 @@ export enum ServerActionType {
 export type CardId = string;
 export type GameId = string;
 export type PlayerId = string;
+export type UserId = string;
 export type Games = i.Map<GameId, Game>;
 export type Cards = i.Map<CardId, Card>;
 export type Players = i.Set<Player>;
