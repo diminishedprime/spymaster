@@ -1,11 +1,15 @@
 import createSagaMiddleware from "redux-saga";
+import io from "socket.io";
+import uuid4 from "uuid/v4";
 import * as i from "immutable";
+import * as ro from "redux-observable";
 import * as t from "../types";
 import { createStore, applyMiddleware } from "redux";
+import { filter, flatMap } from "rxjs/operators";
+import { fromEventPattern } from "rxjs";
 import * as ta from "typesafe-actions";
 import * as m from "monocle-ts";
 import * as a from "./actions";
-import { rootSaga } from "./sagas/index";
 
 const initialState: t.ServerReduxState = {
   games: i.Map(),
@@ -37,6 +41,38 @@ const app = ta
     lens.server.set(t.some(payload.httpServer))(state)
   );
 
-const sagaMiddleware = createSagaMiddleware();
-export const store = createStore(app, applyMiddleware(sagaMiddleware));
-sagaMiddleware.run(rootSaga);
+const websocketEpic: ro.Epic<
+  t.RootAction,
+  t.RootAction,
+  t.ReduxState
+> = action$ =>
+  action$.pipe(
+    filter(ta.isActionOf(a.connectWebsocket)),
+    flatMap(action => {
+      console.log("connectWebsocket happened.");
+      const socketServer = io(action.payload.httpServer);
+      return fromEventPattern<t.RootAction>(add => {
+        socketServer.on("connection", (socket: any) => {
+          const userId = uuid4();
+          // Add this user to the server.
+          add(a.addUser(userId, socket));
+          // // Send message about connecting.
+          // add(a.sendMessage(clientId, 'thanks for connecting.'))
+
+          // This any is actually events that the client can send?
+          socket.on("client action", (a: any) => {
+            add(a);
+          });
+        });
+      });
+    })
+  );
+
+const rootEpic = ro.combineEpics(websocketEpic);
+const epicMiddleware = ro.createEpicMiddleware<
+  t.RootAction,
+  t.RootAction,
+  t.ReduxState
+>();
+export const store = createStore(app, applyMiddleware(epicMiddleware));
+epicMiddleware.run(rootEpic);
