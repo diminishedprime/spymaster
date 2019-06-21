@@ -1,4 +1,6 @@
 import * as i from "immutable";
+import * as ta from "typesafe-actions";
+import { Reducer } from "redux";
 import * as fp from "fp-ts";
 export * from "../../src/types";
 import * as http from "http";
@@ -115,6 +117,7 @@ import { UserId } from "../../src/types";
 
 export type ServerAction = ConnectWebsocket | AddUser2;
 export type SagaAction = never;
+export type ClientAction = never;
 
 export interface AddUser2 {
   type: ServerActionType.AddUser;
@@ -131,36 +134,16 @@ export enum ServerActionType {
   AddUser
 }
 
-export const app = (
-  state: ServerReduxState = initialState,
-  action: ServerAction
-): ServerReduxState => {
-  switch (action.type) {
-    case ServerActionType.ConnectWebsocket:
-      // TODO - I'm not sure if I actually need to set this or include it in
-      // state, I just need the saga to run.
-      return lens.server.set(fp.option.some(action.server))(state);
-    case ServerActionType.AddUser:
-      return lens.user(action.user.id).set(fp.option.some(action.user))(state);
-    default:
-      throw new Error("this should not happen");
-  }
-};
+export type CardId = string;
+export type GameId = string;
+export type PlayerId = string;
+export type Games = i.Map<GameId, Game>;
+export type Cards = i.Map<CardId, Card>;
+export type Players = i.Set<Player>;
+export type Users = i.Map<UserId, User>;
+export type Option<T> = fp.option.Option<T>;
 
-const assertNever = (x: never): never => {
-  throw new Error("Unexpected object: " + x);
-};
-
-type CardId = string;
-type GameId = string;
-type PlayerId = string;
-type Games = i.Map<GameId, Game>;
-type Cards = i.Map<CardId, Card>;
-type Players = i.Set<Player>;
-type Users = i.Map<UserId, User>;
-type Option<T> = fp.option.Option<T>;
-
-enum Team {
+export enum Team {
   Assassin = "Assassin",
   Spymaster = "Spymaster",
   Bystander = "Bystander",
@@ -168,25 +151,25 @@ enum Team {
   Team2 = "Team 2"
 }
 
-interface User {
+export interface User {
   id: UserId;
   socket: io.Socket;
 }
 
-interface Player {
+export interface Player {
   id: PlayerId;
   alias: Option<string>;
   team: Team;
 }
 
-interface Card {
+export interface Card {
   id: CardId;
   text: string;
   team: Team;
   flipped: boolean;
 }
 
-interface Game {
+export interface Game {
   id: GameId;
   // alais: Option<string>;
   // cards: Cards;
@@ -199,23 +182,14 @@ export interface ServerReduxState {
   server: Option<http.Server>;
 }
 
-const serverReduxStateLens = m.Lens.fromProp<ServerReduxState>();
+export const none = fp.option.none;
+export const some = fp.option.some;
+export const fromNullable = fp.option.fromNullable;
 
-const lens = {
-  server: serverReduxStateLens("server"),
-  users: serverReduxStateLens("users"),
-  user: (id: UserId) => {
-    const getter = (a: Users) => fp.option.fromNullable(a.get(id));
-    const setter = (c: Option<User>) => (cs: Users) =>
-      c.isSome() ? cs.set(c.value.id, c.value) : cs;
-    return serverReduxStateLens("users").compose(
-      new m.Lens<Users, Option<User>>(getter, setter)
-    );
+export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
+
+declare module "typesafe-actions" {
+  interface Types {
+    RootAction: RootAction;
   }
-};
-
-const initialState: ServerReduxState = {
-  games: i.Map(),
-  users: i.Map(),
-  server: fp.option.none
-};
+}

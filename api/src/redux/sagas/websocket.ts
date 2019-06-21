@@ -92,22 +92,15 @@ import * as effects from "redux-saga/effects";
 //   yield effects.put(actions.afUserDisconnected(userId));
 // };
 
-// const onClientAction = function*(wsChan: any) {
-//   let action;
-//   while ((action = yield effects.take(wsChan))) {
-//     yield effects.put(action);
-//   }
-// };
-
 const connectWS = function*(ws: any) {
   // eslint-disable-next-line
   const userId = uuid4();
 
-  // const clientActionChan = reduxSaga.eventChannel(emitter => {
-  //   ws.on("client action", emitter);
-  //   // eslint-disable-next-line no-console
-  //   return () => console.log("something unsubscribe socket");
-  // });
+  const clientActionChan = reduxSaga.eventChannel(emitter => {
+    ws.on("client action", emitter);
+    // eslint-disable-next-line no-console
+    return () => console.log("something unsubscribe socket");
+  });
 
   // const disconnectChan = reduxSaga.eventChannel(emitter => {
   //   ws.on("disconnect", () => emitter(userId));
@@ -115,6 +108,7 @@ const connectWS = function*(ws: any) {
   //   return () => console.log("something unsubscribe socket");
   // });
 
+  // Save the user to the server state.
   yield effects.put(actions.addUser(userId, ws));
   // yield effects.put(
   //   actions.afBroadcastMessageToUserId(
@@ -123,7 +117,16 @@ const connectWS = function*(ws: any) {
   //   )
   // );
   // yield effects.put(actions.afUserConnected(userId));
-  // // yield effects.fork(onClientAction, clientActionChan);
+
+  // Accept actions from newly connected user.
+  yield effects.fork(function*(wsChan) {
+    let action;
+    while ((action = yield effects.take<t.ClientAction>(wsChan))) {
+      yield effects.put(action);
+    }
+  }, clientActionChan);
+
+  // What to do when user disconnects;
   // // yield onDisconnect(disconnectChan);
 };
 

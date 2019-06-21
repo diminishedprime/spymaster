@@ -1,4 +1,5 @@
 import * as t from "../types";
+import * as ta from "typesafe-actions";
 import * as http from "http";
 import * as io from "socket.io";
 
@@ -13,20 +14,19 @@ import * as io from "socket.io";
 //   userId
 // });
 
-export const connectWebsocket = (
-  httpServer: http.Server
-): t.ConnectWebsocket => ({
-  type: t.ServerActionType.ConnectWebsocket,
-  server: httpServer
-});
+export const connectWebsocket = ta.createAction(
+  "connect-websocket",
+  action => (httpServer: http.Server) => action({ httpServer })
+);
 
-export const addUser = (id: t.UserId, socket: io.Socket): t.AddUser2 => ({
-  type: t.ServerActionType.AddUser,
-  user: {
-    id,
-    socket
-  }
-});
+export const addUser = ta.createAction(
+  "add-user",
+  action => (id: t.UserId, socket: io.Socket) =>
+    action({
+      id,
+      socket
+    })
+);
 
 // export const afBroadcastMessageToUserId = (
 //   userId: t.UserId,
