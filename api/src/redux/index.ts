@@ -10,9 +10,21 @@ import { fromEventPattern } from "rxjs";
 import * as ta from "typesafe-actions";
 import * as m from "monocle-ts";
 import * as a from "./actions";
+import * as ca from "../../../src/redux/actions";
+
+declare module "typesafe-actions" {
+  interface Types {
+    RootAction: t.RootAction;
+  }
+}
+
+const initialGames: t.Games = (() => {
+  let games: t.Games = i.Map();
+  return games.set("abcde", { id: "abcde", players: i.Set() });
+})();
 
 const initialState: t.ServerReduxState = {
-  games: i.Map(),
+  games: initialGames,
   users: i.Map(),
   server: t.none
 };
@@ -41,6 +53,22 @@ const app = ta
     lens.server.set(t.some(payload.httpServer))(state)
   );
 
+const sendActionEpic: t.Epic = (action$, state) =>
+  action$.pipe(
+    filter(ta.isActionOf(a.sendAction)),
+    map(action => {
+      const socket = lens.user(action.payload.id).get(state.value);
+      if (socket.isSome()) {
+        socket.value.socket.emit("action", action.payload.clientAction);
+      } else {
+        console.error(
+          `Client: ${action.payload.id} is not connected to the server`
+        );
+      }
+      return a.noOp();
+    })
+  );
+
 const sendMessageEpic: t.Epic = (action$, state) =>
   action$.pipe(
     filter(ta.isActionOf(a.sendMessage)),
@@ -57,7 +85,7 @@ const sendMessageEpic: t.Epic = (action$, state) =>
     })
   );
 
-const clientWebsocketEpic: t.Epic = action$ =>
+const clientWebsocketEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.connectWebsocket)),
     flatMap(action => {
@@ -72,6 +100,12 @@ const clientWebsocketEpic: t.Epic = action$ =>
             add(a.addUser(userId, socket));
             // Send message about connecting.
             add(a.sendMessage(userId, "thanks for connecting."));
+            add(
+              a.sendAction(
+                userId,
+                ca.setGameIds(state$.value.games.keySeq().toArray())
+              )
+            );
 
             // This any is actually events that the client can send?
             socket.on("client action", (a: any) => {
@@ -90,7 +124,11 @@ const clientWebsocketEpic: t.Epic = action$ =>
     })
   );
 
-const rootEpic = ro.combineEpics(clientWebsocketEpic, sendMessageEpic);
+const rootEpic = ro.combineEpics(
+  clientWebsocketEpic,
+  sendMessageEpic,
+  sendActionEpic
+);
 const epicMiddleware = ro.createEpicMiddleware<
   t.RootAction,
   t.RootAction,

@@ -1,5 +1,6 @@
 import * as ta from "typesafe-actions";
 import * as http from "http";
+import * as t from "../types";
 
 // export const afAddUser = (userId: t.UserId, ws: any) => ({
 //   type: t.ServerActionType.ADD_USER,
@@ -22,6 +23,11 @@ export const connectWebsocket = ta.createAction(
 export const setSocket = ta.createAction(
   "set-socket",
   action => (socket: SocketIOClient.Socket) => action({ socket })
+);
+
+export const setGameIds = ta.createAction(
+  "set-game-ids",
+  action => (gameIds: t.GameId[]) => action({ gameIds })
 );
 
 // import React from "react";

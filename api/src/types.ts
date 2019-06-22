@@ -115,10 +115,9 @@ export * from "../../src/common-types";
 //   | REMOVE_USER_FROM_GAMEAction;
 
 export type CardId = string;
-export type GameId = string;
 export type PlayerId = string;
 export type UserId = string;
-export type Games = i.Map<GameId, Game>;
+export type Games = i.Map<ct.GameId, Game>;
 export type Cards = i.Map<CardId, Card>;
 export type Players = i.Set<Player>;
 export type Users = i.Map<UserId, User>;
@@ -150,7 +149,7 @@ export interface Card {
 }
 
 export interface Game {
-  id: GameId;
+  id: ct.GameId;
   // alais: Option<string>;
   // cards: Cards;
   players: Players;
@@ -163,11 +162,5 @@ export interface ServerReduxState {
 }
 
 export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
-
-declare module "typesafe-actions" {
-  interface Types {
-    RootAction: RootAction;
-  }
-}
 
 export type Epic = ro.Epic<RootAction, RootAction, ServerReduxState>;

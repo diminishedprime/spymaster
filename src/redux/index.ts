@@ -9,6 +9,12 @@ import * as rr from "react-redux";
 import * as io from "socket.io-client";
 import { fromEventPattern } from "rxjs";
 
+declare module "typesafe-actions" {
+  interface Types {
+    RootAction: t.RootAction;
+  }
+}
+
 export const useDispatch = (): t.Dispatch => {
   return (rr as any).useDispatch();
 };
@@ -21,19 +27,35 @@ export const useSelector = <T>(
 };
 
 const initialState: t.ReduxState2 = {
-  socket: t.none
+  socket: t.none,
+  page: t.Page.Lobby,
+  gameIds: []
 };
 
-const reduxStateLens = m.Lens.fromProp<t.ReduxState2>();
+export const lens = (() => {
+  const reduxStateLens = m.Lens.fromProp<t.ReduxState2>();
 
-export const lens = {
-  socket: reduxStateLens("socket")
-};
+  const socket = reduxStateLens("socket");
+  const page = reduxStateLens("page");
+  const inLobby = page.composeGetter(new m.Getter(p => p === t.Page.Lobby));
+
+  const gameIds = reduxStateLens("gameIds");
+
+  return {
+    socket,
+    page,
+    inLobby,
+    gameIds
+  };
+})();
 
 const app = ta
   .createReducer(initialState)
   .handleAction(a.setSocket, (state, { payload }) =>
     lens.socket.set(t.some(payload.socket))(state)
+  )
+  .handleAction(a.setGameIds, (state, { payload }) =>
+    lens.gameIds.set(payload.gameIds)(state)
   );
 
 const logActionEpic: t.Epic = (action$, state$) =>

@@ -1,6 +1,7 @@
 import React from "react";
 import ConnectToServer from "./ConnectToServer";
 import styled from "styled-components";
+import Lobby from "./Lobby";
 /* import * as t from "../types";
  * import ErrorBar from "./ErrorBar";
  * import Game from "./game";
@@ -70,6 +71,7 @@ const App: React.FC = () => {
   return (
     <Wrapper>
       <ConnectToServer />
+      <Lobby />
     </Wrapper>
   );
 };
