@@ -3,6 +3,9 @@ import * as ta from "typesafe-actions";
 import * as fp from "fp-ts";
 import * as m from "monocle-ts";
 import * as ro from "redux-observable";
+import * as ct from "./common-types";
+
+export * from "./common-types";
 
 export type CardId = string;
 export type GameId = string;
@@ -419,13 +422,8 @@ declare module "typesafe-actions" {
 }
 
 export interface ReduxState2 {
-  socket: Option<SocketIOClient.Socket>;
+  socket: ct.Option<SocketIOClient.Socket>;
 }
 
 export type Dispatch = ReduxDispatch<RootAction>;
-export type Option<T> = fp.option.Option<T>;
 export type Epic = ro.Epic<RootAction, RootAction, ReduxState2>;
-
-export const none = fp.option.none;
-export const some = fp.option.some;
-export const fromNullable = fp.option.fromNullable;

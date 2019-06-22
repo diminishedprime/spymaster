@@ -1,11 +1,11 @@
 import * as i from "immutable";
 import * as ta from "typesafe-actions";
-import { Reducer } from "redux";
-import * as fp from "fp-ts";
 import * as http from "http";
-import * as m from "monocle-ts";
 import * as io from "socket.io";
 import * as ro from "redux-observable";
+import * as ct from "../../src/common-types";
+
+export * from "../../src/common-types";
 
 // export enum ServerActionType {
 //   ADD_USER = "new user",
@@ -114,25 +114,6 @@ import * as ro from "redux-observable";
 //   | CHANGE_BACKGROUND_COLOR_SERVERAction
 //   | REMOVE_USER_FROM_GAMEAction;
 
-export type ServerAction = ConnectWebsocket | AddUser2;
-export type SagaAction = never;
-export type ClientAction = never;
-
-export interface AddUser2 {
-  type: ServerActionType.AddUser;
-  user: User;
-}
-
-export interface ConnectWebsocket {
-  type: ServerActionType.ConnectWebsocket;
-  server: http.Server;
-}
-
-export enum ServerActionType {
-  ConnectWebsocket,
-  AddUser
-}
-
 export type CardId = string;
 export type GameId = string;
 export type PlayerId = string;
@@ -141,7 +122,6 @@ export type Games = i.Map<GameId, Game>;
 export type Cards = i.Map<CardId, Card>;
 export type Players = i.Set<Player>;
 export type Users = i.Map<UserId, User>;
-export type Option<T> = fp.option.Option<T>;
 
 export enum Team {
   Assassin = "Assassin",
@@ -158,7 +138,7 @@ export interface User {
 
 export interface Player {
   id: PlayerId;
-  alias: Option<string>;
+  alias: ct.Option<string>;
   team: Team;
 }
 
@@ -179,12 +159,8 @@ export interface Game {
 export interface ServerReduxState {
   games: Games;
   users: Users;
-  server: Option<http.Server>;
+  server: ct.Option<http.Server>;
 }
-
-export const none = fp.option.none;
-export const some = fp.option.some;
-export const fromNullable = fp.option.fromNullable;
 
 export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
 
