@@ -28,6 +28,13 @@ export const addUser = ta.createAction(
     })
 );
 
+export const sendMessage = ta.createAction(
+  "send-message",
+  action => (id: t.UserId, message: string) => action({ id, message })
+);
+
+export const noOp = ta.createAction("no-op", action => () => action({}));
+
 // export const afBroadcastMessageToUserId = (
 //   userId: t.UserId,
 //   message: string

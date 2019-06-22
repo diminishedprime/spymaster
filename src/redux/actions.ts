@@ -14,7 +14,12 @@ import * as http from "http";
 
 export const connectWebsocket = ta.createAction(
   "connect-websocket",
-  action => (httpServer: http.Server) => action({ httpServer })
+  action => (url: string) => action({ url })
+);
+
+export const setSocket = ta.createAction(
+  "set-socket",
+  action => (socket: SocketIOClient.Socket) => action({ socket })
 );
 
 // import React from "react";

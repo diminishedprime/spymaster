@@ -2,8 +2,7 @@ import { Dispatch as ReduxDispatch } from "redux";
 import * as ta from "typesafe-actions";
 import * as fp from "fp-ts";
 import * as m from "monocle-ts";
-
-export type Dispatch = ReduxDispatch<Action>;
+import * as ro from "redux-observable";
 
 export type CardId = string;
 export type GameId = string;
@@ -420,3 +419,6 @@ declare module "typesafe-actions" {
 }
 
 export interface ReduxState2 {}
+
+export type Dispatch = ReduxDispatch<RootAction>;
+export type Epic = ro.Epic<RootAction, RootAction, ReduxState2>;

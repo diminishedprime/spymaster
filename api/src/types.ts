@@ -5,6 +5,7 @@ import * as fp from "fp-ts";
 import * as http from "http";
 import * as m from "monocle-ts";
 import * as io from "socket.io";
+import * as ro from "redux-observable";
 
 // export enum ServerActionType {
 //   ADD_USER = "new user",
@@ -192,3 +193,5 @@ declare module "typesafe-actions" {
     RootAction: RootAction;
   }
 }
+
+export type Epic = ro.Epic<RootAction, RootAction, ServerReduxState>;
