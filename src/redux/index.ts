@@ -16,7 +16,7 @@ export const useDispatch = (): t.Dispatch => {
 export const useSelector = <T>(
   selector: (t: t.ReduxState2) => T,
   equalityFn?: (t1: T, t2: T) => boolean
-) => {
+): T => {
   return (rr as any).useSelector(selector, equalityFn);
 };
 
@@ -26,7 +26,7 @@ const initialState: t.ReduxState2 = {
 
 const reduxStateLens = m.Lens.fromProp<t.ReduxState2>();
 
-const lens = {
+export const lens = {
   socket: reduxStateLens("socket")
 };
 

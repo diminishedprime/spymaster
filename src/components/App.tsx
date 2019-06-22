@@ -1,7 +1,7 @@
 import React from "react";
 import ConnectToServer from "./ConnectToServer";
+import styled from "styled-components";
 /* import * as t from "../types";
- * import styled from "styled-components";
  * import ErrorBar from "./ErrorBar";
  * import Game from "./game";
  * import PickTeam from "./pick-team";
@@ -10,14 +10,6 @@ import ConnectToServer from "./ConnectToServer";
  * import * as actions from "../redux/actions";
  * import * as lens from "../redux/lenses";
  *
- * const Wrapper = styled.div`
- *   font-family: Helvetica;
- *   margin: 0 auto;
- *   max-width: 50em;
- *   display: flex;
- *   flex-direction: column;
- *   align-items: center;
- * `;
  *
  * const TitleWrapper = styled.div`
  *   padding-top: 5px;
@@ -65,8 +57,21 @@ import ConnectToServer from "./ConnectToServer";
  *
  * export default App; */
 
+const Wrapper = styled.div`
+  font-family: Helvetica;
+  margin: 0 auto;
+  max-width: 50em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const App: React.FC = () => {
-  return <ConnectToServer />;
+  return (
+    <Wrapper>
+      <ConnectToServer />
+    </Wrapper>
+  );
 };
 
 export default App;
