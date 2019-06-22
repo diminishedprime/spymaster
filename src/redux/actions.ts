@@ -12,6 +12,8 @@ import * as http from "http";
 //   userId
 // });
 
+export const noOp = ta.createAction("no-op", action => () => action({}));
+
 export const connectWebsocket = ta.createAction(
   "connect-websocket",
   action => (url: string) => action({ url })

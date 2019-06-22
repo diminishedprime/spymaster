@@ -1,6 +1,7 @@
 import * as ro from "redux-observable";
 import { createStore, applyMiddleware } from "redux";
-import { filter, flatMap } from "rxjs/operators";
+import { filter, flatMap, map } from "rxjs/operators";
+import * as m from "monocle-ts";
 import * as ta from "typesafe-actions";
 import * as a from "./actions";
 import * as t from "../types";
@@ -19,9 +20,30 @@ export const useSelector = <T>(
   return (rr as any).useSelector(selector, equalityFn);
 };
 
-const initialState: t.ReduxState2 = {};
+const initialState: t.ReduxState2 = {
+  socket: t.none
+};
 
-const app = ta.createReducer(initialState);
+const reduxStateLens = m.Lens.fromProp<t.ReduxState2>();
+
+const lens = {
+  socket: reduxStateLens("socket")
+};
+
+const app = ta
+  .createReducer(initialState)
+  .handleAction(a.setSocket, (state, { payload }) =>
+    lens.socket.set(t.some(payload.socket))(state)
+  );
+
+const logActionEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    filter(action => !ta.isActionOf(a.noOp)(action)),
+    map(action => {
+      console.log({ action, state: state$.value });
+      return a.noOp();
+    })
+  );
 
 const websocketEpic: t.Epic = action$ =>
   action$.pipe(
@@ -41,6 +63,7 @@ const websocketEpic: t.Epic = action$ =>
         },
         (remove: any) => {
           socket.on("disconnect", () => {
+            console.log("disconnecting?");
             // a.setSocket(none)
           });
         }
@@ -48,7 +71,7 @@ const websocketEpic: t.Epic = action$ =>
     })
   );
 
-const rootEpic = ro.combineEpics(websocketEpic);
+const rootEpic = ro.combineEpics(websocketEpic, logActionEpic);
 const epicMiddleware = ro.createEpicMiddleware<
   t.RootAction,
   t.RootAction,

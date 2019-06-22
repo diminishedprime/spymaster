@@ -418,7 +418,14 @@ declare module "typesafe-actions" {
   }
 }
 
-export interface ReduxState2 {}
+export interface ReduxState2 {
+  socket: Option<SocketIOClient.Socket>;
+}
 
 export type Dispatch = ReduxDispatch<RootAction>;
+export type Option<T> = fp.option.Option<T>;
 export type Epic = ro.Epic<RootAction, RootAction, ReduxState2>;
+
+export const none = fp.option.none;
+export const some = fp.option.some;
+export const fromNullable = fp.option.fromNullable;
