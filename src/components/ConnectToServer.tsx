@@ -14,13 +14,21 @@ const ConnectToServer = () => {
     []
   );
 
+  const connect = React.useCallback(
+    () => dispatch(actions.connectWebsocket(serverAddress)),
+    []
+  );
+
+  // Automatically connect after 200ms.
+  React.useEffect(() => {
+    setTimeout(connect, 200);
+  }, []);
+
   return socket.isNone() ? (
     <div>
       Server:
       <input value={serverAddress} onChange={onChange} />
-      <button onClick={() => dispatch(actions.connectWebsocket(serverAddress))}>
-        Connect
-      </button>
+      <button onClick={connect}>Connect</button>
     </div>
   ) : null;
 };

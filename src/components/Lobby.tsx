@@ -1,6 +1,7 @@
 import React from "react";
 import * as r from "../redux";
 import * as a from "../redux/actions";
+import * as t from "../types";
 /* import React from "react";
  * import * as t from "./../types";
  * import * as actions from "../redux/actions";
@@ -49,6 +50,18 @@ import * as a from "../redux/actions";
  *   );
  * }; */
 
+interface JoinGameProps {
+  gameId: t.GameId;
+}
+
+const JoinGame: React.FC<JoinGameProps> = ({ gameId }) => {
+  const dispatch = r.useDispatch();
+
+  const join = React.useCallback(() => dispatch(a.joinGame(gameId)), [gameId]);
+
+  return <button onClick={join}>{gameId}</button>;
+};
+
 const Lobby: React.FC = () => {
   const inLobby = r.useSelector(r.lens.inLobby.get);
   const gameIds = r.useSelector(r.lens.gameIds.get);
@@ -57,8 +70,8 @@ const Lobby: React.FC = () => {
     <div>
       <button onClick={() => dispatch(a.newGame())}>New Game</button>
       <h1>Game Ids:</h1>
-      {gameIds.map(id => (
-        <div key={id}>{id}</div>
+      {gameIds.map(gameId => (
+        <JoinGame key={gameId} gameId={gameId} />
       ))}
     </div>
   ) : null;

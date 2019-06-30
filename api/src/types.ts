@@ -114,42 +114,12 @@ export * from "../../src/common-types";
 //   | CHANGE_BACKGROUND_COLOR_SERVERAction
 //   | REMOVE_USER_FROM_GAMEAction;
 
-export type Games = i.Map<ct.GameId, Game>;
-export type Cards = i.Map<ct.CardId, Card>;
-export type Players = i.Set<Player>;
+export type Games = i.Map<ct.GameId, ct.Game>;
 export type Users = i.Map<ct.UserId, User>;
-
-export enum Team {
-  Assassin = "Assassin",
-  Spymaster = "Spymaster",
-  Bystander = "Bystander",
-  Team1 = "Team 1",
-  Team2 = "Team 2"
-}
 
 export interface User {
   id: ct.UserId;
   socket: io.Socket;
-}
-
-export interface Player {
-  id: ct.PlayerId;
-  alias: ct.Option<string>;
-  team: Team;
-}
-
-export interface Card {
-  id: ct.CardId;
-  text: string;
-  team: Team;
-  flipped: boolean;
-}
-
-export interface Game {
-  id: ct.GameId;
-  // alais: Option<string>;
-  // cards: Cards;
-  players: Players;
 }
 
 export interface ServerReduxState {

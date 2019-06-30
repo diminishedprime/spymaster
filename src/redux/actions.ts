@@ -12,8 +12,21 @@ import * as t from "../types";
 //   userId
 // });
 
+export const setPage = ta.createAction("set-page", action => (page: t.Page) =>
+  action({ page })
+);
+
+export const setGame = ta.createAction("set-game", action => (game: t.Game) =>
+  action({ game })
+);
+
 export const newGame = ta.createAction("new-game", action => () =>
   action({ newGame: "newGame" })
+);
+
+export const joinGame = ta.createAction(
+  "join-game",
+  action => (gameId: t.GameId) => action({ gameId })
 );
 
 export const noOp = ta.createAction("no-op", action => () => action({}));

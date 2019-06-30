@@ -26,29 +26,72 @@ const initialState: t.ServerReduxState = {
 
 const serverReduxStateLens = m.Lens.fromProp<t.ServerReduxState>();
 
-const lens = {
-  server: serverReduxStateLens("server"),
-  games: serverReduxStateLens("games"),
-  game: (id: t.GameId) => {
-    const getter = (a: t.Games) => t.fromNullable(a.get(id));
-    const setter = (c: t.Option<t.Game>) => (cs: t.Games) =>
-      c.isSome() ? cs.set(c.value.id, c.value) : cs;
-    return serverReduxStateLens("games").compose(
-      new m.Lens<t.Games, t.Option<t.Game>>(getter, setter)
-    );
-  },
-  users: serverReduxStateLens("users"),
-  user: (id: t.UserId) => {
-    const getter = (a: t.Users) => t.fromNullable(a.get(id));
-    const setter = (c: t.Option<t.User>) => (cs: t.Users) =>
-      c.isSome() ? cs.set(c.value.id, c.value) : cs;
-    return serverReduxStateLens("users").compose(
-      new m.Lens<t.Users, t.Option<t.User>>(getter, setter)
-    );
-  }
-};
+const lens = (() => {
+  const server = serverReduxStateLens("server");
+  const games = serverReduxStateLens("games");
+  const users = serverReduxStateLens("users");
 
-const newGame = (id: t.GameId): t.Game => ({ id, players: i.Set() });
+  const game = (id: t.GameId) => {
+    const getter = (games: t.Games) => t.fromNullable(games.get(id));
+    const setter = (game: t.Option<t.Game>) => (games: t.Games) =>
+      game.isSome() ? games.set(game.value.id, game.value) : games;
+    return games.compose(new m.Lens<t.Games, t.Option<t.Game>>(getter, setter));
+  };
+
+  const user = (userId: t.UserId) => {
+    const getter = (users: t.Users) => t.fromNullable(users.get(userId));
+    const setter = (user: t.Option<t.User>) => (users: t.Users) =>
+      user.isSome() ? users.set(user.value.id, user.value) : users;
+    return users.compose(new m.Lens<t.Users, t.Option<t.User>>(getter, setter));
+  };
+
+  const players = (gameId: t.GameId) => {
+    // const sub = m.Lens.fromProp<t.Game>()("players")
+    // const getter = ()
+    const getter = (game: t.Option<t.Game>) => game.map(game => game.players);
+    const setter = (players: t.Option<t.Players>) => (game: t.Option<t.Game>) =>
+      game.map(game =>
+        players.isSome()
+          ? {
+              ...game,
+              players: players.value
+            }
+          : game
+      );
+    const base = game(gameId);
+    return base.compose(
+      new m.Lens<t.Option<t.Game>, t.Option<t.Players>>(getter, setter)
+    );
+  };
+
+  const player = (gameId: t.GameId, playerId: t.PlayerId) => {
+    const getter = (players: t.Option<t.Players>) => {
+      return players.chain(players => t.fromNullable(players.get(playerId)));
+    };
+    const setter = (player: t.Option<t.Player>) => (
+      players: t.Option<t.Players>
+    ) =>
+      players.map(players =>
+        player.isSome() ? players.set(playerId, player.value) : players
+      );
+    const base = players(gameId);
+    return base.compose(
+      new m.Lens<t.Option<t.Players>, t.Option<t.Player>>(getter, setter)
+    );
+  };
+
+  return {
+    server,
+    games,
+    game,
+    users,
+    user,
+    players,
+    player
+  };
+})();
+
+const newGame = (id: t.GameId): t.Game => ({ id, players: i.Map() });
 
 const app = ta
   .createReducer(initialState)
@@ -58,8 +101,47 @@ const app = ta
   .handleAction(a.addUser, (state, { payload }) =>
     lens.user(payload.id).set(t.some(payload))(state)
   )
+  .handleAction(a.fromClient, (state, { payload }) => {
+    if (ta.isActionOf(ca.joinGame)(payload.clientAction)) {
+      const clientId = payload.clientId;
+      const p = payload.clientAction.payload;
+      return lens
+        .player(p.gameId, clientId)
+        .set(t.some({ id: clientId, alias: t.none, team: t.Team.Bystander }))(
+        state
+      );
+    }
+    return state;
+  })
   .handleAction(a.connectWebsocket, (state, { payload }) =>
     lens.server.set(t.some(payload.httpServer))(state)
+  );
+
+const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
+  action: ta.ActionType<typeof a.fromClient>
+): t.RootAction[] => {
+  const actions: t.RootAction[] = [];
+  const clientAction = action.payload.clientAction;
+  const userId = action.payload.clientId;
+  if (ta.isActionOf(ca.joinGame)(clientAction)) {
+    const game = lens.game(clientAction.payload.gameId).get(state$.value);
+    if (game.isSome()) {
+      actions.push(a.sendAction(userId, ca.setGame(game.value)));
+      actions.push(a.sendAction(userId, ca.setPage(t.Page)));
+    } else {
+      // TODO - this could have better error handling later.
+    }
+  }
+  if (ta.isActionOf(ca.newGame)(clientAction)) {
+    actions.push(a.newGame(uuid4()));
+  }
+  return actions;
+};
+
+const fromClientEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    filter(ta.isActionOf(a.fromClient)),
+    flatMap(fromClient(state$))
   );
 
 const updateGameIdsEpic: t.Epic = (action$, state$) =>
@@ -72,19 +154,6 @@ const updateGameIdsEpic: t.Epic = (action$, state$) =>
       return userIds.map(userId =>
         a.sendAction(userId, ca.setGameIds(gameIds))
       );
-    })
-  );
-
-const newGameClientEpic: t.Epic = action$ =>
-  action$.pipe(
-    filter(
-      action =>
-        ta.isActionOf(a.fromClient)(action) &&
-        ta.isActionOf(ca.newGame)(action.payload.clientAction)
-    ),
-    map(_ => {
-      const id = uuid4();
-      return a.newGame(id);
     })
   );
 
@@ -124,12 +193,10 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.connectWebsocket)),
     flatMap(action => {
-      console.log("connectWebsocket happened.");
       const socketServer = io(action.payload.httpServer);
       return fromEventPattern<t.RootAction>(
         add => {
           socketServer.on("connection", (socket: any) => {
-            console.log("there was a connection");
             const userId = uuid4();
             // Add this user to the server.
             add(a.addUser(userId, socket));
@@ -144,7 +211,6 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
 
             // This any is actually events that the client can send?
             socket.on("client action", (clientAction: any) => {
-              console.log("a client action happened", { clientAction });
               add(a.fromClient(userId, clientAction));
             });
           });
@@ -160,12 +226,28 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
     })
   );
 
+const logActionEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    filter(action => !ta.isActionOf(a.noOp)(action)),
+    map(action => {
+      console.log();
+      console.log(action.type);
+      const loggable = {
+        games: state$.value.games,
+        clients: state$.value.users.map(u => u.id)
+      };
+      console.log(JSON.stringify(loggable, undefined, "  "));
+      return a.noOp();
+    })
+  );
+
 const rootEpic = ro.combineEpics(
+  logActionEpic,
   clientWebsocketEpic,
   sendMessageEpic,
   sendActionEpic,
-  newGameClientEpic,
-  updateGameIdsEpic
+  updateGameIdsEpic,
+  fromClientEpic
 );
 const epicMiddleware = ro.createEpicMiddleware<
   t.RootAction,

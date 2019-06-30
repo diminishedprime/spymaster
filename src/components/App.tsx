@@ -2,6 +2,7 @@ import React from "react";
 import ConnectToServer from "./ConnectToServer";
 import styled from "styled-components";
 import Lobby from "./Lobby";
+import * as r from "../redux";
 /* import * as t from "../types";
  * import ErrorBar from "./ErrorBar";
  * import Game from "./game";
@@ -67,9 +68,23 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const Debug: React.FC = () => {
+  const game = r.useSelector(t => t.game);
+  const page = r.useSelector(t => t.page);
+  return (
+    <div>
+      <h3>Game</h3>
+      <div>{JSON.stringify(game.isSome() ? game.value : {})}</div>
+      <h3>Page</h3>
+      <div>{JSON.stringify(page)}</div>
+    </div>
+  );
+};
+
 const App: React.FC = () => {
   return (
     <Wrapper>
+      <Debug />
       <ConnectToServer />
       <Lobby />
     </Wrapper>

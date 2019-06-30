@@ -413,14 +413,11 @@ export * from "./common-types";
 
 export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
 
-export enum Page {
-  Lobby = "Lobby"
-}
-
 export interface ReduxState2 {
   socket: ct.Option<SocketIOClient.Socket>;
-  page: Page;
+  page: ct.Page;
   gameIds: ct.GameId[];
+  game: ct.Option<ct.Game>;
 }
 
 export type Dispatch = ReduxDispatch<RootAction>;

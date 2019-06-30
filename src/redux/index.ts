@@ -29,7 +29,8 @@ export const useSelector = <T>(
 const initialState: t.ReduxState2 = {
   socket: t.none,
   page: t.Page.Lobby,
-  gameIds: []
+  gameIds: [],
+  game: t.none
 };
 
 export const lens = (() => {
@@ -37,11 +38,13 @@ export const lens = (() => {
 
   const socket = reduxStateLens("socket");
   const page = reduxStateLens("page");
+  const game = reduxStateLens("game");
   const inLobby = page.composeGetter(new m.Getter(p => p === t.Page.Lobby));
 
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    game,
     socket,
     page,
     inLobby,
@@ -51,6 +54,12 @@ export const lens = (() => {
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.setPage, (state, { payload }) =>
+    lens.page.set(payload.page)(state)
+  )
+  .handleAction(a.setGame, (state, { payload }) =>
+    lens.game.set(t.some(payload.game))(state)
+  )
   .handleAction(a.setSocket, (state, { payload }) =>
     lens.socket.set(t.some(payload.socket))(state)
   )
@@ -61,7 +70,10 @@ const app = ta
 const sendActionEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     // Extend this filter for events that should be sent to the server.
-    filter(action => ta.isActionOf(a.newGame)(action)),
+    filter(
+      action =>
+        ta.isActionOf(a.newGame)(action) || ta.isActionOf(a.joinGame)(action)
+    ),
     map(action => {
       const socket = state$.value.socket;
       if (socket.isSome()) {
@@ -77,7 +89,7 @@ const logActionEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(action => !ta.isActionOf(a.noOp)(action)),
     map(action => {
-      console.log({ action, state: state$.value });
+      console.log(action.type, { action, state: state$.value });
       return a.noOp();
     })
   );
