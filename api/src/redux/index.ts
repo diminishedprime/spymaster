@@ -18,13 +18,8 @@ declare module "typesafe-actions" {
   }
 }
 
-const initialGames: t.Games = (() => {
-  let games: t.Games = i.Map();
-  return games.set("abcde", { id: "abcde", players: i.Set() });
-})();
-
 const initialState: t.ServerReduxState = {
-  games: initialGames,
+  games: i.Map(),
   users: i.Map(),
   server: t.none
 };
@@ -33,6 +28,15 @@ const serverReduxStateLens = m.Lens.fromProp<t.ServerReduxState>();
 
 const lens = {
   server: serverReduxStateLens("server"),
+  games: serverReduxStateLens("games"),
+  game: (id: t.GameId) => {
+    const getter = (a: t.Games) => t.fromNullable(a.get(id));
+    const setter = (c: t.Option<t.Game>) => (cs: t.Games) =>
+      c.isSome() ? cs.set(c.value.id, c.value) : cs;
+    return serverReduxStateLens("games").compose(
+      new m.Lens<t.Games, t.Option<t.Game>>(getter, setter)
+    );
+  },
   users: serverReduxStateLens("users"),
   user: (id: t.UserId) => {
     const getter = (a: t.Users) => t.fromNullable(a.get(id));
@@ -44,8 +48,13 @@ const lens = {
   }
 };
 
+const newGame = (id: t.GameId): t.Game => ({ id, players: i.Set() });
+
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.newGame, (state, { payload }) =>
+    lens.game(payload.id).set(t.some(newGame(payload.id)))(state)
+  )
   .handleAction(a.addUser, (state, { payload }) =>
     lens.user(payload.id).set(t.some(payload))(state)
   )
@@ -53,11 +62,37 @@ const app = ta
     lens.server.set(t.some(payload.httpServer))(state)
   );
 
-const sendActionEpic: t.Epic = (action$, state) =>
+const updateGameIdsEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    filter(ta.isActionOf(a.newGame)),
+    flatMap(action => {
+      action.payload.id;
+      const userIds = state$.value.users.keySeq().toArray();
+      const gameIds = state$.value.games.keySeq().toArray();
+      return userIds.map(userId =>
+        a.sendAction(userId, ca.setGameIds(gameIds))
+      );
+    })
+  );
+
+const newGameClientEpic: t.Epic = action$ =>
+  action$.pipe(
+    filter(
+      action =>
+        ta.isActionOf(a.fromClient)(action) &&
+        ta.isActionOf(ca.newGame)(action.payload.clientAction)
+    ),
+    map(_ => {
+      const id = uuid4();
+      return a.newGame(id);
+    })
+  );
+
+const sendActionEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.sendAction)),
     map(action => {
-      const socket = lens.user(action.payload.id).get(state.value);
+      const socket = lens.user(action.payload.id).get(state$.value);
       if (socket.isSome()) {
         socket.value.socket.emit("action", action.payload.clientAction);
       } else {
@@ -69,11 +104,11 @@ const sendActionEpic: t.Epic = (action$, state) =>
     })
   );
 
-const sendMessageEpic: t.Epic = (action$, state) =>
+const sendMessageEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.sendMessage)),
     map(action => {
-      const socket = lens.user(action.payload.id).get(state.value);
+      const socket = lens.user(action.payload.id).get(state$.value);
       if (socket.isSome()) {
         socket.value.socket.emit("message", action.payload.message);
       } else {
@@ -108,8 +143,9 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
             );
 
             // This any is actually events that the client can send?
-            socket.on("client action", (a: any) => {
-              add(a);
+            socket.on("client action", (clientAction: any) => {
+              console.log("a client action happened", { clientAction });
+              add(a.fromClient(userId, clientAction));
             });
           });
         },
@@ -127,7 +163,9 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
 const rootEpic = ro.combineEpics(
   clientWebsocketEpic,
   sendMessageEpic,
-  sendActionEpic
+  sendActionEpic,
+  newGameClientEpic,
+  updateGameIdsEpic
 );
 const epicMiddleware = ro.createEpicMiddleware<
   t.RootAction,

@@ -1,6 +1,6 @@
 import React from "react";
 import * as r from "../redux";
-import * as t from "../types";
+import * as a from "../redux/actions";
 /* import React from "react";
  * import * as t from "./../types";
  * import * as actions from "../redux/actions";
@@ -52,8 +52,10 @@ import * as t from "../types";
 const Lobby: React.FC = () => {
   const inLobby = r.useSelector(r.lens.inLobby.get);
   const gameIds = r.useSelector(r.lens.gameIds.get);
+  const dispatch = r.useDispatch();
   return inLobby ? (
     <div>
+      <button onClick={() => dispatch(a.newGame())}>New Game</button>
       <h1>Game Ids:</h1>
       {gameIds.map(id => (
         <div key={id}>{id}</div>

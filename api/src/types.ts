@@ -114,13 +114,10 @@ export * from "../../src/common-types";
 //   | CHANGE_BACKGROUND_COLOR_SERVERAction
 //   | REMOVE_USER_FROM_GAMEAction;
 
-export type CardId = string;
-export type PlayerId = string;
-export type UserId = string;
 export type Games = i.Map<ct.GameId, Game>;
-export type Cards = i.Map<CardId, Card>;
+export type Cards = i.Map<ct.CardId, Card>;
 export type Players = i.Set<Player>;
-export type Users = i.Map<UserId, User>;
+export type Users = i.Map<ct.UserId, User>;
 
 export enum Team {
   Assassin = "Assassin",
@@ -131,18 +128,18 @@ export enum Team {
 }
 
 export interface User {
-  id: UserId;
+  id: ct.UserId;
   socket: io.Socket;
 }
 
 export interface Player {
-  id: PlayerId;
+  id: ct.PlayerId;
   alias: ct.Option<string>;
   team: Team;
 }
 
 export interface Card {
-  id: CardId;
+  id: ct.CardId;
   text: string;
   team: Team;
   flipped: boolean;
@@ -162,5 +159,9 @@ export interface ServerReduxState {
 }
 
 export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
+
+export type ClientRootAction = ta.ActionType<
+  typeof import("../../src/redux/actions")
+>;
 
 export type Epic = ro.Epic<RootAction, RootAction, ServerReduxState>;

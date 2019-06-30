@@ -6,3 +6,6 @@ export const fromNullable = fp.option.fromNullable;
 export type Option<T> = fp.option.Option<T>;
 
 export type GameId = string;
+export type CardId = string;
+export type PlayerId = string;
+export type UserId = string;

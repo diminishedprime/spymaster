@@ -58,6 +58,21 @@ const app = ta
     lens.gameIds.set(payload.gameIds)(state)
   );
 
+const sendActionEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    // Extend this filter for events that should be sent to the server.
+    filter(action => ta.isActionOf(a.newGame)(action)),
+    map(action => {
+      const socket = state$.value.socket;
+      if (socket.isSome()) {
+        socket.value.emit("client action", action);
+      } else {
+        console.error("No socket connected.");
+      }
+      return a.noOp();
+    })
+  );
+
 const logActionEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(action => !ta.isActionOf(a.noOp)(action)),
@@ -71,7 +86,6 @@ const websocketEpic: t.Epic = action$ =>
   action$.pipe(
     filter(ta.isActionOf(a.connectWebsocket)),
     flatMap(action => {
-      console.log("connect websocket to server");
       const socket = io.connect(action.payload.url);
       return fromEventPattern<t.RootAction>(
         (add: any) => {
@@ -93,7 +107,7 @@ const websocketEpic: t.Epic = action$ =>
     })
   );
 
-const rootEpic = ro.combineEpics(websocketEpic, logActionEpic);
+const rootEpic = ro.combineEpics(websocketEpic, logActionEpic, sendActionEpic);
 const epicMiddleware = ro.createEpicMiddleware<
   t.RootAction,
   t.RootAction,

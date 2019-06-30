@@ -3,6 +3,12 @@ import * as ta from "typesafe-actions";
 import * as http from "http";
 import * as io from "socket.io";
 
+export const fromClient = ta.createAction(
+  "from-client",
+  action => (clientId: t.UserId, clientAction: t.ClientRootAction) =>
+    action({ clientId, clientAction })
+);
+
 // export const afAddUser = (userId: t.UserId, ws: any) => ({
 //   type: t.ServerActionType.ADD_USER,
 //   ws,
@@ -36,6 +42,10 @@ export const sendMessage = ta.createAction(
 export const sendAction = ta.createAction(
   "send-action",
   action => (id: t.UserId, clientAction: any) => action({ id, clientAction })
+);
+
+export const newGame = ta.createAction("new-game", action => (id: t.GameId) =>
+  action({ id })
 );
 
 export const noOp = ta.createAction("no-op", action => () => action({}));

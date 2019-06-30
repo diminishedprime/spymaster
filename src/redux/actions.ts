@@ -1,5 +1,4 @@
 import * as ta from "typesafe-actions";
-import * as http from "http";
 import * as t from "../types";
 
 // export const afAddUser = (userId: t.UserId, ws: any) => ({
@@ -12,6 +11,10 @@ import * as t from "../types";
 //   type: t.ServerActionType.REMOVE_USER,
 //   userId
 // });
+
+export const newGame = ta.createAction("new-game", action => () =>
+  action({ newGame: "newGame" })
+);
 
 export const noOp = ta.createAction("no-op", action => () => action({}));
 
