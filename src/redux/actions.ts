@@ -12,6 +12,11 @@ import * as t from "../types";
 //   userId
 // });
 
+export const setTeam = ta.createAction(
+  "set-team",
+  action => (team: t.Team.Team1 | t.Team.Team2) => action({ team })
+);
+
 export const setPage = ta.createAction("set-page", action => (page: t.Page) =>
   action({ page })
 );
@@ -22,6 +27,12 @@ export const setGame = ta.createAction("set-game", action => (game: t.Game) =>
 
 export const newGame = ta.createAction("new-game", action => () =>
   action({ newGame: "newGame" })
+);
+
+export const requestTeam = ta.createAction(
+  "request-team",
+  action => (gameId: t.GameId, team: t.Team.Team1 | t.Team.Team2) =>
+    action({ team, gameId })
 );
 
 export const joinGame = ta.createAction(

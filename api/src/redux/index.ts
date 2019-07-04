@@ -26,7 +26,7 @@ const initialState: t.ServerReduxState = {
 
 const serverReduxStateLens = m.Lens.fromProp<t.ServerReduxState>();
 
-const lens = (() => {
+export const lens = (() => {
   const server = serverReduxStateLens("server");
   const games = serverReduxStateLens("games");
   const users = serverReduxStateLens("users");
@@ -111,6 +111,14 @@ const app = ta
         state
       );
     }
+    if (ta.isActionOf(ca.requestTeam)(payload.clientAction)) {
+      const clientId = payload.clientId;
+      const gameId = payload.clientAction.payload.gameId;
+      const team = payload.clientAction.payload.team;
+      return lens
+        .player(gameId, clientId)
+        .modify(player => player.map(player => ({ ...player, team })))(state);
+    }
     return state;
   })
   .handleAction(a.connectWebsocket, (state, { payload }) =>
@@ -131,6 +139,9 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     } else {
       // TODO - this could have better error handling later.
     }
+  }
+  if (ta.isActionOf(ca.requestTeam)(clientAction)) {
+    actions.push(a.sendAction(userId, ca.setTeam(clientAction.payload.team)));
   }
   if (ta.isActionOf(ca.newGame)(clientAction)) {
     actions.push(a.newGame(uuid4()));

@@ -44,6 +44,7 @@ let createServerFake = (): io.Server => {
 
 interface FakeClient {
   sendAction: (action: t.ClientRootAction) => void;
+  emit: jest.Mock;
 }
 
 const addFakeClient = (): FakeClient => {
@@ -96,9 +97,15 @@ describe("After setting up the server", () => {
 
   describe("With a client", () => {
     let client: FakeClient;
+    let clientId: string;
 
     beforeEach(() => {
       client = addFakeClient();
+      client.emit.mockClear();
+      clientId = store
+        .getState()
+        .users.keySeq()
+        .toArray()[0];
     });
 
     test("newGame creates a new game", () => {
@@ -115,32 +122,53 @@ describe("After setting up the server", () => {
     });
 
     describe("and a new game", () => {
+      let gameId: string;
       beforeEach(() => {
         client.sendAction(ca.newGame());
-      });
-      test("can join existing game", () => {
-        const existingGame = store
+        gameId = store
           .getState()
           .games.keySeq()
           .toArray()[0];
-
+      });
+      test("can join existing game", () => {
         expect(
           store
             .getState()
-            .games.get(existingGame)!
+            .games.get(gameId)!
             .players.keySeq()
             .toArray().length
         ).toEqual(0);
 
-        client.sendAction(ca.joinGame(existingGame));
+        client.sendAction(ca.joinGame(gameId));
 
         expect(
           store
             .getState()
-            .games.get(existingGame)!
+            .games.get(gameId)!
             .players.keySeq()
             .toArray().length
         ).toEqual(1);
+      });
+
+      describe("and joining that game", () => {
+        beforeEach(() => {
+          client.sendAction(ca.joinGame(gameId));
+        });
+
+        test("Can request a team", () => {
+          client.sendAction(ca.requestTeam(gameId, t.Team.Team1));
+
+          const actualTeam = sut.lens
+            .player(gameId, clientId)
+            .get(store.getState())
+            .map(p => p.team);
+
+          expect(actualTeam).toEqual(t.some(t.Team.Team1));
+          const emitMockCalls = client.emit.mock.calls;
+          expect(emitMockCalls[emitMockCalls.length - 1][1]).toEqual(
+            ca.setTeam(t.Team.Team1)
+          );
+        });
       });
     });
   });
