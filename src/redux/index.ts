@@ -40,10 +40,12 @@ export const lens = (() => {
   const page = reduxStateLens("page");
   const game = reduxStateLens("game");
   const inLobby = page.composeGetter(new m.Getter(p => p === t.Page.Lobby));
+  const inGame = page.composeGetter(new m.Getter(p => p === t.Page.Game));
 
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    inGame,
     game,
     socket,
     page,

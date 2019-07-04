@@ -2,6 +2,7 @@ import React from "react";
 import ConnectToServer from "./ConnectToServer";
 import styled from "styled-components";
 import Lobby from "./Lobby";
+import Game from "./Game";
 import * as r from "../redux";
 /* import * as t from "../types";
  * import ErrorBar from "./ErrorBar";
@@ -87,6 +88,7 @@ const App: React.FC = () => {
       <Debug />
       <ConnectToServer />
       <Lobby />
+      <Game />
     </Wrapper>
   );
 };
