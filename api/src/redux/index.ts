@@ -4,7 +4,7 @@ import uuid4 from "uuid/v4";
 import * as i from "immutable";
 import * as ro from "redux-observable";
 import * as t from "../types";
-import { createStore, applyMiddleware } from "redux";
+import * as redux from "redux";
 import { filter, flatMap, map } from "rxjs/operators";
 import { fromEventPattern } from "rxjs";
 import * as ta from "typesafe-actions";
@@ -249,10 +249,12 @@ const rootEpic = ro.combineEpics(
   updateGameIdsEpic,
   fromClientEpic
 );
-const epicMiddleware = ro.createEpicMiddleware<
-  t.RootAction,
-  t.RootAction,
-  t.ServerReduxState
->();
-export const store = createStore(app, applyMiddleware(epicMiddleware));
-epicMiddleware.run(rootEpic);
+const createEpicMiddleware = () =>
+  ro.createEpicMiddleware<t.RootAction, t.RootAction, t.ServerReduxState>();
+
+export const createStore = () => {
+  const middleware = createEpicMiddleware();
+  const store = redux.createStore(app, redux.applyMiddleware(middleware));
+  middleware.run(rootEpic);
+  return store;
+};

@@ -1,12 +1,11 @@
 import * as path from "path";
-import * as fs from "fs";
 import { createServer } from "http";
 
 import express = require("express");
 
 import { PORT, BASE_URL } from "../../src/constants";
 
-import { store } from "./redux/index";
+import * as redux from "./redux/index";
 import { connectWebsocket } from "./redux/actions";
 
 // const options = {
@@ -19,6 +18,7 @@ const app = express();
 const server = createServer(app);
 
 // Connect websocket server
+const store = redux.createStore();
 store.dispatch(connectWebsocket(server));
 
 // Serve static resources
