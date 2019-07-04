@@ -20,11 +20,7 @@ const JoinTeam: React.FC = () => {
     [gameId, dispatch]
   );
 
-  if (team.isNone()) {
-    throw new Error("This invariant should not hoppen.");
-  }
-
-  return (
+  return team.isSome() ? (
     <div>
       <button
         disabled={team.value === t.Team.Team1}
@@ -39,7 +35,7 @@ const JoinTeam: React.FC = () => {
         Team 2
       </button>
     </div>
-  );
+  ) : null;
 };
 
 const Game: React.FC = () => {

@@ -136,18 +136,13 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   const clientAction = action.payload.clientAction;
   const userId = action.payload.clientId;
   if (ta.isActionOf(ca.joinGame)(clientAction)) {
-    const game = lens.game(clientAction.payload.gameId).get(state$.value);
-    if (game.isSome()) {
-      actions.push(a.sendAction(userId, ca.setGame(game.value)));
-      actions.push(a.sendAction(userId, ca.setPage(t.Page.Game)));
-    } else {
-      // TODO - this could have better error handling later.
-    }
+    actions.push(a.refreshGameState(clientAction.payload.gameId));
+    actions.push(a.sendAction(userId, ca.setPage(t.Page.Game)));
   }
   if (ta.isActionOf(ca.requestTeam)(clientAction)) {
     const game = lens.game(clientAction.payload.gameId).get(state$.value);
     if (game.isSome()) {
-      actions.push(a.sendAction(userId, ca.setGame(game.value)));
+      actions.push(a.refreshGameState(game.value.id));
     } else {
       // TODO - this could have better error handling later.
     }
@@ -174,6 +169,26 @@ const updateGameIdsEpic: t.Epic = (action$, state$) =>
       return userIds.map(userId =>
         a.sendAction(userId, ca.setGameIds(gameIds))
       );
+    })
+  );
+
+const refreshGameStateEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    filter(ta.isActionOf(a.refreshGameState)),
+    flatMap(action => {
+      console.log("this action is happening");
+      const gameId = action.payload.id;
+      const game = lens.game(action.payload.id).get(state$.value);
+      console.log({ game });
+      if (game.isSome()) {
+        return game.value.players
+          .keySeq()
+          .toArray()
+          .map(id => a.sendAction(id, ca.setGame(game.value)));
+      } else {
+        console.error("this invariant should not happen");
+        return [a.noOp()];
+      }
     })
   );
 
@@ -274,7 +289,8 @@ const logActionEpic: t.Epic = (action$, state$) =>
   );
 
 const rootEpic = ro.combineEpics(
-  logActionEpic,
+  refreshGameStateEpic,
+  // logActionEpic,
   clientWebsocketEpic,
   sendMessageEpic,
   sendActionEpic,

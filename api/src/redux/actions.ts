@@ -44,6 +44,11 @@ export const sendMessage = ta.createAction(
   action => (id: t.UserId, message: string) => action({ id, message })
 );
 
+export const refreshGameState = ta.createAction(
+  "refresh-game-state",
+  action => (id: t.GameId) => action({ id })
+);
+
 export const sendAction = ta.createAction(
   "send-action",
   action => (id: t.UserId, clientAction: any) => action({ id, clientAction })
