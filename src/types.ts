@@ -415,6 +415,7 @@ export type RootAction = ta.ActionType<typeof import("./redux/actions")>;
 
 export interface ReduxState2 {
   socket: ct.Option<SocketIOClient.Socket>;
+  playerId: ct.Option<ct.PlayerId>;
   page: ct.Page;
   gameIds: ct.GameId[];
   game: ct.Option<ct.Game>;

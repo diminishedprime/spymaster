@@ -1,4 +1,5 @@
 import createSagaMiddleware from "redux-saga";
+import transit from "../../../src/transit";
 import io from "socket.io";
 import uuid4 from "uuid/v4";
 import * as i from "immutable";
@@ -141,7 +142,12 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     }
   }
   if (ta.isActionOf(ca.requestTeam)(clientAction)) {
-    actions.push(a.sendAction(userId, ca.setTeam(clientAction.payload.team)));
+    const game = lens.game(clientAction.payload.gameId).get(state$.value);
+    if (game.isSome()) {
+      actions.push(a.sendAction(userId, ca.setGame(game.value)));
+    } else {
+      // TODO - this could have better error handling later.
+    }
   }
   if (ta.isActionOf(ca.newGame)(clientAction)) {
     actions.push(a.newGame(uuid4()));
@@ -174,7 +180,10 @@ const sendActionEpic: t.Epic = (action$, state$) =>
     map(action => {
       const socket = lens.user(action.payload.id).get(state$.value);
       if (socket.isSome()) {
-        socket.value.socket.emit("action", action.payload.clientAction);
+        socket.value.socket.emit(
+          "action",
+          transit.toJSON(action.payload.clientAction)
+        );
       } else {
         console.error(
           `Client: ${action.payload.id} is not connected to the server`
@@ -190,7 +199,10 @@ const sendMessageEpic: t.Epic = (action$, state$) =>
     map(action => {
       const socket = lens.user(action.payload.id).get(state$.value);
       if (socket.isSome()) {
-        socket.value.socket.emit("message", action.payload.message);
+        socket.value.socket.emit(
+          "message",
+          transit.toJSON(action.payload.message)
+        );
       } else {
         console.error(
           `Client: ${action.payload.id} is not connected to the server`
@@ -213,6 +225,7 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
             add(a.addUser(userId, socket));
             // Send message about connecting.
             add(a.sendMessage(userId, "thanks for connecting."));
+            add(a.sendAction(userId, ca.setPlayerId(userId)));
             add(
               a.sendAction(
                 userId,
@@ -221,7 +234,8 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
             );
 
             // This any is actually events that the client can send?
-            socket.on("client action", (clientAction: any) => {
+            socket.on("client action", (clientActionString: any) => {
+              const clientAction = transit.fromJSON(clientActionString);
               add(a.fromClient(userId, clientAction));
             });
           });

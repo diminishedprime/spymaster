@@ -12,7 +12,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": { "*" : ["typings/*"] }
   },
   "include": ["src"]
 }

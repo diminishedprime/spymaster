@@ -20,6 +20,8 @@
     "shuffle-array": "^1.0.1",
     "socket.io": "^2.0.3",
     "styled-components": "^4.3.1",
+    "transit-immutable-js": "^0.7.0",
+    "transit-js": "^0.8.861",
     "typesafe-actions": "^4.4.1",
     "typescript": "^3.5.1",
     "uuid": "^3.1.0"

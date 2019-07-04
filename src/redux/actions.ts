@@ -12,9 +12,9 @@ import * as t from "../types";
 //   userId
 // });
 
-export const setTeam = ta.createAction(
-  "set-team",
-  action => (team: t.Team.Team1 | t.Team.Team2) => action({ team })
+export const setPlayerId = ta.createAction(
+  "set-player-id",
+  action => (playerId: t.PlayerId) => action({ id: playerId })
 );
 
 export const setPage = ta.createAction("set-page", action => (page: t.Page) =>

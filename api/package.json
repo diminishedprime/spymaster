@@ -9,12 +9,15 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "fp-ts": "^1.18.2",
     "immutable": "^4.0.0-rc.12",
     "redux": "^4.0.1",
     "redux-observable": "^1.1.0",
     "redux-saga": "^1.0.3",
     "rxjs": "^6.5.2",
     "socket.io": "^2.2.0",
+    "transit-immutable-js": "^0.7.0",
+    "transit-js": "^0.8.861",
     "typesafe-actions": "^4.4.1",
     "typescript": "^3.5.2",
     "uuid": "^3.3.2"

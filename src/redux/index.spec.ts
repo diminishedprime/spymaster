@@ -3,6 +3,7 @@ import * as a from "./actions";
 import * as io from "socket.io-client";
 import * as t from "../types";
 import * as i from "immutable";
+import transit from "../transit";
 
 jest.mock("socket.io-client");
 
@@ -73,7 +74,9 @@ describe("For the action: ", () => {
 
       store.dispatch(a.newGame());
 
-      expect(socketMock.emit.mock.calls[0][1]).toEqual(a.newGame());
+      expect(socketMock.emit.mock.calls[0][1]).toEqual(
+        transit.toJSON(a.newGame())
+      );
     });
   });
 
@@ -83,7 +86,9 @@ describe("For the action: ", () => {
 
       store.dispatch(a.joinGame("123"));
 
-      expect(socketMock.emit.mock.calls[0][1]).toEqual(a.joinGame("123"));
+      expect(socketMock.emit.mock.calls[0][1]).toEqual(
+        transit.toJSON(a.joinGame("123"))
+      );
     });
   });
 

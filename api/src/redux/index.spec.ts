@@ -3,6 +3,7 @@ import * as a from "./actions";
 import * as ca from "../../../src/redux/actions";
 import * as t from "../types";
 import io from "socket.io";
+import transit from "../../../src/transit";
 import * as i from "immutable";
 
 jest.mock("socket.io");
@@ -18,7 +19,7 @@ let logMock = jest.fn();
 let createClientFake = (cbs: any): any => {
   const on = (eventType: string, cb: any) => {
     if (eventType === "client action") {
-      cbs.sendAction = cb;
+      cbs.sendAction = (thing: any) => cb(transit.toJSON(thing));
     }
   };
   const emit = jest.fn();
@@ -33,7 +34,6 @@ let createClientFake = (cbs: any): any => {
 let createServerFake = (): io.Server => {
   const on = (eventType: string, cb: (socket: any) => void) => {
     if (eventType === "connection") {
-      console.log("yeehaw");
       onSocket = cb;
     }
   };
@@ -166,7 +166,7 @@ describe("After setting up the server", () => {
           expect(actualTeam).toEqual(t.some(t.Team.Team1));
           const emitMockCalls = client.emit.mock.calls;
           expect(emitMockCalls[emitMockCalls.length - 1][1]).toEqual(
-            ca.setTeam(t.Team.Team1)
+            transit.toJSON(ca.setGame(store.getState().games.get(gameId)!))
           );
         });
       });

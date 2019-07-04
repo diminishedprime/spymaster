@@ -1,10 +1,10 @@
-import * as fp from "fp-ts";
 import * as i from "immutable";
+import * as option from "fp-ts/lib/Option";
 
-export const none = fp.option.none;
-export const some = fp.option.some;
-export const fromNullable = fp.option.fromNullable;
-export type Option<T> = fp.option.Option<T>;
+export const none = option.none;
+export const some = option.some;
+export const fromNullable = option.fromNullable;
+export type Option<T> = option.Option<T>;
 
 export type GameId = string;
 export type CardId = string;

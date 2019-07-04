@@ -1,4 +1,5 @@
 import * as ro from "redux-observable";
+import transit from "../transit";
 import * as redux from "redux";
 import { filter, flatMap, map } from "rxjs/operators";
 import * as m from "monocle-ts";
@@ -30,7 +31,8 @@ const initialState: t.ReduxState2 = {
   socket: t.none,
   page: t.Page.Lobby,
   gameIds: [],
-  game: t.none
+  game: t.none,
+  playerId: t.none
 };
 
 export const lens = (() => {
@@ -41,10 +43,25 @@ export const lens = (() => {
   const game = reduxStateLens("game");
   const inLobby = page.composeGetter(new m.Getter(p => p === t.Page.Lobby));
   const inGame = page.composeGetter(new m.Getter(p => p === t.Page.Game));
+  const gameId = game.composeGetter(new m.Getter(g => g.map(g => g.id)));
+  const player = (userId: t.Option<t.UserId>) =>
+    game.composeGetter(
+      new m.Getter(g =>
+        g.chain(g =>
+          userId.chain(userId => t.fromNullable(g.players.get(userId)))
+        )
+      )
+    );
+  const team = (userId: t.Option<t.UserId>) =>
+    player(userId).composeGetter(new m.Getter(p => p.map(p => p.team)));
+  const playerId = reduxStateLens("playerId");
 
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    team,
+    playerId,
+    gameId,
     inGame,
     game,
     socket,
@@ -56,6 +73,9 @@ export const lens = (() => {
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.setPlayerId, (state, { payload }) =>
+    lens.playerId.set(t.some(payload.id))(state)
+  )
   .handleAction(a.setPage, (state, { payload }) =>
     lens.page.set(payload.page)(state)
   )
@@ -74,12 +94,14 @@ const sendActionEpic: t.Epic = (action$, state$) =>
     // Extend this filter for events that should be sent to the server.
     filter(
       action =>
-        ta.isActionOf(a.newGame)(action) || ta.isActionOf(a.joinGame)(action)
+        ta.isActionOf(a.newGame)(action) ||
+        ta.isActionOf(a.joinGame)(action) ||
+        ta.isActionOf(a.requestTeam)(action)
     ),
     map(action => {
       const socket = state$.value.socket;
       if (socket.isSome()) {
-        socket.value.emit("client action", action);
+        socket.value.emit("client action", transit.toJSON(action));
       } else {
         console.error("No socket connected.");
       }
@@ -104,10 +126,12 @@ const websocketEpic: t.Epic = action$ =>
       return fromEventPattern<t.RootAction>(
         (add: any) => {
           add(a.setSocket(socket));
-          socket.on("message", (message: any) => {
+          socket.on("message", (messageString: any) => {
+            const message = transit.fromJSON(messageString);
             console.log({ message });
           });
-          socket.on("action", (action: any) => {
+          socket.on("action", (messageAction: any) => {
+            const action = transit.fromJSON(messageAction);
             add(action);
           });
         },
