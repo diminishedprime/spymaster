@@ -1,5 +1,5 @@
 import * as ro from "redux-observable";
-import { createStore, applyMiddleware } from "redux";
+import * as redux from "redux";
 import { filter, flatMap, map } from "rxjs/operators";
 import * as m from "monocle-ts";
 import * as ta from "typesafe-actions";
@@ -120,10 +120,13 @@ const websocketEpic: t.Epic = action$ =>
   );
 
 const rootEpic = ro.combineEpics(websocketEpic, logActionEpic, sendActionEpic);
-const epicMiddleware = ro.createEpicMiddleware<
-  t.RootAction,
-  t.RootAction,
-  t.ReduxState2
->();
-export const store = createStore(app, applyMiddleware(epicMiddleware));
-epicMiddleware.run(rootEpic);
+
+const createEpicMiddleware = () =>
+  ro.createEpicMiddleware<t.RootAction, t.RootAction, t.ReduxState2>();
+
+export const createStore = () => {
+  const middleware = createEpicMiddleware();
+  const store = redux.createStore(app, redux.applyMiddleware(middleware));
+  middleware.run(rootEpic);
+  return store;
+};
