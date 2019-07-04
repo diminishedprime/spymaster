@@ -127,7 +127,7 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     const game = lens.game(clientAction.payload.gameId).get(state$.value);
     if (game.isSome()) {
       actions.push(a.sendAction(userId, ca.setGame(game.value)));
-      actions.push(a.sendAction(userId, ca.setPage(t.Page)));
+      actions.push(a.sendAction(userId, ca.setPage(t.Page.Game)));
     } else {
       // TODO - this could have better error handling later.
     }
