@@ -21,6 +21,9 @@ let createClientFake = (cbs: any): any => {
     if (eventType === "client action") {
       cbs.sendAction = (thing: any) => cb(transit.toJSON(thing));
     }
+    if (eventType === "disconnect") {
+      cbs.disconnect = cb;
+    }
   };
   const emit = jest.fn();
   cbs.emit = emit;
@@ -44,6 +47,7 @@ let createServerFake = (): io.Server => {
 
 interface FakeClient {
   sendAction: (action: t.ClientRootAction) => void;
+  disconnect: (reason: string) => void;
   emit: jest.Mock;
 }
 
@@ -106,6 +110,14 @@ describe("After setting up the server", () => {
         .getState()
         .users.keySeq()
         .toArray()[0];
+    });
+
+    test("Client can be removed", () => {
+      expect(store.getState().users.get(clientId)).toBeTruthy();
+
+      client.disconnect("cause");
+
+      expect(store.getState().users.get(clientId)).toBeFalsy();
     });
 
     test("newGame creates a new game", () => {

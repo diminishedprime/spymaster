@@ -34,6 +34,11 @@ export const addUser = ta.createAction(
     })
 );
 
+export const removeUser = ta.createAction(
+  "remove-user",
+  action => (id: t.UserId) => action({ id })
+);
+
 export const sendMessage = ta.createAction(
   "send-message",
   action => (id: t.UserId, message: string) => action({ id, message })

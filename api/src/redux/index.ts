@@ -96,6 +96,9 @@ const newGame = (id: t.GameId): t.Game => ({ id, players: i.Map() });
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.removeUser, (state, { payload }) =>
+    lens.users.modify(users => users.remove(payload.id))(state)
+  )
   .handleAction(a.newGame, (state, { payload }) =>
     lens.game(payload.id).set(t.some(newGame(payload.id)))(state)
   )
@@ -237,6 +240,10 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
             socket.on("client action", (clientActionString: any) => {
               const clientAction = transit.fromJSON(clientActionString);
               add(a.fromClient(userId, clientAction));
+            });
+
+            socket.on("disconnect", (reason: string) => {
+              add(a.removeUser(userId));
             });
           });
         },
