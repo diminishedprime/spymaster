@@ -16,13 +16,13 @@ const ConnectToServer = () => {
 
   const connect = React.useCallback(
     () => dispatch(actions.connectWebsocket(serverAddress)),
-    []
+    [dispatch, serverAddress]
   );
 
   // Automatically connect after 200ms.
   React.useEffect(() => {
     setTimeout(connect, 200);
-  }, []);
+  }, [connect]);
 
   return socket.isNone() ? (
     <div>

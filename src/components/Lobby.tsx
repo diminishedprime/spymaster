@@ -57,7 +57,10 @@ interface JoinGameProps {
 const JoinGame: React.FC<JoinGameProps> = ({ gameId }) => {
   const dispatch = r.useDispatch();
 
-  const join = React.useCallback(() => dispatch(a.joinGame(gameId)), [gameId]);
+  const join = React.useCallback(() => dispatch(a.joinGame(gameId)), [
+    gameId,
+    dispatch
+  ]);
 
   return <button onClick={join}>{gameId}</button>;
 };
