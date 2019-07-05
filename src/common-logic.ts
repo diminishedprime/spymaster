@@ -5,7 +5,6 @@ export const canHaveRole = (
   role: t.Role,
   game: t.Game
 ): boolean => {
-  console.log("can have role", { team, role, game });
   const alreadyThat = game.players.filter(
     p =>
       p.team.isSome() &&
