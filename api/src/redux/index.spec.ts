@@ -5,6 +5,7 @@ import * as t from "../types";
 import io from "socket.io";
 import transit from "../../../src/transit";
 import * as i from "immutable";
+import * as ta from "typesafe-actions";
 
 jest.mock("socket.io");
 
@@ -25,7 +26,14 @@ let createClientFake = (cbs: any): any => {
       cbs.disconnect = cb;
     }
   };
-  const emit = jest.fn();
+  const emit = jest.fn((t, v) => {
+    if (t === "action") {
+      const value = transit.fromJSON(v);
+      if (ta.isActionOf(ca.setPlayerId)(value)) {
+        cbs.playerId = value.payload.id;
+      }
+    }
+  });
   cbs.emit = emit;
 
   return {
@@ -49,11 +57,21 @@ interface FakeClient {
   sendAction: (action: t.ClientRootAction) => void;
   disconnect: (reason: string) => void;
   emit: jest.Mock;
+  playerId: string;
 }
 
-const addFakeClient = (): FakeClient => {
+const addFakeClient = (
+  gameId?: t.GameId,
+  team?: t.Team.Team1 | t.Team.Team2
+): FakeClient => {
   const client1Cbs: any = {};
   onSocket(createClientFake(client1Cbs));
+  if (gameId !== undefined) {
+    (client1Cbs as FakeClient).sendAction(ca.joinGame(gameId));
+    if (team !== undefined) {
+      (client1Cbs as FakeClient).sendAction(ca.requestTeam(gameId, team));
+    }
+  }
   return client1Cbs;
 };
 
@@ -180,6 +198,43 @@ describe("After setting up the server", () => {
           expect(emitMockCalls[emitMockCalls.length - 1][1]).toEqual(
             transit.toJSON(ca.setGame(store.getState().games.get(gameId)!))
           );
+        });
+        describe("and requesting a team", () => {
+          beforeEach(() => {
+            client.sendAction(ca.requestTeam(gameId, t.Team.Team1));
+          });
+
+          test("Can request a role that is available", () => {
+            expect(
+              store
+                .getState()
+                .games.get(gameId)!
+                .players.get(clientId)!.role
+            ).toEqual(t.none);
+
+            client.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
+
+            expect(
+              store
+                .getState()
+                .games.get(gameId)!
+                .players.get(clientId)!.role
+            ).toEqual(t.some(t.Role.Spymaster));
+          });
+
+          test("Cant request Spymaster once taken", () => {
+            const secondClient = addFakeClient(gameId, t.Team.Team1);
+
+            client.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
+            secondClient.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
+
+            expect(
+              store
+                .getState()
+                .games.get(gameId)!
+                .players.get(secondClient.playerId)!.role
+            ).toEqual(t.none);
+          });
         });
       });
     });

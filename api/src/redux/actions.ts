@@ -20,6 +20,12 @@ export const fromClient = ta.createAction(
 //   userId
 // });
 
+export const setRole = ta.createAction(
+  "set-role",
+  action => (gameId: t.GameId, userId: t.UserId, role: t.Role) =>
+    action({ role, userId, gameId })
+);
+
 export const connectWebsocket = ta.createAction(
   "connect-websocket",
   action => (httpServer: http.Server) => action({ httpServer })

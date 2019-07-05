@@ -20,9 +20,13 @@ export interface Card {
   flipped: boolean;
 }
 
+export enum Role {
+  Spymaster = "Spymaster",
+  Guesser = "Guesser"
+}
+
 export enum Team {
   Assassin = "Assassin",
-  Spymaster = "Spymaster",
   Bystander = "Bystander",
   Team1 = "Team 1",
   Team2 = "Team 2"
@@ -32,6 +36,7 @@ export interface Player {
   id: PlayerId;
   alias: Option<string>;
   team: Team;
+  role: Option<Role>;
 }
 
 export interface Game {

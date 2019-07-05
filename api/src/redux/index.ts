@@ -96,6 +96,11 @@ const newGame = (id: t.GameId): t.Game => ({ id, players: i.Map() });
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.setRole, (state, { payload: { role, gameId, userId } }) =>
+    lens
+      .player(gameId, userId)
+      .modify(p => p.map(p => ({ ...p, role: t.some(role) })))(state)
+  )
   .handleAction(a.removeUser, (state, { payload }) =>
     lens.users.modify(users => users.remove(payload.id))(state)
   )
@@ -109,11 +114,14 @@ const app = ta
     if (ta.isActionOf(ca.joinGame)(payload.clientAction)) {
       const clientId = payload.clientId;
       const p = payload.clientAction.payload;
-      return lens
-        .player(p.gameId, clientId)
-        .set(t.some({ id: clientId, alias: t.none, team: t.Team.Bystander }))(
-        state
-      );
+      return lens.player(p.gameId, clientId).set(
+        t.some({
+          id: clientId,
+          alias: t.none,
+          team: t.Team.Bystander,
+          role: t.none
+        })
+      )(state);
     }
     if (ta.isActionOf(ca.requestTeam)(payload.clientAction)) {
       const clientId = payload.clientId;
@@ -129,6 +137,17 @@ const app = ta
     lens.server.set(t.some(payload.httpServer))(state)
   );
 
+const canHaveRole = (team: t.Team, role: t.Role, game: t.Game): boolean => {
+  const alreadyThat = game.players.filter(
+    p => p.team === team && p.role.isSome() && p.role.value === role
+  ).size;
+  if (role === t.Role.Spymaster) {
+    return alreadyThat === 0;
+  } else {
+    return true;
+  }
+};
+
 const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   action: ta.ActionType<typeof a.fromClient>
 ): t.RootAction[] => {
@@ -138,6 +157,23 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   if (ta.isActionOf(ca.joinGame)(clientAction)) {
     actions.push(a.refreshGameState(clientAction.payload.gameId));
     actions.push(a.sendAction(userId, ca.setPage(t.Page.Game)));
+  }
+  if (ta.isActionOf(ca.requestRole)(clientAction)) {
+    const gameId = clientAction.payload.gameId;
+    const requestedRole = clientAction.payload.role;
+    const team = lens.player(gameId, userId).get(state$.value);
+    const game = lens.game(gameId).get(state$.value);
+    if (
+      team.isSome() &&
+      game.isSome() &&
+      canHaveRole(team.value.team, requestedRole, game.value)
+    ) {
+      actions.push(a.setRole(gameId, userId, requestedRole));
+    } else {
+      // TODO - send a message that that role is no-longer available? This might
+      // not be necessary since after the other one is successful, we'll disable
+      // it client-side.
+    }
   }
   if (ta.isActionOf(ca.requestTeam)(clientAction)) {
     const game = lens.game(clientAction.payload.gameId).get(state$.value);
@@ -176,10 +212,8 @@ const refreshGameStateEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.refreshGameState)),
     flatMap(action => {
-      console.log("this action is happening");
       const gameId = action.payload.id;
       const game = lens.game(action.payload.id).get(state$.value);
-      console.log({ game });
       if (game.isSome()) {
         return game.value.players
           .keySeq()
@@ -290,7 +324,7 @@ const logActionEpic: t.Epic = (action$, state$) =>
 
 const rootEpic = ro.combineEpics(
   refreshGameStateEpic,
-  // logActionEpic,
+  logActionEpic,
   clientWebsocketEpic,
   sendMessageEpic,
   sendActionEpic,
