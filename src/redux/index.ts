@@ -53,12 +53,15 @@ export const lens = (() => {
       )
     );
   const team = (userId: t.Option<t.UserId>) =>
-    player(userId).composeGetter(new m.Getter(p => p.map(p => p.team)));
+    player(userId).composeGetter(new m.Getter(p => p.chain(p => p.team)));
+  const role = (userId: t.Option<t.UserId>) =>
+    player(userId).composeGetter(new m.Getter(p => p.chain(p => p.role)));
   const playerId = reduxStateLens("playerId");
 
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    role,
     team,
     playerId,
     gameId,
@@ -96,7 +99,8 @@ const sendActionEpic: t.Epic = (action$, state$) =>
       action =>
         ta.isActionOf(a.newGame)(action) ||
         ta.isActionOf(a.joinGame)(action) ||
-        ta.isActionOf(a.requestTeam)(action)
+        ta.isActionOf(a.requestTeam)(action) ||
+        ta.isActionOf(a.requestRole)(action)
     ),
     map(action => {
       const socket = state$.value.socket;

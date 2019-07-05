@@ -1,4 +1,5 @@
 import createSagaMiddleware from "redux-saga";
+import * as cl from "../../../src/common-logic";
 import transit from "../../../src/transit";
 import io from "socket.io";
 import uuid4 from "uuid/v4";
@@ -118,7 +119,7 @@ const app = ta
         t.some({
           id: clientId,
           alias: t.none,
-          team: t.Team.Bystander,
+          team: t.none,
           role: t.none
         })
       )(state);
@@ -129,24 +130,19 @@ const app = ta
       const team = payload.clientAction.payload.team;
       return lens
         .player(gameId, clientId)
-        .modify(player => player.map(player => ({ ...player, team })))(state);
+        .modify(player =>
+          player.map(player => ({
+            ...player,
+            team: t.some(team),
+            role: t.none
+          }))
+        )(state);
     }
     return state;
   })
   .handleAction(a.connectWebsocket, (state, { payload }) =>
     lens.server.set(t.some(payload.httpServer))(state)
   );
-
-const canHaveRole = (team: t.Team, role: t.Role, game: t.Game): boolean => {
-  const alreadyThat = game.players.filter(
-    p => p.team === team && p.role.isSome() && p.role.value === role
-  ).size;
-  if (role === t.Role.Spymaster) {
-    return alreadyThat === 0;
-  } else {
-    return true;
-  }
-};
 
 const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   action: ta.ActionType<typeof a.fromClient>
@@ -161,14 +157,18 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   if (ta.isActionOf(ca.requestRole)(clientAction)) {
     const gameId = clientAction.payload.gameId;
     const requestedRole = clientAction.payload.role;
-    const team = lens.player(gameId, userId).get(state$.value);
+    const team = lens
+      .player(gameId, userId)
+      .get(state$.value)
+      .chain(p => p.team);
     const game = lens.game(gameId).get(state$.value);
     if (
       team.isSome() &&
       game.isSome() &&
-      canHaveRole(team.value.team, requestedRole, game.value)
+      cl.canHaveRole(team.value, requestedRole, game.value)
     ) {
       actions.push(a.setRole(gameId, userId, requestedRole));
+      actions.push(a.refreshGameState(gameId));
     } else {
       // TODO - send a message that that role is no-longer available? This might
       // not be necessary since after the other one is successful, we'll disable
@@ -324,7 +324,7 @@ const logActionEpic: t.Epic = (action$, state$) =>
 
 const rootEpic = ro.combineEpics(
   refreshGameStateEpic,
-  logActionEpic,
+  // logActionEpic,
   clientWebsocketEpic,
   sendMessageEpic,
   sendActionEpic,

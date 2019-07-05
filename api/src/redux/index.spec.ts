@@ -191,7 +191,7 @@ describe("After setting up the server", () => {
           const actualTeam = sut.lens
             .player(gameId, clientId)
             .get(store.getState())
-            .map(p => p.team);
+            .chain(p => p.team);
 
           expect(actualTeam).toEqual(t.some(t.Team.Team1));
           const emitMockCalls = client.emit.mock.calls;
@@ -202,6 +202,23 @@ describe("After setting up the server", () => {
         describe("and requesting a team", () => {
           beforeEach(() => {
             client.sendAction(ca.requestTeam(gameId, t.Team.Team1));
+          });
+
+          describe("and requesting a role", () => {
+            beforeEach(() => {
+              client.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
+            });
+
+            test("resets role when changing teams", () => {
+              client.sendAction(ca.requestTeam(gameId, t.Team.Team2));
+
+              expect(
+                store
+                  .getState()
+                  .games.get(gameId)!
+                  .players.get(client.playerId)!.role
+              ).toEqual(t.none);
+            });
           });
 
           test("Can request a role that is available", () => {

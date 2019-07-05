@@ -2,6 +2,7 @@ import * as i from "immutable";
 import * as option from "fp-ts/lib/Option";
 
 export const none = option.none;
+export const None = option.None;
 export const some = option.some;
 export const fromNullable = option.fromNullable;
 export type Option<T> = option.Option<T>;
@@ -32,10 +33,12 @@ export enum Team {
   Team2 = "Team 2"
 }
 
+export type PlayerTeam = Team.Team1 | Team.Team2;
+
 export interface Player {
   id: PlayerId;
   alias: Option<string>;
-  team: Team;
+  team: Option<PlayerTeam>;
   role: Option<Role>;
 }
 

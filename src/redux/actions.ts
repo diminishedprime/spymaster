@@ -36,8 +36,7 @@ export const newGame = ta.createAction("new-game", action => () =>
 
 export const requestTeam = ta.createAction(
   "request-team",
-  action => (gameId: t.GameId, team: t.Team.Team1 | t.Team.Team2) =>
-    action({ team, gameId })
+  action => (gameId: t.GameId, team: t.PlayerTeam) => action({ team, gameId })
 );
 
 export const joinGame = ta.createAction(
