@@ -89,12 +89,29 @@ const JoinTeam: React.FC = () => {
   );
 };
 
+const StartGame: React.FC = () => {
+  const hasNecessaryPlayers = r.useSelector(r.lens.hasNecessaryPlayers.get);
+
+  // TODO - actually send an event to start the game.
+
+  return (
+    <div>
+      {hasNecessaryPlayers.isSome() && hasNecessaryPlayers.value ? (
+        <button>Start Game</button>
+      ) : (
+        <div>Waiting for players to join remaining roles.</div>
+      )}
+    </div>
+  );
+};
+
 const Game: React.FC = () => {
   const inGame = r.useSelector(r.lens.inGame.get);
   return inGame ? (
     <div>
       <JoinTeam />
       <JoinRole />
+      <StartGame />
     </div>
   ) : null;
 };

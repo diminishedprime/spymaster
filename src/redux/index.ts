@@ -44,6 +44,9 @@ export const lens = (() => {
   const inLobby = page.composeGetter(new m.Getter(p => p === t.Page.Lobby));
   const inGame = page.composeGetter(new m.Getter(p => p === t.Page.Game));
   const gameId = game.composeGetter(new m.Getter(g => g.map(g => g.id)));
+  const hasNecessaryPlayers = game.composeGetter(
+    new m.Getter(g => g.map(g => g.hasNecessaryPlayers))
+  );
   const player = (userId: t.Option<t.UserId>) =>
     game.composeGetter(
       new m.Getter(g =>
@@ -61,6 +64,7 @@ export const lens = (() => {
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    hasNecessaryPlayers,
     role,
     team,
     playerId,
