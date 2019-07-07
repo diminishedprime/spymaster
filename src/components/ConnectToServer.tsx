@@ -19,11 +19,6 @@ const ConnectToServer = () => {
     [dispatch, serverAddress]
   );
 
-  // Automatically connect after 200ms.
-  React.useEffect(() => {
-    setTimeout(connect, 200);
-  }, [connect]);
-
   return socket.isNone() ? (
     <div>
       Server:

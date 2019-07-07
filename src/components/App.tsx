@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Lobby from "./Lobby";
 import Game from "./Game";
 import * as r from "../redux";
+import * as a from "../redux/actions";
 /* import * as t from "../types";
  * import ErrorBar from "./ErrorBar";
  * import Game from "./game";
@@ -72,6 +73,26 @@ const Wrapper = styled.div`
 const Debug: React.FC = () => {
   const game = r.useSelector(t => t.game);
   const page = r.useSelector(t => t.page);
+  const socket = r.useSelector(s => s.socket);
+  const dispatch = r.useDispatch();
+  const games = r.useSelector(t => t.gameIds);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      dispatch(a.connectWebsocket("10.0.0.5:3003"));
+    }, 200);
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    if (socket.isSome()) {
+      if (games.length < 1) {
+        dispatch(a.newGame());
+      } else {
+        dispatch(a.joinGame(games[0]));
+      }
+    }
+  }, [dispatch, games, socket]);
+
   return (
     <div>
       <h3>Game</h3>
@@ -85,10 +106,10 @@ const Debug: React.FC = () => {
 const App: React.FC = () => {
   return (
     <Wrapper>
-      <Debug />
       <ConnectToServer />
       <Lobby />
       <Game />
+      <Debug />
     </Wrapper>
   );
 };
