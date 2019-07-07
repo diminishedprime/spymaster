@@ -18,3 +18,28 @@ export const canHaveRole = (
     return true;
   }
 };
+
+export const readyToStart = (game: t.Game): boolean => {
+  let team1Spymaster = false;
+  let team2Spymaster = false;
+  let team1Guesser = false;
+  let team2Guesser = false;
+  for (const player of game.players.valueSeq().toArray()) {
+    if (player.role.isSome() && player.team.isSome()) {
+      if (player.role.value === t.Role.Spymaster) {
+        if (player.team.value === t.Team.Team1) {
+          team1Spymaster = true;
+        } else if (player.team.value === t.Team.Team2) {
+          team2Spymaster = true;
+        }
+      } else if (player.role.value === t.Role.Guesser) {
+        if (player.team.value === t.Team.Team1) {
+          team1Guesser = true;
+        } else if (player.team.value === t.Team.Team2) {
+          team2Guesser = true;
+        }
+      }
+    }
+  }
+  return team1Spymaster && team1Guesser && team2Guesser && team2Spymaster;
+};

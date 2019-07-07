@@ -73,3 +73,48 @@ describe("canHaveRole", () => {
     });
   });
 });
+
+describe("readyToStart", () => {
+  let game: t.Game = { id: "123", players: i.Map() };
+
+  beforeEach(() => {
+    game = { id: "123", players: i.Map() };
+  });
+
+  test("with no teams or roles set is false", () => {
+    game.players = i.Map();
+
+    expect(sut.readyToStart(game)).toBeFalsy();
+  });
+
+  test("with all teams & roles set is true", () => {
+    game.players = i.Map({
+      a: {
+        id: "a",
+        alias: t.none,
+        team: t.some(t.Team.Team1),
+        role: t.some(t.Role.Spymaster)
+      },
+      b: {
+        id: "b",
+        alias: t.none,
+        team: t.some(t.Team.Team2),
+        role: t.some(t.Role.Spymaster)
+      },
+      c: {
+        id: "c",
+        alias: t.none,
+        team: t.some(t.Team.Team1),
+        role: t.some(t.Role.Guesser)
+      },
+      d: {
+        id: "d",
+        alias: t.none,
+        team: t.some(t.Team.Team2),
+        role: t.some(t.Role.Guesser)
+      }
+    });
+
+    expect(sut.readyToStart(game)).toBeTruthy();
+  });
+});
