@@ -20,6 +20,11 @@ export const fromClient = ta.createAction(
 //   userId
 // });
 
+export const setCards = ta.createAction(
+  "set-cards",
+  action => (gameId: t.GameId, cards: t.Cards) => action({ gameId, cards })
+);
+
 export const setIsReady = ta.createAction(
   "set-is-ready",
   action => (gameId: t.GameId) => action({ gameId })

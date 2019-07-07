@@ -91,13 +91,17 @@ const JoinTeam: React.FC = () => {
 
 const StartGame: React.FC = () => {
   const hasNecessaryPlayers = r.useSelector(r.lens.hasNecessaryPlayers.get);
+  const gameId = r.useSelector(r.lens.gameId.get);
+  const dispatch = r.useDispatch();
 
-  // TODO - actually send an event to start the game.
+  const startGame = React.useCallback(() => {
+    gameId.isSome() && dispatch(a.startGame(gameId.value));
+  }, [dispatch, gameId]);
 
   return (
     <div>
       {hasNecessaryPlayers.isSome() && hasNecessaryPlayers.value ? (
-        <button>Start Game</button>
+        <button onClick={startGame}>Start Game</button>
       ) : (
         <div>Waiting for players to join remaining roles.</div>
       )}

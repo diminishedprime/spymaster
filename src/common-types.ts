@@ -45,7 +45,7 @@ export interface Player {
 export interface Game {
   id: GameId;
   // alais: Option<string>;
-  // cards: Cards;
+  cards: Option<Cards>;
   players: Players;
   hasNecessaryPlayers: boolean;
 }

@@ -88,6 +88,24 @@ beforeEach(() => {
   window.console.log = logMock;
 });
 
+describe("generateCards", () => {
+  let cards: t.Cards;
+  beforeEach(() => {
+    cards = sut.generateCards(t.Team.Team1);
+  });
+
+  test("generates right number of cards", () => {
+    expect(cards.size).toEqual(25);
+  });
+
+  test("generates right number for each team", () => {
+    expect(cards.filter(card => card.team === t.Team.Team1).size).toBe(9);
+    expect(cards.filter(card => card.team === t.Team.Team2).size).toBe(8);
+    expect(cards.filter(card => card.team === t.Team.Bystander).size).toBe(7);
+    expect(cards.filter(card => card.team === t.Team.Assassin).size).toBe(1);
+  });
+});
+
 describe("After setting up the server", () => {
   beforeEach(() => {
     store.dispatch(a.connectWebsocket(server as any));
@@ -152,6 +170,17 @@ describe("After setting up the server", () => {
       expect(hasNecessaryPlayers.isSome()).toBeTruthy();
       expect(
         hasNecessaryPlayers.isSome() && hasNecessaryPlayers.value
+      ).toBeTruthy();
+    });
+
+    test("can start game", () => {
+      team1Spymaster.sendAction(ca.startGame(gameId));
+
+      expect(
+        store
+          .getState()
+          .games.get(gameId)!
+          .cards.isSome()
       ).toBeTruthy();
     });
   });

@@ -1,6 +1,7 @@
 import createSagaMiddleware from "redux-saga";
 import * as cl from "../../../src/common-logic";
 import transit from "../../../src/transit";
+import shuffle from "shuffle-array";
 import io from "socket.io";
 import uuid4 from "uuid/v4";
 import * as i from "immutable";
@@ -13,6 +14,7 @@ import * as ta from "typesafe-actions";
 import * as m from "monocle-ts";
 import * as a from "./actions";
 import * as ca from "../../../src/redux/actions";
+import words from "../words";
 
 declare module "typesafe-actions" {
   interface Types {
@@ -96,7 +98,8 @@ export const lens = (() => {
 const newGame = (id: t.GameId): t.Game => ({
   id,
   players: i.Map(),
-  hasNecessaryPlayers: false
+  hasNecessaryPlayers: false,
+  cards: t.none
 });
 
 const app = ta
@@ -106,6 +109,15 @@ const app = ta
       .player(gameId, userId)
       .modify(p => p.map(p => ({ ...p, role: t.some(role) })))(state)
   )
+  .handleAction(a.setCards, (state, { payload }) => {
+    const gameId = payload.gameId;
+    const cards = payload.cards;
+    return lens
+      .game(gameId)
+      .modify(game => game.map(game => ({ ...game, cards: t.some(cards) })))(
+      state
+    );
+  })
   .handleAction(a.removeUser, (state, { payload }) => {
     const withRemoved = lens.users.modify(users => users.remove(payload.id))(
       state
@@ -159,6 +171,7 @@ const app = ta
         }))
       )(state);
     }
+    // TODO refactor out this handle-action into its own function.
     return state;
   })
   .handleAction(a.connectWebsocket, (state, { payload }) =>
@@ -208,7 +221,65 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   if (ta.isActionOf(ca.newGame)(clientAction)) {
     actions.push(a.newGame(uuid4()));
   }
+  if (ta.isActionOf(ca.startGame)(clientAction)) {
+    const cards = generateCards();
+    const gameId = clientAction.payload.gameId;
+    actions.push(a.setCards(gameId, cards));
+    actions.push(a.refreshGameState(gameId));
+  }
   return actions;
+};
+
+export const generateCards = (firstTeamOverride?: t.PlayerTeam): t.Cards => {
+  const shuffled = shuffle(words);
+  const firstTeam =
+    firstTeamOverride === undefined
+      ? Math.random() > 0.5
+        ? t.Team.Team1
+        : t.Team.Team2
+      : firstTeamOverride;
+  const secondTeam = firstTeam === t.Team.Team1 ? t.Team.Team2 : t.Team.Team1;
+  const firstTeamCardNumber = 9;
+  const secondTeamCardNumber = 8;
+  const bystanderCardNumber = 7;
+  const assassinCardNumber = 1;
+  const firstTeamWords = shuffled.slice(0, firstTeamCardNumber);
+  const secondTeamWords = shuffled.slice(
+    firstTeamCardNumber,
+    firstTeamCardNumber + secondTeamCardNumber
+  );
+  const bystanderWords = shuffled.slice(
+    firstTeamCardNumber + secondTeamCardNumber,
+    firstTeamCardNumber + secondTeamCardNumber + bystanderCardNumber
+  );
+  const assassinWords = shuffled.slice(
+    firstTeamCardNumber + secondTeamCardNumber + bystanderCardNumber,
+    firstTeamCardNumber +
+      secondTeamCardNumber +
+      bystanderCardNumber +
+      assassinCardNumber
+  );
+
+  const cards: t.Cards = i.Map();
+  const groups: [t.Team, string[]][] = [
+    [firstTeam, firstTeamWords],
+    [secondTeam, secondTeamWords],
+    [t.Team.Bystander, bystanderWords],
+    [t.Team.Assassin, assassinWords]
+  ];
+  const cardsList = groups.reduce(
+    (acc: i.List<t.Card>, [team, teamWords]) =>
+      teamWords.reduce(
+        (acc: i.List<t.Card>, word) =>
+          acc.push({ id: word, text: word, flipped: false, team }),
+        acc
+      ),
+    i.List()
+  );
+  return shuffle(cardsList.toArray()).reduce(
+    (acc: t.Cards, card: t.Card) => acc.set(card.id, card),
+    cards
+  );
 };
 
 const fromClientEpic: t.Epic = (action$, state$) =>

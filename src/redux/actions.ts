@@ -12,6 +12,11 @@ import * as t from "../types";
 //   userId
 // });
 
+export const startGame = ta.createAction(
+  "start-game",
+  action => (gameId: t.GameId) => action({ gameId })
+);
+
 export const requestRole = ta.createAction(
   "request-role",
   action => (gameId: t.GameId, role: t.Role) => action({ role, gameId })

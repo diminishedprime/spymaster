@@ -104,7 +104,8 @@ const sendActionEpic: t.Epic = (action$, state$) =>
         ta.isActionOf(a.newGame)(action) ||
         ta.isActionOf(a.joinGame)(action) ||
         ta.isActionOf(a.requestTeam)(action) ||
-        ta.isActionOf(a.requestRole)(action)
+        ta.isActionOf(a.requestRole)(action) ||
+        ta.isActionOf(a.startGame)(action)
     ),
     map(action => {
       const socket = state$.value.socket;
