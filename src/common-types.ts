@@ -47,6 +47,7 @@ export interface Game {
   // alais: Option<string>;
   // cards: Cards;
   players: Players;
+  hasNecessaryPlayers: boolean;
 }
 
 export enum Page {

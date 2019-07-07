@@ -93,7 +93,11 @@ export const lens = (() => {
   };
 })();
 
-const newGame = (id: t.GameId): t.Game => ({ id, players: i.Map() });
+const newGame = (id: t.GameId): t.Game => ({
+  id,
+  players: i.Map(),
+  hasNecessaryPlayers: false
+});
 
 const app = ta
   .createReducer(initialState)
@@ -128,15 +132,13 @@ const app = ta
       const clientId = payload.clientId;
       const gameId = payload.clientAction.payload.gameId;
       const team = payload.clientAction.payload.team;
-      return lens
-        .player(gameId, clientId)
-        .modify(player =>
-          player.map(player => ({
-            ...player,
-            team: t.some(team),
-            role: t.none
-          }))
-        )(state);
+      return lens.player(gameId, clientId).modify(player =>
+        player.map(player => ({
+          ...player,
+          team: t.some(team),
+          role: t.none
+        }))
+      )(state);
     }
     return state;
   })
