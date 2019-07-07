@@ -109,6 +109,13 @@ const app = ta
   .handleAction(a.removeUser, (state, { payload }) =>
     lens.users.modify(users => users.remove(payload.id))(state)
   )
+  .handleAction(a.setIsReady, (state, { payload }) =>
+    lens
+      .game(payload.gameId)
+      .modify(g =>
+        g.map(g => ({ ...g, hasNecessaryPlayers: cl.readyToStart(g) }))
+      )(state)
+  )
   .handleAction(a.newGame, (state, { payload }) =>
     lens.game(payload.id).set(t.some(newGame(payload.id)))(state)
   )
@@ -170,6 +177,7 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
       cl.canHaveRole(team.value, requestedRole, game.value)
     ) {
       actions.push(a.setRole(gameId, userId, requestedRole));
+      actions.push(a.setIsReady(gameId));
       actions.push(a.refreshGameState(gameId));
     } else {
       // TODO - send a message that that role is no-longer available? This might

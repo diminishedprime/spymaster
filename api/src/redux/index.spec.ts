@@ -117,6 +117,54 @@ describe("After setting up the server", () => {
     expect(clients[0]).not.toEqual(clients[1]);
   });
 
+  describe("With all necessary clients", () => {
+    let team1Spymaster: FakeClient;
+    let team2Spymaster: FakeClient;
+    let team1Guesser: FakeClient;
+    let team2Guesser: FakeClient;
+    let gameId: t.GameId;
+
+    beforeEach(() => {
+      team1Spymaster = addFakeClient();
+      team2Spymaster = addFakeClient();
+      team1Guesser = addFakeClient();
+      team2Guesser = addFakeClient();
+
+      team1Spymaster.sendAction(ca.newGame());
+      gameId = store
+        .getState()
+        .games.keySeq()
+        .toArray()[0];
+
+      team1Spymaster.sendAction(ca.joinGame(gameId));
+      team1Spymaster.sendAction(ca.requestTeam(gameId, t.Team.Team1));
+      team1Spymaster.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
+
+      team1Guesser.sendAction(ca.joinGame(gameId));
+      team1Guesser.sendAction(ca.requestTeam(gameId, t.Team.Team1));
+      team1Guesser.sendAction(ca.requestRole(gameId, t.Role.Guesser));
+
+      team2Spymaster.sendAction(ca.joinGame(gameId));
+      team2Spymaster.sendAction(ca.requestTeam(gameId, t.Team.Team2));
+      team2Spymaster.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
+
+      team2Guesser.sendAction(ca.joinGame(gameId));
+      team2Guesser.sendAction(ca.requestTeam(gameId, t.Team.Team2));
+      team2Guesser.sendAction(ca.requestRole(gameId, t.Role.Guesser));
+    });
+
+    test("hasNecessaryPlayers is true", () => {
+      const hasNecessaryPlayers = t
+        .fromNullable(store.getState().games.get(gameId))
+        .map(g => g.hasNecessaryPlayers);
+
+      expect(hasNecessaryPlayers.isSome()).toBeTruthy();
+      expect(
+        hasNecessaryPlayers.isSome() && hasNecessaryPlayers.value
+      ).toBeTruthy();
+    });
+  });
+
   describe("With a client", () => {
     let client: FakeClient;
     let clientId: string;

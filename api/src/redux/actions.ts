@@ -20,6 +20,11 @@ export const fromClient = ta.createAction(
 //   userId
 // });
 
+export const setIsReady = ta.createAction(
+  "set-is-ready",
+  action => (gameId: t.GameId) => action({ gameId })
+);
+
 export const setRole = ta.createAction(
   "set-role",
   action => (gameId: t.GameId, userId: t.UserId, role: t.Role) =>
