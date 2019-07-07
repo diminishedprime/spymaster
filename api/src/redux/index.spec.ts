@@ -62,7 +62,8 @@ interface FakeClient {
 
 const addFakeClient = (
   gameId?: t.GameId,
-  team?: t.Team.Team1 | t.Team.Team2
+  team?: t.Team.Team1 | t.Team.Team2,
+  role?: t.Role
 ): FakeClient => {
   const client1Cbs: any = {};
   onSocket(createClientFake(client1Cbs));
@@ -70,6 +71,9 @@ const addFakeClient = (
     (client1Cbs as FakeClient).sendAction(ca.joinGame(gameId));
     if (team !== undefined) {
       (client1Cbs as FakeClient).sendAction(ca.requestTeam(gameId, team));
+      if (role !== undefined) {
+        (client1Cbs as FakeClient).sendAction(ca.requestRole(gameId, role));
+      }
     }
   }
   return client1Cbs;
@@ -126,31 +130,18 @@ describe("After setting up the server", () => {
 
     beforeEach(() => {
       team1Spymaster = addFakeClient();
-      team2Spymaster = addFakeClient();
-      team1Guesser = addFakeClient();
-      team2Guesser = addFakeClient();
-
       team1Spymaster.sendAction(ca.newGame());
       gameId = store
         .getState()
         .games.keySeq()
         .toArray()[0];
-
       team1Spymaster.sendAction(ca.joinGame(gameId));
       team1Spymaster.sendAction(ca.requestTeam(gameId, t.Team.Team1));
       team1Spymaster.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
 
-      team1Guesser.sendAction(ca.joinGame(gameId));
-      team1Guesser.sendAction(ca.requestTeam(gameId, t.Team.Team1));
-      team1Guesser.sendAction(ca.requestRole(gameId, t.Role.Guesser));
-
-      team2Spymaster.sendAction(ca.joinGame(gameId));
-      team2Spymaster.sendAction(ca.requestTeam(gameId, t.Team.Team2));
-      team2Spymaster.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
-
-      team2Guesser.sendAction(ca.joinGame(gameId));
-      team2Guesser.sendAction(ca.requestTeam(gameId, t.Team.Team2));
-      team2Guesser.sendAction(ca.requestRole(gameId, t.Role.Guesser));
+      team2Spymaster = addFakeClient(gameId, t.Team.Team2, t.Role.Spymaster);
+      team1Guesser = addFakeClient(gameId, t.Team.Team1, t.Role.Guesser);
+      team2Guesser = addFakeClient(gameId, t.Team.Team2, t.Role.Guesser);
     });
 
     test("hasNecessaryPlayers is true", () => {
