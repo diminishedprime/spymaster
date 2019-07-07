@@ -182,6 +182,8 @@ describe("After setting up the server", () => {
           .games.get(gameId)!
           .cards.isSome()
       ).toBeTruthy();
+
+      expect(store.getState().games.get(gameId)!.started).toBeTruthy();
     });
   });
 

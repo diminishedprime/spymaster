@@ -48,6 +48,7 @@ export interface Game {
   cards: Option<Cards>;
   players: Players;
   hasNecessaryPlayers: boolean;
+  started: boolean;
 }
 
 export enum Page {

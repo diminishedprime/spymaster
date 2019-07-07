@@ -99,11 +99,17 @@ const newGame = (id: t.GameId): t.Game => ({
   id,
   players: i.Map(),
   hasNecessaryPlayers: false,
-  cards: t.none
+  cards: t.none,
+  started: false
 });
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.setStarted, (state, { payload }) =>
+    lens
+      .game(payload.gameId)
+      .modify(g => g.map(g => ({ ...g, started: payload.started })))(state)
+  )
   .handleAction(a.setRole, (state, { payload: { role, gameId, userId } }) =>
     lens
       .player(gameId, userId)
@@ -225,6 +231,7 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     const cards = generateCards();
     const gameId = clientAction.payload.gameId;
     actions.push(a.setCards(gameId, cards));
+    actions.push(a.setStarted(gameId, true));
     actions.push(a.refreshGameState(gameId));
   }
   return actions;
