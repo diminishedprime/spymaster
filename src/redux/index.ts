@@ -62,10 +62,12 @@ export const lens = (() => {
   const playerId = reduxStateLens("playerId");
 
   const cards = game.composeGetter(new m.Getter(g => g.chain(g => g.cards)));
+  const started = game.composeGetter(new m.Getter(g => g.map(g => g.started)));
 
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    started,
     cards,
     hasNecessaryPlayers,
     role,
