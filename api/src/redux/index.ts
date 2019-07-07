@@ -106,9 +106,21 @@ const app = ta
       .player(gameId, userId)
       .modify(p => p.map(p => ({ ...p, role: t.some(role) })))(state)
   )
-  .handleAction(a.removeUser, (state, { payload }) =>
-    lens.users.modify(users => users.remove(payload.id))(state)
-  )
+  .handleAction(a.removeUser, (state, { payload }) => {
+    const withRemoved = lens.users.modify(users => users.remove(payload.id))(
+      state
+    );
+    // TODO - This might should be refactored out into being called from a
+    // separate 'remove from game' action.
+    return lens.games.modify(games =>
+      games.update(games =>
+        games.map(game => ({
+          ...game,
+          players: game.players.remove(payload.id)
+        }))
+      )
+    )(withRemoved);
+  })
   .handleAction(a.setIsReady, (state, { payload }) =>
     lens
       .game(payload.gameId)

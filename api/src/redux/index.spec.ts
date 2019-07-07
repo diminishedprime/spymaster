@@ -248,6 +248,14 @@ describe("After setting up the server", () => {
               client.sendAction(ca.requestRole(gameId, t.Role.Spymaster));
             });
 
+            test("is removed from game if disconnects", () => {
+              client.disconnect("cause I wanna");
+
+              expect(store.getState().games.get(gameId)!.players).toEqual(
+                i.Map()
+              );
+            });
+
             test("resets role when changing teams", () => {
               client.sendAction(ca.requestTeam(gameId, t.Team.Team2));
 
