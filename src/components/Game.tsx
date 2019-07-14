@@ -160,12 +160,34 @@ const Board: React.FC = () => {
   ) : null;
 };
 
+const SpymasterControls: React.FC = () => {
+  const playerId = r.useSelector(r.lens.playerId.get);
+  const isSpymaster = r.useSelector(r.lens.isSpymaster(playerId).get);
+  return isSpymaster.isSome() && isSpymaster.value ? (
+    <div>
+      <input placeholder="Hint" />
+    </div>
+  ) : null;
+};
+
+const Guesser: React.FC = () => {
+  const playerId = r.useSelector(r.lens.playerId.get);
+  const isGuesser = r.useSelector(r.lens.isGuesser(playerId).get);
+  return isGuesser.isSome() && isGuesser.value ? (
+    <div>
+      <div>This is where the guess hint goes.</div>
+    </div>
+  ) : null;
+};
+
 const Game: React.FC = () => {
   const inGame = r.useSelector(r.lens.inGame.get);
   return inGame ? (
     <div>
       <GameSetUp />
       <Board />
+      <SpymasterControls />
+      <Guesser />
     </div>
   ) : null;
 };

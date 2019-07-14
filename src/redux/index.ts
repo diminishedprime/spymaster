@@ -59,6 +59,14 @@ export const lens = (() => {
     player(userId).composeGetter(new m.Getter(p => p.chain(p => p.team)));
   const role = (userId: t.Option<t.UserId>) =>
     player(userId).composeGetter(new m.Getter(p => p.chain(p => p.role)));
+  const isSpymaster = (userId: t.Option<t.UserId>) =>
+    role(userId).composeGetter(
+      new m.Getter(r => r.map(r => r === t.Role.Spymaster))
+    );
+  const isGuesser = (userId: t.Option<t.UserId>) =>
+    role(userId).composeGetter(
+      new m.Getter(r => r.map(r => r === t.Role.Guesser))
+    );
   const playerId = reduxStateLens("playerId");
 
   const cards = game.composeGetter(new m.Getter(g => g.chain(g => g.cards)));
@@ -67,6 +75,8 @@ export const lens = (() => {
   const gameIds = reduxStateLens("gameIds");
 
   return {
+    isGuesser,
+    isSpymaster,
     started,
     cards,
     hasNecessaryPlayers,
