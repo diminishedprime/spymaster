@@ -121,8 +121,24 @@ const GameSetUp: React.FC = () => {
   ) : null;
 };
 
+const cardBackground = (card: t.Card): string => {
+  switch (card.team) {
+    case t.Team.Team1:
+      return "blue";
+    case t.Team.Team2:
+      return "red";
+    case t.Team.Assassin:
+      return "orange";
+    case t.Team.Bystander:
+      return "gray";
+  }
+};
+
+// TODO - Make background-color only show when flipped or current player is a
+// spymaster.
 const Card = styled.div`
   border: 1px solid black;
+  background-color: ${(props: t.Card) => cardBackground(props)};
 `;
 
 const BoardWrapper = styled.div`
@@ -138,7 +154,7 @@ const Board: React.FC = () => {
   return cards.isSome() ? (
     <BoardWrapper>
       {cards.value.map(card => {
-        return <Card>{card.text}</Card>;
+        return <Card {...card}>{card.text}</Card>;
       })}
     </BoardWrapper>
   ) : null;
