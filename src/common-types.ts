@@ -7,6 +7,7 @@ export const some = option.some;
 export const fromNullable = option.fromNullable;
 export type Option<T> = option.Option<T>;
 
+export type Hint = string;
 export type GameId = string;
 export type CardId = string;
 export type PlayerId = string;
@@ -49,6 +50,8 @@ export interface Game {
   players: Players;
   hasNecessaryPlayers: boolean;
   started: boolean;
+  currentTeam: Option<PlayerTeam>;
+  hint: Option<Hint>;
 }
 
 export enum Page {

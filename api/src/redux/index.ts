@@ -100,11 +100,25 @@ const newGame = (id: t.GameId): t.Game => ({
   players: i.Map(),
   hasNecessaryPlayers: false,
   cards: t.none,
-  started: false
+  started: false,
+  currentTeam: t.none,
+  hint: t.none
 });
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.setHint, (state, { payload }) =>
+    lens
+      .game(payload.gameId)
+      .modify(g => g.map(g => ({ ...g, hint: t.some(payload.hint) })))(state)
+  )
+  .handleAction(a.setCurrentTeam, (state, { payload }) =>
+    lens
+      .game(payload.gameId)
+      .modify(g => g.map(g => ({ ...g, currentTeam: t.some(payload.team) })))(
+      state
+    )
+  )
   .handleAction(a.setStarted, (state, { payload }) =>
     lens
       .game(payload.gameId)
@@ -190,6 +204,11 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   const actions: t.RootAction[] = [];
   const clientAction = action.payload.clientAction;
   const userId = action.payload.clientId;
+  if (ta.isActionOf(ca.setHint)(clientAction)) {
+    actions.push(
+      a.setHint(clientAction.payload.gameId, clientAction.payload.hint)
+    );
+  }
   if (ta.isActionOf(ca.joinGame)(clientAction)) {
     actions.push(a.refreshGameState(clientAction.payload.gameId));
     actions.push(a.sendAction(userId, ca.setPage(t.Page.Game)));
@@ -231,7 +250,9 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     const game = lens.game(clientAction.payload.gameId).get(state$.value);
     if (game.isSome() && !game.value.started) {
       const cards = generateCards();
+      const firstTeam = Math.random() > 0.5 ? t.Team.Team1 : t.Team.Team2;
       const gameId = clientAction.payload.gameId;
+      actions.push(a.setCurrentTeam(gameId, firstTeam));
       actions.push(a.setCards(gameId, cards));
       actions.push(a.setStarted(gameId, true));
       actions.push(a.refreshGameState(gameId));

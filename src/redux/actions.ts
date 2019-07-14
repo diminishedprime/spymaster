@@ -12,6 +12,11 @@ import * as t from "../types";
 //   userId
 // });
 
+export const setHint = ta.createAction(
+  "set-hint",
+  action => (gameId: t.GameId, hint: t.Hint) => action({ gameId, hint })
+);
+
 export const startGame = ta.createAction(
   "start-game",
   action => (gameId: t.GameId) => action({ gameId })

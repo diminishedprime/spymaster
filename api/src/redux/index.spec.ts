@@ -145,6 +145,7 @@ describe("After setting up the server", () => {
     let team1Guesser: FakeClient;
     let team2Guesser: FakeClient;
     let gameId: t.GameId;
+    let game: t.Game;
 
     beforeEach(() => {
       team1Spymaster = addFakeClient();
@@ -160,6 +161,8 @@ describe("After setting up the server", () => {
       team2Spymaster = addFakeClient(gameId, t.Team.Team2, t.Role.Spymaster);
       team1Guesser = addFakeClient(gameId, t.Team.Team1, t.Role.Guesser);
       team2Guesser = addFakeClient(gameId, t.Team.Team2, t.Role.Guesser);
+
+      game = store.getState().games.get(gameId)!;
     });
 
     test("hasNecessaryPlayers is true", () => {
@@ -184,6 +187,38 @@ describe("After setting up the server", () => {
       ).toBeTruthy();
 
       expect(store.getState().games.get(gameId)!.started).toBeTruthy();
+    });
+
+    describe("and started game", () => {
+      beforeEach(() => {
+        team1Spymaster.sendAction(ca.startGame(gameId));
+      });
+
+      test("Sets currentTeam", () => {
+        const maybeCurrentTeam = store.getState().games.get(gameId)!
+          .currentTeam;
+        expect(maybeCurrentTeam.isSome()).toBeTruthy();
+      });
+
+      test("First spymaster can send hint.", () => {
+        const maybeCurrentTeam = store.getState().games.get(gameId)!
+          .currentTeam;
+        expect(maybeCurrentTeam.isSome()).toBeTruthy();
+        if (maybeCurrentTeam.isSome()) {
+          const currentTeam = maybeCurrentTeam.value;
+          const expectedHint = "MyHint";
+          const firstSpymaster =
+            currentTeam === t.Team.Team1 ? team1Spymaster : team2Spymaster;
+          firstSpymaster.sendAction(ca.setHint(gameId, expectedHint));
+
+          const actualHint = store.getState().games.get(gameId)!.hint;
+
+          expect(actualHint.isSome()).toBeTruthy();
+          if (actualHint.isSome()) {
+            expect(actualHint.value === expectedHint).toBeTruthy();
+          }
+        }
+      });
     });
   });
 

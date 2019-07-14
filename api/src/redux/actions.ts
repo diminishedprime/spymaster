@@ -3,6 +3,16 @@ import * as ta from "typesafe-actions";
 import * as http from "http";
 import * as io from "socket.io";
 
+export const setHint = ta.createAction(
+  "set-hint",
+  action => (gameId: t.GameId, hint: t.Hint) => action({ gameId, hint })
+);
+
+export const setCurrentTeam = ta.createAction(
+  "set-current-team",
+  action => (gameId: t.GameId, team: t.PlayerTeam) => action({ gameId, team })
+);
+
 export const fromClient = ta.createAction(
   "from-client",
   action => (clientId: t.UserId, clientAction: t.ClientRootAction) =>
@@ -19,6 +29,11 @@ export const fromClient = ta.createAction(
 //   type: t.ServerActionType.REMOVE_USER,
 //   userId
 // });
+
+export const flipCard = ta.createAction(
+  "flip-card",
+  action => (gameId: t.GameId, cardId: t.CardId) => action({ gameId, cardId })
+);
 
 export const setStarted = ta.createAction(
   "set-started",
