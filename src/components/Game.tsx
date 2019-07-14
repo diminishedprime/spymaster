@@ -3,6 +3,7 @@ import * as r from "../redux";
 import * as t from "../types";
 import * as a from "../redux/actions";
 import * as cl from "../common-logic";
+import styled from "styled-components";
 
 const JoinRole: React.FC = () => {
   const dispatch = r.useDispatch();
@@ -109,13 +110,46 @@ const StartGame: React.FC = () => {
   );
 };
 
-const Game: React.FC = () => {
-  const inGame = r.useSelector(r.lens.inGame.get);
-  return inGame ? (
+const GameSetUp: React.FC = () => {
+  const started = r.useSelector(r.lens.started.get);
+  return started.isSome() && !started.value ? (
     <div>
       <JoinTeam />
       <JoinRole />
       <StartGame />
+    </div>
+  ) : null;
+};
+
+const Card = styled.div`
+  border: 1px solid black;
+`;
+
+const BoardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 19vw);
+  grid-template-rows: repeat(5, 10vh);
+`;
+
+const Board: React.FC = () => {
+  const cards = r.useSelector(s =>
+    r.lens.cards.get(s).map(c => c.valueSeq().toArray())
+  );
+  return cards.isSome() ? (
+    <BoardWrapper>
+      {cards.value.map(card => {
+        return <Card>{card.text}</Card>;
+      })}
+    </BoardWrapper>
+  ) : null;
+};
+
+const Game: React.FC = () => {
+  const inGame = r.useSelector(r.lens.inGame.get);
+  return inGame ? (
+    <div>
+      <GameSetUp />
+      <Board />
     </div>
   ) : null;
 };

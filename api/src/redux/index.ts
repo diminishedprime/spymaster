@@ -228,11 +228,14 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     actions.push(a.newGame(uuid4()));
   }
   if (ta.isActionOf(ca.startGame)(clientAction)) {
-    const cards = generateCards();
-    const gameId = clientAction.payload.gameId;
-    actions.push(a.setCards(gameId, cards));
-    actions.push(a.setStarted(gameId, true));
-    actions.push(a.refreshGameState(gameId));
+    const game = lens.game(clientAction.payload.gameId).get(state$.value);
+    if (game.isSome() && !game.value.started) {
+      const cards = generateCards();
+      const gameId = clientAction.payload.gameId;
+      actions.push(a.setCards(gameId, cards));
+      actions.push(a.setStarted(gameId, true));
+      actions.push(a.refreshGameState(gameId));
+    }
   }
   return actions;
 };

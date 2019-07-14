@@ -11,8 +11,12 @@ const transit = baseTransit.withExtraHandlers([
   {
     tag: "ts-fp-some",
     class: option.Some,
-    write: (a: option.Some<any>) => JSON.stringify(a.value),
-    read: a => option.some(JSON.parse(a))
+    write: (a: option.Some<any>) => {
+      return baseTransit.toJSON(a.value);
+    },
+    read: a => {
+      return option.some(baseTransit.fromJSON(a));
+    }
   }
 ]);
 
