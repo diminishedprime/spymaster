@@ -39,42 +39,42 @@ const newGame = (id: t.GameId): t.Game => ({
 
 const gameReducer = ta
   .createReducer(newGame("0"))
-  .handleAction(a.setHint, (game, { payload }) => ({
+  .handleAction(a.setHint, (game, { payload: { hint } }) => ({
     ...game,
-    hint: t.some(payload.hint)
+    hint: t.some(hint)
   }))
-  .handleAction(a.setCurrentTeam, (game, { payload }) => ({
+  .handleAction(a.setCurrentTeam, (game, { payload: { team } }) => ({
     ...game,
-    currentTeam: t.some(payload.team)
+    currentTeam: t.some(team)
   }))
-  .handleAction(a.setStarted, (game, { payload }) => ({
+  .handleAction(a.setStarted, (game, { payload: { started } }) => ({
     ...game,
-    started: payload.started
+    started
   }))
-  .handleAction(a.setCards, (game, { payload }) => ({
+  .handleAction(a.setCards, (game, { payload: { cards } }) => ({
     ...game,
-    cards: t.some(payload.cards)
+    cards: t.some(cards)
   }))
-  .handleAction(a.setRole, (game, { payload }) =>
+  .handleAction(a.setRole, (game, { payload: { userId, role } }) =>
     lens
-      .gamePlayer(payload.userId)
-      .modify(p => p.map(p => ({ ...p, role: t.some(payload.role) })))(game)
+      .gamePlayer(userId)
+      .modify(p => p.map(p => ({ ...p, role: t.some(role) })))(game)
   )
-  .handleAction(a.setIsReady, (game, { payload }) => ({
+  .handleAction(a.setIsReady, game => ({
     ...game,
     hasNecessaryPlayers: cl.readyToStart(game)
   }))
-  .handleAction(a.setTeam, (game, { payload }) =>
+  .handleAction(a.setTeam, (game, { payload: { playerId, team } }) =>
     lens
-      .gamePlayer(payload.playerId)
-      .modify(p =>
-        p.map(p => ({ ...p, team: t.some(payload.team), role: t.none }))
-      )(game)
+      .gamePlayer(playerId)
+      .modify(p => p.map(p => ({ ...p, team: t.some(team), role: t.none })))(
+      game
+    )
   )
-  .handleAction(a.playerJoinGame, (game, { payload }) =>
-    lens.gamePlayer(payload.playerId).set(
+  .handleAction(a.playerJoinGame, (game, { payload: { playerId } }) =>
+    lens.gamePlayer(playerId).set(
       t.some({
-        id: payload.playerId,
+        id: playerId,
         alias: t.none,
         team: t.none,
         role: t.none
@@ -84,8 +84,8 @@ const gameReducer = ta
 
 const app = ta
   .createReducer(initialState)
-  .handleAction(a.newGame, (state, { payload }) =>
-    lens.game(payload.id).set(t.some(newGame(payload.id)))(state)
+  .handleAction(a.newGame, (state, { payload: { id } }) =>
+    lens.game(id).set(t.some(newGame(id)))(state)
   )
   .handleAction(
     [
@@ -103,26 +103,24 @@ const app = ta
         .game(action.payload.gameId)
         .modify(g => g.map(g => gameReducer(g, action)))(state)
   )
-  .handleAction(a.removeUser, (state, { payload }) => {
-    const withRemoved = lens.users.modify(users => users.remove(payload.id))(
-      state
-    );
+  .handleAction(a.removeUser, (state, { payload: { id } }) => {
+    const withRemoved = lens.users.modify(users => users.remove(id))(state);
     // TODO - This might should be refactored out into being called from a
     // separate 'remove from game' action.
     return lens.games.modify(games =>
       games.update(games =>
         games.map(game => ({
           ...game,
-          players: game.players.remove(payload.id)
+          players: game.players.remove(id)
         }))
       )
     )(withRemoved);
   })
-  .handleAction(a.addUser, (state, { payload }) =>
-    lens.user(payload.id).set(t.some(payload))(state)
+  .handleAction(a.addUser, (state, { payload: { id }, payload }) =>
+    lens.user(id).set(t.some(payload))(state)
   )
-  .handleAction(a.connectWebsocket, (state, { payload }) =>
-    lens.server.set(t.some(payload.httpServer))(state)
+  .handleAction(a.connectWebsocket, (state, { payload: { httpServer } }) =>
+    lens.server.set(t.some(httpServer))(state)
   );
 
 const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
@@ -267,7 +265,6 @@ const refreshGameStateEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.refreshGameState)),
     flatMap(action => {
-      const gameId = action.payload.id;
       const game = lens.game(action.payload.id).get(state$.value);
       if (game.isSome()) {
         return game.value.players
