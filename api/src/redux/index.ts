@@ -68,6 +68,17 @@ export const lens = (() => {
     );
   };
 
+  const gamePlayers = (playerId: t.PlayerId) => {
+    const getter = (game: t.Game) => t.fromNullable(game.players.get(playerId));
+    const setter = (player: t.Option<t.Player>) => (game: t.Game) => {
+      const players = player.isSome()
+        ? game.players.set(playerId, player.value)
+        : game.players;
+      return { ...game, players };
+    };
+    return new m.Lens<t.Game, t.Option<t.Player>>(getter, setter);
+  };
+
   const player = (gameId: t.GameId, playerId: t.PlayerId) => {
     const getter = (players: t.Option<t.Players>) => {
       return players.chain(players => t.fromNullable(players.get(playerId)));
@@ -85,6 +96,7 @@ export const lens = (() => {
   };
 
   return {
+    gamePlayers,
     server,
     games,
     game,
@@ -105,39 +117,53 @@ const newGame = (id: t.GameId): t.Game => ({
   hint: t.none
 });
 
+const gameReducer = ta
+  .createReducer(newGame("0"))
+  .handleAction(a.setHint, (game, { payload }) => ({
+    ...game,
+    hint: t.some(payload.hint)
+  }))
+  .handleAction(a.setCurrentTeam, (game, { payload }) => ({
+    ...game,
+    currentTeam: t.some(payload.team)
+  }))
+  .handleAction(a.setStarted, (game, { payload }) => ({
+    ...game,
+    started: payload.started
+  }))
+  .handleAction(a.setCards, (game, { payload }) => ({
+    ...game,
+    cards: t.some(payload.cards)
+  }))
+  .handleAction(a.setRole, (game, { payload }) =>
+    lens
+      .gamePlayers(payload.userId)
+      .modify(p => p.map(p => ({ ...p, role: t.some(payload.role) })))(game)
+  )
+  .handleAction(a.setIsReady, (game, { payload }) => ({
+    ...game,
+    hasNecessaryPlayers: cl.readyToStart(game)
+  }));
+
 const app = ta
   .createReducer(initialState)
-  .handleAction(a.setHint, (state, { payload }) =>
-    lens
-      .game(payload.gameId)
-      .modify(g => g.map(g => ({ ...g, hint: t.some(payload.hint) })))(state)
+  .handleAction(a.newGame, (state, { payload }) =>
+    lens.game(payload.id).set(t.some(newGame(payload.id)))(state)
   )
-  .handleAction(a.setCurrentTeam, (state, { payload }) =>
-    lens
-      .game(payload.gameId)
-      .modify(g => g.map(g => ({ ...g, currentTeam: t.some(payload.team) })))(
-      state
-    )
+  .handleAction(
+    [
+      a.setHint,
+      a.setCurrentTeam,
+      a.setStarted,
+      a.setCards,
+      a.setRole,
+      a.setIsReady
+    ],
+    (state, action) =>
+      lens
+        .game(action.payload.gameId)
+        .modify(g => g.map(g => gameReducer(g, action)))(state)
   )
-  .handleAction(a.setStarted, (state, { payload }) =>
-    lens
-      .game(payload.gameId)
-      .modify(g => g.map(g => ({ ...g, started: payload.started })))(state)
-  )
-  .handleAction(a.setRole, (state, { payload: { role, gameId, userId } }) =>
-    lens
-      .player(gameId, userId)
-      .modify(p => p.map(p => ({ ...p, role: t.some(role) })))(state)
-  )
-  .handleAction(a.setCards, (state, { payload }) => {
-    const gameId = payload.gameId;
-    const cards = payload.cards;
-    return lens
-      .game(gameId)
-      .modify(game => game.map(game => ({ ...game, cards: t.some(cards) })))(
-      state
-    );
-  })
   .handleAction(a.removeUser, (state, { payload }) => {
     const withRemoved = lens.users.modify(users => users.remove(payload.id))(
       state
@@ -153,16 +179,6 @@ const app = ta
       )
     )(withRemoved);
   })
-  .handleAction(a.setIsReady, (state, { payload }) =>
-    lens
-      .game(payload.gameId)
-      .modify(g =>
-        g.map(g => ({ ...g, hasNecessaryPlayers: cl.readyToStart(g) }))
-      )(state)
-  )
-  .handleAction(a.newGame, (state, { payload }) =>
-    lens.game(payload.id).set(t.some(newGame(payload.id)))(state)
-  )
   .handleAction(a.addUser, (state, { payload }) =>
     lens.user(payload.id).set(t.some(payload))(state)
   )
