@@ -4,6 +4,7 @@ import * as t from "../types";
 import * as a from "../redux/actions";
 import * as cl from "../common-logic";
 import styled from "styled-components";
+import { useDebounce } from "use-debounce";
 
 const JoinRole: React.FC = () => {
   const dispatch = r.useDispatch();
@@ -160,12 +161,44 @@ const Board: React.FC = () => {
   ) : null;
 };
 
+const SpymasterHint: React.FC = () => {
+  const gameId = r.useSelector(r.lens.gameId.get);
+  const dispatch = r.useDispatch();
+  const [localHint, setLocalHint] = React.useState("");
+  const serverHint = r.useSelector(r.lens.hint.get);
+  const [debouncedHint] = useDebounce(localHint, 100);
+  const isCurrentSpymaster = r.useSelector(r.lens.isCurrentSpymaster.get);
+
+  React.useEffect(() => {
+    if (isCurrentSpymaster.isSome() && !isCurrentSpymaster.value) {
+      serverHint.isSome() && setLocalHint(serverHint.value);
+    }
+  }, [isCurrentSpymaster]);
+
+  React.useEffect(() => {
+    gameId.isSome() && dispatch(a.setHint(gameId.value, debouncedHint));
+  }, [debouncedHint]);
+
+  return (
+    <input
+      disabled={isCurrentSpymaster.isSome() && !isCurrentSpymaster.value}
+      placeholder="Hint"
+      onChange={e => setLocalHint(e.target.value)}
+      value={localHint}
+    />
+  );
+};
+
 const SpymasterControls: React.FC = () => {
   const playerId = r.useSelector(r.lens.playerId.get);
   const isSpymaster = r.useSelector(r.lens.isSpymaster(playerId).get);
-  return isSpymaster.isSome() && isSpymaster.value ? (
+  const started = r.useSelector(r.lens.started.get);
+  return started.isSome() &&
+    started.value &&
+    isSpymaster.isSome() &&
+    isSpymaster.value ? (
     <div>
-      <input placeholder="Hint" />
+      <SpymasterHint />
     </div>
   ) : null;
 };

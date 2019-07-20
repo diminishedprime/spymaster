@@ -72,9 +72,34 @@ export const lens = (() => {
   const cards = game.composeGetter(new m.Getter(g => g.chain(g => g.cards)));
   const started = game.composeGetter(new m.Getter(g => g.map(g => g.started)));
 
+  const hint = game.composeGetter(new m.Getter(g => g.chain(g => g.hint)));
+
   const gameIds = reduxStateLens("gameIds");
 
+  const isCurrentTurn = new m.Getter<t.ReduxState2, t.Option<boolean>>(
+    reduxState => {
+      const id = playerId.get(reduxState);
+      const t = team(id).get(reduxState);
+      return game
+        .get(reduxState)
+        .chain(g => g.currentTeam.chain(ct => t.map(t => t === ct)));
+    }
+  );
+
+  const isCurrentSpymaster = new m.Getter<t.ReduxState2, t.Option<boolean>>(
+    reduxState => {
+      const id = playerId.get(reduxState);
+      const isCurrent = isCurrentTurn.get(reduxState);
+      const isSpy = isSpymaster(id).get(reduxState);
+      return isSpy.chain(isSpy =>
+        isCurrent.map(isCurrent => isCurrent && isSpy)
+      );
+    }
+  );
+
   return {
+    isCurrentSpymaster,
+    hint,
     isGuesser,
     isSpymaster,
     started,
@@ -120,7 +145,8 @@ const sendActionEpic: t.Epic = (action$, state$) =>
         ta.isActionOf(a.joinGame)(action) ||
         ta.isActionOf(a.requestTeam)(action) ||
         ta.isActionOf(a.requestRole)(action) ||
-        ta.isActionOf(a.startGame)(action)
+        ta.isActionOf(a.startGame)(action) ||
+        ta.isActionOf(a.setHint)(action)
     ),
     map(action => {
       const socket = state$.value.socket;

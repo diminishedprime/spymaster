@@ -128,6 +128,7 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     actions.push(
       a.setHint(clientAction.payload.gameId, clientAction.payload.hint)
     );
+    actions.push(a.refreshGameState(clientAction.payload.gameId));
   }
   if (ta.isActionOf(ca.joinGame)(clientAction)) {
     actions.push(a.playerJoinGame(clientAction.payload.gameId, userId));
