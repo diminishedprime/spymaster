@@ -3,6 +3,12 @@ import * as ta from "typesafe-actions";
 import * as http from "http";
 import * as io from "socket.io";
 
+export const removePlayerFromGame = ta.createAction(
+  "remove-player-from-game",
+  action => (gameId: t.GameId, playerId: t.PlayerId) =>
+    action({ gameId, playerId })
+);
+
 export const playerJoinGame = ta.createAction(
   "player-join-game",
   action => (gameId: t.GameId, playerId: t.PlayerId) =>
@@ -86,7 +92,7 @@ export const addUser = ta.createAction(
     })
 );
 
-export const removeUser = ta.createAction(
+export const removeUserFromServer = ta.createAction(
   "remove-user",
   action => (id: t.UserId) => action({ id })
 );

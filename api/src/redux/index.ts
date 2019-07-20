@@ -39,6 +39,10 @@ const newGame = (id: t.GameId): t.Game => ({
 
 const gameReducer = ta
   .createReducer(newGame("0"))
+  .handleAction(a.removePlayerFromGame, (game, { payload: { playerId } }) => ({
+    ...game,
+    players: game.players.remove(playerId)
+  }))
   .handleAction(a.setHint, (game, { payload: { hint } }) => ({
     ...game,
     hint: t.some(hint)
@@ -84,6 +88,15 @@ const gameReducer = ta
 
 const app = ta
   .createReducer(initialState)
+  .handleAction(a.removeUserFromServer, (state, { payload: { id } }) =>
+    lens.users.modify(users => users.remove(id))(state)
+  )
+  .handleAction(a.addUser, (state, { payload: { id }, payload }) =>
+    lens.user(id).set(t.some(payload))(state)
+  )
+  .handleAction(a.connectWebsocket, (state, { payload: { httpServer } }) =>
+    lens.server.set(t.some(httpServer))(state)
+  )
   .handleAction(a.newGame, (state, { payload: { id } }) =>
     lens.game(id).set(t.some(newGame(id)))(state)
   )
@@ -96,31 +109,13 @@ const app = ta
       a.setRole,
       a.setIsReady,
       a.setTeam,
-      a.playerJoinGame
+      a.playerJoinGame,
+      a.removePlayerFromGame
     ],
     (state, action) =>
       lens
         .game(action.payload.gameId)
         .modify(g => g.map(g => gameReducer(g, action)))(state)
-  )
-  .handleAction(a.removeUser, (state, { payload: { id } }) => {
-    const withRemoved = lens.users.modify(users => users.remove(id))(state);
-    // TODO - This might should be refactored out into being called from a
-    // separate 'remove from game' action.
-    return lens.games.modify(games =>
-      games.update(games =>
-        games.map(game => ({
-          ...game,
-          players: game.players.remove(id)
-        }))
-      )
-    )(withRemoved);
-  })
-  .handleAction(a.addUser, (state, { payload: { id }, payload }) =>
-    lens.user(id).set(t.some(payload))(state)
-  )
-  .handleAction(a.connectWebsocket, (state, { payload: { httpServer } }) =>
-    lens.server.set(t.some(httpServer))(state)
   );
 
 const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
@@ -261,6 +256,20 @@ const updateGameIdsEpic: t.Epic = (action$, state$) =>
     })
   );
 
+const removeUserFromServerEpic: t.Epic = (action$, state$) =>
+  action$.pipe(
+    filter(ta.isActionOf(a.removeUserFromServer)),
+    flatMap(action => {
+      const playerId = action.payload.id;
+      const gameIds = lens.games
+        .get(state$.value)
+        .filter(g => g.players.has(playerId))
+        .keySeq()
+        .toArray();
+      return gameIds.map(gameId => a.removePlayerFromGame(gameId, playerId));
+    })
+  );
+
 const refreshGameStateEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(ta.isActionOf(a.refreshGameState)),
@@ -344,7 +353,7 @@ const clientWebsocketEpic: t.Epic = (action$, state$) =>
             });
 
             socket.on("disconnect", (reason: string) => {
-              add(a.removeUser(userId));
+              add(a.removeUserFromServer(userId));
             });
           });
         },
@@ -375,6 +384,7 @@ const logActionEpic: t.Epic = (action$, state$) =>
   );
 
 const rootEpic = ro.combineEpics(
+  removeUserFromServerEpic,
   refreshGameStateEpic,
   // logActionEpic,
   clientWebsocketEpic,
