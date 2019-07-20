@@ -1,20 +1,19 @@
-import createSagaMiddleware from "redux-saga";
-import * as cl from "../../../src/common-logic";
-import transit from "../../../src/transit";
+import * as i from "immutable";
+import * as redux from "redux";
+import * as ro from "redux-observable";
+import { fromEventPattern } from "rxjs";
+import { filter, flatMap, map } from "rxjs/operators";
 import shuffle from "shuffle-array";
 import io from "socket.io";
-import uuid4 from "uuid/v4";
-import * as i from "immutable";
-import * as ro from "redux-observable";
-import * as t from "../types";
-import * as redux from "redux";
-import { filter, flatMap, map } from "rxjs/operators";
-import { fromEventPattern } from "rxjs";
 import * as ta from "typesafe-actions";
-import * as a from "./actions";
+import uuid4 from "uuid/v4";
+import * as cl from "../../../src/common-logic";
 import * as ca from "../../../src/redux/actions";
-import * as lens from "./lens";
+import transit from "../../../src/transit";
+import * as t from "../types";
 import words from "../words";
+import * as a from "./actions";
+import * as lens from "./lens";
 
 declare module "typesafe-actions" {
   interface Types {
