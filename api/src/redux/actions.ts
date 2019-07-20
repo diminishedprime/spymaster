@@ -3,6 +3,16 @@ import * as ta from "typesafe-actions";
 import * as http from "http";
 import * as io from "socket.io";
 
+export const setTeam = ta.createAction(
+  "set-team",
+  action => (gameId: t.GameId, playerId: t.PlayerId, team: t.PlayerTeam) =>
+    action({
+      gameId,
+      playerId,
+      team
+    })
+);
+
 export const setHint = ta.createAction(
   "set-hint",
   action => (gameId: t.GameId, hint: t.Hint) => action({ gameId, hint })

@@ -143,7 +143,14 @@ const gameReducer = ta
   .handleAction(a.setIsReady, (game, { payload }) => ({
     ...game,
     hasNecessaryPlayers: cl.readyToStart(game)
-  }));
+  }))
+  .handleAction(a.setTeam, (game, { payload }) =>
+    lens
+      .gamePlayers(payload.playerId)
+      .modify(p =>
+        p.map(p => ({ ...p, team: t.some(payload.team), role: t.none }))
+      )(game)
+  );
 
 const app = ta
   .createReducer(initialState)
@@ -157,7 +164,8 @@ const app = ta
       a.setStarted,
       a.setCards,
       a.setRole,
-      a.setIsReady
+      a.setIsReady,
+      a.setTeam
     ],
     (state, action) =>
       lens
@@ -193,18 +201,6 @@ const app = ta
           team: t.none,
           role: t.none
         })
-      )(state);
-    }
-    if (ta.isActionOf(ca.requestTeam)(payload.clientAction)) {
-      const clientId = payload.clientId;
-      const gameId = payload.clientAction.payload.gameId;
-      const team = payload.clientAction.payload.team;
-      return lens.player(gameId, clientId).modify(player =>
-        player.map(player => ({
-          ...player,
-          team: t.some(team),
-          role: t.none
-        }))
       )(state);
     }
     // TODO refactor out this handle-action into its own function.
@@ -252,8 +248,11 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     }
   }
   if (ta.isActionOf(ca.requestTeam)(clientAction)) {
+    const gameId = clientAction.payload.gameId;
+    const requestedTeam = clientAction.payload.team;
     const game = lens.game(clientAction.payload.gameId).get(state$.value);
     if (game.isSome()) {
+      actions.push(a.setTeam(gameId, userId, requestedTeam));
       actions.push(a.refreshGameState(game.value.id));
     } else {
       // TODO - this could have better error handling later.
