@@ -1,4 +1,5 @@
 import * as sut from "./index";
+import * as lens from "./lens";
 import * as a from "./actions";
 import * as ca from "../../../src/redux/actions";
 import * as t from "../types";
@@ -293,7 +294,7 @@ describe("After setting up the server", () => {
         test("Can request a team", () => {
           client.sendAction(ca.requestTeam(gameId, t.Team.Team1));
 
-          const actualTeam = sut.lens
+          const actualTeam = lens
             .player(gameId, clientId)
             .get(store.getState())
             .chain(p => p.team);
