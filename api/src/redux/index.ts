@@ -57,7 +57,7 @@ const gameReducer = ta
   }))
   .handleAction(a.setRole, (game, { payload }) =>
     lens
-      .gamePlayers(payload.userId)
+      .gamePlayer(payload.userId)
       .modify(p => p.map(p => ({ ...p, role: t.some(payload.role) })))(game)
   )
   .handleAction(a.setIsReady, (game, { payload }) => ({
@@ -66,13 +66,13 @@ const gameReducer = ta
   }))
   .handleAction(a.setTeam, (game, { payload }) =>
     lens
-      .gamePlayers(payload.playerId)
+      .gamePlayer(payload.playerId)
       .modify(p =>
         p.map(p => ({ ...p, team: t.some(payload.team), role: t.none }))
       )(game)
   )
   .handleAction(a.playerJoinGame, (game, { payload }) =>
-    lens.gamePlayers(payload.playerId).set(
+    lens.gamePlayer(payload.playerId).set(
       t.some({
         id: payload.playerId,
         alias: t.none,

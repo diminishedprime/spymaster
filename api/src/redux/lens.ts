@@ -38,7 +38,7 @@ export const players = (gameId: t.GameId) => {
   );
 };
 
-export const gamePlayers = (playerId: t.PlayerId) => {
+export const gamePlayer = (playerId: t.PlayerId) => {
   const getter = (game: t.Game) => t.fromNullable(game.players.get(playerId));
   const setter = (player: t.Option<t.Player>) => (game: t.Game) => {
     const players = player.isSome()
