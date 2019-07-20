@@ -150,6 +150,16 @@ const gameReducer = ta
       .modify(p =>
         p.map(p => ({ ...p, team: t.some(payload.team), role: t.none }))
       )(game)
+  )
+  .handleAction(a.playerJoinGame, (game, { payload }) =>
+    lens.gamePlayers(payload.playerId).set(
+      t.some({
+        id: payload.playerId,
+        alias: t.none,
+        team: t.none,
+        role: t.none
+      })
+    )(game)
   );
 
 const app = ta
@@ -165,7 +175,8 @@ const app = ta
       a.setCards,
       a.setRole,
       a.setIsReady,
-      a.setTeam
+      a.setTeam,
+      a.playerJoinGame
     ],
     (state, action) =>
       lens
@@ -190,22 +201,6 @@ const app = ta
   .handleAction(a.addUser, (state, { payload }) =>
     lens.user(payload.id).set(t.some(payload))(state)
   )
-  .handleAction(a.fromClient, (state, { payload }) => {
-    if (ta.isActionOf(ca.joinGame)(payload.clientAction)) {
-      const clientId = payload.clientId;
-      const p = payload.clientAction.payload;
-      return lens.player(p.gameId, clientId).set(
-        t.some({
-          id: clientId,
-          alias: t.none,
-          team: t.none,
-          role: t.none
-        })
-      )(state);
-    }
-    // TODO refactor out this handle-action into its own function.
-    return state;
-  })
   .handleAction(a.connectWebsocket, (state, { payload }) =>
     lens.server.set(t.some(payload.httpServer))(state)
   );
@@ -222,6 +217,7 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
     );
   }
   if (ta.isActionOf(ca.joinGame)(clientAction)) {
+    actions.push(a.playerJoinGame(clientAction.payload.gameId, userId));
     actions.push(a.refreshGameState(clientAction.payload.gameId));
     actions.push(a.sendAction(userId, ca.setPage(t.Page.Game)));
   }
