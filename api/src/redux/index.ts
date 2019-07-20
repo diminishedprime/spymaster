@@ -281,7 +281,10 @@ const refreshGameStateEpic: t.Epic = (action$, state$) =>
           .toArray()
           .map(id => a.sendAction(id, ca.setGame(game.value)));
       } else {
-        console.error("this invariant should not happen");
+        console.error(
+          "this invariant should not happen",
+          "Tried to refresh a game state that does not exist."
+        );
         return [a.noOp()];
       }
     })
@@ -372,8 +375,7 @@ const logActionEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     filter(action => !ta.isActionOf(a.noOp)(action)),
     map(action => {
-      console.log();
-      console.log(action.type);
+      console.log("logging action: ", action.type);
       const loggable = {
         games: state$.value.games,
         clients: state$.value.users.map(u => u.id)
