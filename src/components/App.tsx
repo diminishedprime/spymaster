@@ -91,8 +91,10 @@ const Debug: React.FC = () => {
 
   React.useEffect(() => {
     if (socket.isSome()) {
-      if (games.length < 1 && tabNumber === "1") {
-        dispatch(a.newGame());
+      if (games.length < 1) {
+        if (tabNumber === "1") {
+          dispatch(a.newGame());
+        }
       } else {
         dispatch(a.joinGame(games[0]));
       }
@@ -126,7 +128,6 @@ const Debug: React.FC = () => {
           role = Math.random() > 0.5 ? t.Role.Guesser : t.Role.Spymaster;
       }
       if (maybeTeam.isNone()) {
-        console.log("hi");
         dispatch(a.requestTeam(gameId, team));
       }
       if (maybeRole.isNone()) {
