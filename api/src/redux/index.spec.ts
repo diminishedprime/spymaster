@@ -17,69 +17,6 @@ let onSocket = (_: any) => {};
 let errorMock = jest.fn();
 let logMock = jest.fn();
 
-// TODO - this is really confusing, but it works for now.
-let createClientFake = (cbs: any): any => {
-  const on = (eventType: string, cb: any) => {
-    if (eventType === "client action") {
-      cbs.sendAction = (thing: any) => cb(transit.toJSON(thing));
-    }
-    if (eventType === "disconnect") {
-      cbs.disconnect = cb;
-    }
-  };
-  const emit = jest.fn((t, v) => {
-    if (t === "action") {
-      const value = transit.fromJSON(v);
-      if (ta.isActionOf(ca.setPlayerId)(value)) {
-        cbs.playerId = value.payload.id;
-      }
-    }
-  });
-  cbs.emit = emit;
-
-  return {
-    on,
-    emit
-  } as any;
-};
-
-let createServerFake = (): io.Server => {
-  const on = (eventType: string, cb: (socket: any) => void) => {
-    if (eventType === "connection") {
-      onSocket = cb;
-    }
-  };
-  return {
-    on
-  } as any;
-};
-
-interface FakeClient {
-  sendAction: (action: t.ClientRootAction) => void;
-  disconnect: (reason: string) => void;
-  emit: jest.Mock;
-  playerId: string;
-}
-
-const addFakeClient = (
-  gameId?: t.GameId,
-  team?: t.Team.Team1 | t.Team.Team2,
-  role?: t.Role
-): FakeClient => {
-  const client1Cbs: any = {};
-  onSocket(createClientFake(client1Cbs));
-  if (gameId !== undefined) {
-    (client1Cbs as FakeClient).sendAction(ca.joinGame(gameId));
-    if (team !== undefined) {
-      (client1Cbs as FakeClient).sendAction(ca.requestTeam(gameId, team));
-      if (role !== undefined) {
-        (client1Cbs as FakeClient).sendAction(ca.requestRole(gameId, role));
-      }
-    }
-  }
-  return client1Cbs;
-};
-
 beforeEach(() => {
   // Reset the store for each test.
   store = sut.createStore();
@@ -371,3 +308,66 @@ describe("After setting up the server", () => {
     });
   });
 });
+
+// TODO - this is really confusing, but it works for now.
+let createClientFake = (cbs: any): any => {
+  const on = (eventType: string, cb: any) => {
+    if (eventType === "client action") {
+      cbs.sendAction = (thing: any) => cb(transit.toJSON(thing));
+    }
+    if (eventType === "disconnect") {
+      cbs.disconnect = cb;
+    }
+  };
+  const emit = jest.fn((t, v) => {
+    if (t === "action") {
+      const value = transit.fromJSON(v);
+      if (ta.isActionOf(ca.setPlayerId)(value)) {
+        cbs.playerId = value.payload.id;
+      }
+    }
+  });
+  cbs.emit = emit;
+
+  return {
+    on,
+    emit
+  } as any;
+};
+
+let createServerFake = (): io.Server => {
+  const on = (eventType: string, cb: (socket: any) => void) => {
+    if (eventType === "connection") {
+      onSocket = cb;
+    }
+  };
+  return {
+    on
+  } as any;
+};
+
+interface FakeClient {
+  sendAction: (action: t.ClientRootAction) => void;
+  disconnect: (reason: string) => void;
+  emit: jest.Mock;
+  playerId: string;
+}
+
+const addFakeClient = (
+  gameId?: t.GameId,
+  team?: t.Team.Team1 | t.Team.Team2,
+  role?: t.Role
+): FakeClient => {
+  const client1Cbs: any = {};
+  onSocket(createClientFake(client1Cbs));
+  if (gameId !== undefined) {
+    (client1Cbs as FakeClient).sendAction(ca.joinGame(gameId));
+    if (team !== undefined) {
+      (client1Cbs as FakeClient).sendAction(ca.requestTeam(gameId, team));
+      if (role !== undefined) {
+        (client1Cbs as FakeClient).sendAction(ca.requestRole(gameId, role));
+      }
+    }
+  }
+  return client1Cbs;
+};
