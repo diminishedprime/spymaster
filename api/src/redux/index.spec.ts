@@ -201,7 +201,7 @@ describe("After setting up the server", () => {
         expect(maybeCurrentTeam.isSome()).toBeTruthy();
       });
 
-      test("First spymaster can send hint.", () => {
+      test("First spymaster can set hint.", () => {
         const maybeCurrentTeam = store.getState().games.get(gameId)!
           .currentTeam;
         expect(maybeCurrentTeam.isSome()).toBeTruthy();
