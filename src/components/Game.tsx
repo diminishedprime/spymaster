@@ -122,24 +122,29 @@ const GameSetUp: React.FC = () => {
   ) : null;
 };
 
-const cardBackground = (card: t.Card): string => {
-  switch (card.team) {
-    case t.Team.Team1:
-      return "blue";
-    case t.Team.Team2:
-      return "red";
-    case t.Team.Assassin:
-      return "orange";
-    case t.Team.Bystander:
-      return "gray";
+const cardBackground = (show: boolean, card: t.Card): string => {
+  if (show) {
+    switch (card.team) {
+      case t.Team.Team1:
+        return "blue";
+      case t.Team.Team2:
+        return "red";
+      case t.Team.Assassin:
+        return "orange";
+      case t.Team.Bystander:
+        return "gray";
+    }
   }
+  return "white";
 };
 
 // TODO - Make background-color only show when flipped or current player is a
 // spymaster.
 const Card = styled.div`
   border: 1px solid black;
-  background-color: ${(props: t.Card) => cardBackground(props)};
+  background-color: ${({ show, ...props }: t.Card & { show: boolean }) =>
+    cardBackground(show, props)};
+  opacity: ${({ flipped }) => (flipped ? 0.5 : 1.0)};
 `;
 
 const BoardWrapper = styled.div`
@@ -152,10 +157,18 @@ const Board: React.FC = () => {
   const cards = r.useSelector(s =>
     r.lens.cards.get(s).map(c => c.valueSeq().toArray())
   );
+  const userId = r.useSelector(r.lens.playerId.get);
+  const isSpymaster = r.useSelector(r.lens.isSpymaster(userId).get);
   return cards.isSome() ? (
     <BoardWrapper>
       {cards.value.map(card => {
-        return <Card {...card}>{card.text}</Card>;
+        const show =
+          card.flipped || (isSpymaster.isSome() && isSpymaster.value);
+        return (
+          <Card show={show} {...card}>
+            {card.text}
+          </Card>
+        );
       })}
     </BoardWrapper>
   ) : null;
