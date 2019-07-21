@@ -3,6 +3,11 @@ import * as ta from "typesafe-actions";
 import * as http from "http";
 import * as io from "socket.io";
 
+export const sendHint = ta.createAction(
+  "submit-hint",
+  action => (gameId: t.GameId) => action({ gameId })
+);
+
 export const removePlayerFromGame = ta.createAction(
   "remove-player-from-game",
   action => (gameId: t.GameId, playerId: t.PlayerId) =>

@@ -52,6 +52,7 @@ export interface Game {
   started: boolean;
   currentTeam: Option<PlayerTeam>;
   hint: Option<Hint>;
+  hintSubmitted: Option<boolean>;
 }
 
 export enum Page {

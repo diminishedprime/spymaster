@@ -132,6 +132,26 @@ describe("After setting up the server", () => {
         team1Spymaster.sendAction(ca.startGame(gameId));
       });
 
+      describe("and spymaster 1 set hint", () => {
+        let firstSpymaster: FakeClient;
+        beforeEach(() => {
+          const currentTeam = store.getState().games.get(gameId)!.currentTeam;
+          firstSpymaster =
+            currentTeam.isSome() && currentTeam.value === t.Team.Team1
+              ? team1Spymaster
+              : team2Spymaster;
+          firstSpymaster.sendAction(ca.setHint(gameId, "peterthecat"));
+        });
+
+        test("First spymaster can send hint.", () => {
+          firstSpymaster.sendAction(ca.sendHint(gameId));
+
+          const actual = store.getState().games.get(gameId)!.hintSubmitted;
+          expect(actual.isSome()).toBeTruthy();
+          expect(actual.isSome() && actual.value).toBeTruthy();
+        });
+      });
+
       test("Sets currentTeam", () => {
         const maybeCurrentTeam = store.getState().games.get(gameId)!
           .currentTeam;

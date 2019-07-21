@@ -179,8 +179,11 @@ const SpymasterHint: React.FC = () => {
   const dispatch = r.useDispatch();
   const [localHint, setLocalHint] = React.useState("");
   const serverHint = r.useSelector(r.lens.hint.get);
+  // TODO - this debouncing doesn't work right, I think I actually want
+  // throttling, but also I can just remove this entirely probably.
   const [debouncedHint] = useDebounce(localHint, 100);
   const isCurrentSpymaster = r.useSelector(r.lens.isCurrentSpymaster.get);
+  const hintSubmitted = r.useSelector(r.lens.hintSubmitted.get);
 
   React.useEffect(() => {
     if (isCurrentSpymaster.isSome() && !isCurrentSpymaster.value) {
@@ -193,12 +196,25 @@ const SpymasterHint: React.FC = () => {
   }, [debouncedHint]);
 
   return (
-    <input
-      disabled={isCurrentSpymaster.isSome() && !isCurrentSpymaster.value}
-      placeholder="Hint"
-      onChange={e => setLocalHint(e.target.value)}
-      value={localHint}
-    />
+    <>
+      <input
+        disabled={
+          (isCurrentSpymaster.isSome() && !isCurrentSpymaster.value) ||
+          (hintSubmitted.isSome() && hintSubmitted.value)
+        }
+        placeholder="Hint"
+        onChange={e => setLocalHint(e.target.value)}
+        value={localHint}
+      />
+      <button
+        disabled={localHint.length === 0}
+        onClick={() => {
+          gameId.isSome() && dispatch(a.sendHint(gameId.value));
+        }}
+      >
+        Send
+      </button>
+    </>
   );
 };
 

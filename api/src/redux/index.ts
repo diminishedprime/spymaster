@@ -34,11 +34,16 @@ const newGame = (id: t.GameId): t.Game => ({
   cards: t.none,
   started: false,
   currentTeam: t.none,
-  hint: t.none
+  hint: t.none,
+  hintSubmitted: t.none
 });
 
 const gameReducer = ta
   .createReducer(newGame("0"))
+  .handleAction(a.sendHint, game => ({
+    ...game,
+    hintSubmitted: t.some(true)
+  }))
   .handleAction(a.removePlayerFromGame, (game, { payload: { playerId } }) => ({
     ...game,
     players: game.players.remove(playerId)
@@ -103,6 +108,7 @@ const app = ta
   .handleAction(
     [
       a.setHint,
+      a.sendHint,
       a.setCurrentTeam,
       a.setStarted,
       a.setCards,
@@ -124,6 +130,14 @@ const fromClient = (state$: ro.StateObservable<t.ServerReduxState>) => (
   const actions: t.RootAction[] = [];
   const clientAction = action.payload.clientAction;
   const userId = action.payload.clientId;
+  if (ta.isActionOf(ca.sendHint)(clientAction)) {
+    const gameId = clientAction.payload.gameId;
+    const game = lens.game(gameId).get(state$.value);
+    if (game.isSome() && game.value.hint.isSome()) {
+      actions.push(a.sendHint(gameId));
+      actions.push(a.refreshGameState(gameId));
+    }
+  }
   if (ta.isActionOf(ca.setHint)(clientAction)) {
     actions.push(
       a.setHint(clientAction.payload.gameId, clientAction.payload.hint)

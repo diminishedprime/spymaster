@@ -97,7 +97,12 @@ export const lens = (() => {
     }
   );
 
+  const hintSubmitted = game.composeGetter(
+    new m.Getter(g => g.chain(g => g.hintSubmitted))
+  );
+
   return {
+    hintSubmitted,
     isCurrentSpymaster,
     hint,
     isGuesser,
@@ -139,14 +144,16 @@ const app = ta
 const sendActionEpic: t.Epic = (action$, state$) =>
   action$.pipe(
     // Extend this filter for events that should be sent to the server.
-    filter(
-      action =>
-        ta.isActionOf(a.newGame)(action) ||
-        ta.isActionOf(a.joinGame)(action) ||
-        ta.isActionOf(a.requestTeam)(action) ||
-        ta.isActionOf(a.requestRole)(action) ||
-        ta.isActionOf(a.startGame)(action) ||
-        ta.isActionOf(a.setHint)(action)
+    filter(action =>
+      ta.isActionOf([
+        a.newGame,
+        a.joinGame,
+        a.requestTeam,
+        a.requestRole,
+        a.startGame,
+        a.setHint,
+        a.sendHint
+      ])(action)
     ),
     map(action => {
       const socket = state$.value.socket;
